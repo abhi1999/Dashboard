@@ -13,14 +13,17 @@ import {
 
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { Container } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 
 
 
 import DashboardHeader from "./DashboardHeader"
 
 import { INewsFeed } from "./../../domain/DataModel"
+
 import NewsFeedList from "./../news/NewsFeedList"
+
+import DashboardContainer from "./../widgets/DashboardContainer"
 
 interface IDefaultLayoutProps{
   navItems:any[]
@@ -41,7 +44,14 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">
-           <NewsFeedList {...this.props}/>
+          <Row>
+           <DashboardContainer colSize={6} headerTitle="News">
+              <NewsFeedList {...this.props}/>
+           </DashboardContainer>
+           <DashboardContainer colSize={2}/>
+           <DashboardContainer colSize={2}/>
+           <DashboardContainer colSize={2}/>
+          </Row>
             <Container fluid={true}>
               <Switch>
                 <Redirect from="/" to="/dashboard" />
