@@ -20,7 +20,7 @@ const parser = new Parser({customFields: {
       ['content:encoded', 'contentEncoded'],
     ]
   }});
-const RSS_FEED = "http://www.datamasons.com/customer-blog/rss.xml";
+const RSS_FEED = "https://www.datamasons.com/customer-blog/rss.xml";
 const BASE_URL = "http://192.168.104.125:5001";
 const SERVICES ={
     endpoints:{
