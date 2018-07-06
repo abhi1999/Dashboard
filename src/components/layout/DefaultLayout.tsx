@@ -41,7 +41,7 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
         </AppHeader>
         <div className="app-body">
           <AppSidebar fixed={true} display="lg">
-            <AppSidebarHeader>Navigation Header</AppSidebarHeader>
+            <AppSidebarHeader/>
             <AppSidebarNav navConfig={{items:this.props.navItems}}/>
             <AppSidebarMinimizer />
           </AppSidebar>
@@ -52,7 +52,7 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
               <NewsFeedList {...this.props}/>
            </DashboardContainer>
            <DashboardContainer colSize={3} headerTitle="Critical Alerts"><CriticalAlerts/></DashboardContainer>
-           <DashboardContainer colSize={3}> <DocReceived/></DashboardContainer>
+           <DashboardContainer colSize={3} headerTitle="Documents by Type"> <DocReceived/></DashboardContainer>
           </Row>
             <Container fluid={true}>
               <Switch>
@@ -65,7 +65,13 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
           </AppAside>
         </div>
         <AppFooter>
-          footer
+          <div>
+            <a href="http://www.datamasons.com/">Data Masons</a>
+            <span>© 2018 Data Masons Software</span>
+          </div>
+          <div className="ml-auto">
+            <span>Version</span>
+          </div>
         </AppFooter>  
       </div>
     );

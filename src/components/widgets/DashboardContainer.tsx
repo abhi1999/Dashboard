@@ -29,7 +29,7 @@ class DashboardContainer extends React.Component<IDashboardContainerProps, IDash
         this.setState({colSize:nextProps.colSize})
     }
     public render(){
-        return<Col xs={this.state.colSize}> 
+        return <Col xs={this.state.colSize}> 
                 <Card>
                 <CardHeader>
                   {this.props.headerTitle}
@@ -41,9 +41,6 @@ class DashboardContainer extends React.Component<IDashboardContainerProps, IDash
                   <CardBody>
                     {this.props.children}
                   </CardBody>
-                  <CardFooter>
-                      footer
-                  </CardFooter>
                 </Collapse>
               </Card>
             </Col>
