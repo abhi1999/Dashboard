@@ -27,7 +27,6 @@ class NewsFeedItem extends React.Component<INewsFeedItemProps, INewsFeedItemStat
     public render(){
         let createdAt = "";
         if(this.props.item && this.props.item.date){
-            console.log("date",this.props.item.date,  this.momentInstance(this.props.item.date))
             createdAt = this.momentInstance(this.props.item.date).format("d MMM Y h:m A");
         }
         return <Fade timeout={this.state.timeout} in={this.state.fadeIn}>
@@ -39,14 +38,13 @@ class NewsFeedItem extends React.Component<INewsFeedItemProps, INewsFeedItemStat
                     <a className="card-header-action btn btn-minimize" onClick={()=>{window.open(this.props.item.guid)}}><i className="icon-action-redo" title="View Post"/></a>
                   </div>
                 </CardTitle>
-                <CardSubtitle> <div>{createdAt} (GMT Time: {this.props.item.date})</div></CardSubtitle>
+                <CardSubtitle> <small className="text-muted">{createdAt} (GMT Time: {this.props.item.date})</small></CardSubtitle>
                 <Collapse isOpen={this.state.collapse} id="collapseExample">
                   <CardBody>
                     <div dangerouslySetInnerHTML={{ __html: this.props.item.contentEncoded }} />
-                   
-                  </CardBody>
+                   </CardBody>
                   <CardFooter>
-                      Categories: {this.props.item.categories.join(';')}
+                      <small className="text-muted">Categories: {this.props.item.categories.join(';')}</small>
                   </CardFooter>
                 </Collapse>
               </Card>

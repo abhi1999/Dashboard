@@ -8,6 +8,7 @@ interface IDashboardContainerProps{
     maxColSize?:number
     children?:any;
     headerTitle?:string
+    onMaximize?:(isMaximized:boolean)=>{}
 }
 interface IDashboardContainerState{
     colSize:number
@@ -49,7 +50,21 @@ class DashboardContainer extends React.Component<IDashboardContainerProps, IDash
             
     }
     private toggleColSize() {
-        this.setState({ colSize: this.state.colSize === this.props.colSize ? this.getMaxColSize(): this.props.colSize });
+        let isMaximized= false;
+        let colSize;
+        if( this.state.colSize === this.props.colSize){
+            isMaximized= true;
+            colSize = this.getMaxColSize();
+        }
+        else{
+            isMaximized= false;
+            colSize = this.props.colSize
+        }
+
+        this.setState({ colSize });
+        if(this.props.onMaximize) {
+            this.props.onMaximize(isMaximized)
+        }
     }
     private getMaxColSize(){
         return this.props.maxColSize ? this.props.maxColSize: 12;

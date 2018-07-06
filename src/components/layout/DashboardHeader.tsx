@@ -26,7 +26,9 @@ class DashboardHeader extends React.Component{
                 <Input type="search" name="search" id="exampleSearch" placeholder="Search..." />
                 <NavItem className="d-md-down-none">
                     <NavLink href="#"><i className="icon-globe"/><Badge pill={true} color="danger">5</Badge></NavLink>
+                    
                 </NavItem>
+                <NavItem><i className="icon-refresh"/></NavItem>
             </Nav>
             <AppHeaderDropdown direction="down">
                 <DropdownToggle nav={true}>

@@ -1,7 +1,8 @@
 import lodash from "lodash";
-import { LOAD_DATA, LOAD_ERROR, LOAD_NEWS_FEED_SUCCESS } from './../constants';
+import { LOAD_ALERT_GROUP_SUCCESS, LOAD_DATA, LOAD_ERROR, LOAD_NEWS_FEED_SUCCESS } from './../constants';
 
 const initialState = {
+    alertGroupSet:[],
     loading:false, 
     navItems:[
         {  
@@ -65,6 +66,11 @@ export const mainReducer = (state = initialState, action)=>{
             return {
                 ...state,
                 newsFeeds:action.data,
+            }
+        case LOAD_ALERT_GROUP_SUCCESS:
+            return {
+                ...state,
+                alertGroupSet:action.data
             }
         case LOAD_ERROR:
             return {

@@ -22,15 +22,22 @@ import { INewsFeed } from "./../domain/DataModel"
 
 
 interface IAppProps{
+  alertGroupSet:any[],
   notifications:any,
   navItems:any[],
   newsFeeds:INewsFeed,
-  loadNewsFeed: ()=>{}
+  loadAlertGroupSet:()=>{},
+  loadAllLookup:()=>{},
+  loadNewsFeed: ()=>{},
 }
 
 class App extends React.Component<IAppProps> {
+  public constructor(props){
+    super(props)
+    this.reloadData= this.reloadData.bind(this);
+  }
   public componentDidMount(){
-    this.props.loadNewsFeed();
+    this.reloadData();
   }
   public render() {
     const defaultStyle ={
@@ -40,6 +47,7 @@ class App extends React.Component<IAppProps> {
           }
       }
     }
+    console.log(this.props.alertGroupSet)
     return (
       <div className="App">
         <HashRouter>
@@ -55,6 +63,11 @@ class App extends React.Component<IAppProps> {
         <Notifications notifications={this.props.notifications} style={defaultStyle} />
       </div>
     );
+  }
+  private reloadData(){
+    // this.props.loadNewsFeed();
+    // this.props.loadAlertGroupSet();
+    this.props.loadAllLookup();
   }
 }
 

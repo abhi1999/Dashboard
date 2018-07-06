@@ -5,10 +5,15 @@ import Notifications from 'react-notification-system-redux';
 
 import Parser from 'rss-parser';
 
+import {AlertGroupSet, DocReceivedCount, TopErrorLog} from "./../__mocks__/MockData";
+
 import {  
+    LOAD_ALERT_GROUP_SUCCESS,
     LOAD_DATA, 
+    LOAD_DOC_RECEIVED_COUNT,
     LOAD_ERROR,
     LOAD_NEWS_FEED_SUCCESS,
+    LOAD_TOP_ERROR_LOGS,
 } from './../constants';
 
 
@@ -20,7 +25,7 @@ const parser = new Parser({customFields: {
       ['content:encoded', 'contentEncoded'],
     ]
   }});
-const RSS_FEED = "http://www.datamasons.com/customer-blog/rss.xml";
+const RSS_FEED = "https://www.datamasons.com/customer-blog/rss.xml";
 const BASE_URL = "http://192.168.104.125:5001";
 const SERVICES ={
     endpoints:{
@@ -80,9 +85,47 @@ export const loadNewsFeed = () => (dispatch, getState)=> {
                 });
 };
 
+
+export const loadAlertGroupSet = () => (dispatch, getState)=> {
+    dispatch(loadDataState());
+    dispatch(loadAlertGroupSetSuccess(AlertGroupSet.value));
+};
+
+
+export const loadDocReceivedCount = () => (dispatch, getState)=> {
+    dispatch(loadDataState());
+    dispatch(loadDocReceivedCountSuccess(AlertGroupSet.value));
+};
+
+
+export const loadTopErrorLogs = () => (dispatch, getState)=> {
+    dispatch(loadDataState());
+    dispatch(loadTopErrorLogsSuccess(AlertGroupSet.value));
+};
+
 const loadNewsFeedSuccess = (data:any) => {
     return {
         data, 
         type: LOAD_NEWS_FEED_SUCCESS
+    };
+};
+
+const loadAlertGroupSetSuccess = (data:any) => {
+    return {
+        data, 
+        type: LOAD_ALERT_GROUP_SUCCESS
+    };
+};
+
+const loadDocReceivedCountSuccess = (data:any) => {
+    return {
+        data, 
+        type: LOAD_DOC_RECEIVED_COUNT
+    };
+};
+const loadTopErrorLogsSuccess = (data:any) => {
+    return {
+        data, 
+        type: LOAD_TOP_ERROR_LOGS
     };
 };

@@ -6,6 +6,7 @@ import App from "../components/App"
 const mapStateToProps = (state) => {
   const {
       mainReducer:{
+        alertGroupSet,
         loading,
         navItems,
         newsFeeds,
@@ -13,6 +14,7 @@ const mapStateToProps = (state) => {
       notifications
   }= state;
   return {
+      alertGroupSet,
       loading,
       navItems,
       newsFeeds,
@@ -21,12 +23,28 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   const {
+    loadAlertGroupSet,
+    loadDocReceivedCount,
     loadNewsFeed,
+    loadTopErrorLogs,
     testNotification
   } = bindActionCreators(actionCreators, dispatch)
   return {
+    loadAlertGroupSet,
+    loadDocReceivedCount,
     loadNewsFeed,
-    testNotification
+    loadTopErrorLogs,
+    testNotification,
+    loadAllLookup(){
+      loadNewsFeed()
+      loadDocReceivedCount();
+      loadAlertGroupSet();
+      loadTopErrorLogs();
+      // dispatch(loadAlertGroupSet())
+      // dispatch(loadDocReceivedCount())
+      // dispatch(loadNewsFeed());
+      // dispatch(loadTopErrorLogs());
+    }
   }
 }
 const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
