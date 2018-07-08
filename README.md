@@ -1,25 +1,41 @@
 
-Converted vp5_crud project to typescript project
+# Vantage Point 5 Dashboard 
 
-## install
+## Overview 
+Vantage Point 5 dashboad provides an easy access to Alerts, News Feeds and other statastical data for VP software.
+
+## Setup scripts
+
+### To install UI Project install
+
+Run this following command to install all the dependencies for this UI project.  You may need to setup appropriate npm proxies to install from the npm registry.     
 ```
 npm install
 ```
 
-## debug
-
+### Local developmemnt/ debug
+Run the following command to debug the application locally.  This will start a webpack local dev server to serve static content.  The dev server is currently configured on port number 9003, which can be changed in pacakge.json start script.
 ```
 npm start
 ```
 
-## build
+### production/uat builds
+In order to build this application for production deployment, use the following command to build
 ```
 npm run build
 ```
 
-output is in build directory
+The bundle will be created in build directory and can be tested via 
 
-## pre requsite
+```
+npm run serve
+```
+
+## Enviornment variables
+
+Development & Production environmnet variables are set in .env & .env.production files
+
+## Pre requsite
 
 npm
 node
@@ -39,14 +55,13 @@ source/
   src/
     actions/
     components/
+        App.css
+        App.tsx
     containers/
     reducers/
     services/
     store/
-    App.css
-    App.js
-    App.test.js
     index.css
-    index.js
+    index.tsx
 ```
 

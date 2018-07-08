@@ -10,23 +10,18 @@ import {
   AppSidebarMinimizer,
   AppSidebarNav,
 } from '@coreui/react';
-
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container, Row } from 'reactstrap';
-
-
-
-import DashboardHeader from "./DashboardHeader"
-
+import AlertsContainer from "./../../containers/Alerts/AlertsContainer"
+import NewsFeedContainer from "./../../containers/NewsFeed/NewsFeedContainer"
 import { INewsFeed } from "./../../domain/DataModel"
-
-import NewsFeedList from "./../news/NewsFeedList"
-
-import DashboardContainer from "./../widgets/DashboardContainer"
-
 import CriticalAlerts from "./../charts/CriticalAlerts"
 import DocReceived from "./../charts/DocReceived";
+import DashboardContainer from "./../widgets/DashboardContainer"
+import DashboardFooter from "./DashboardFooter"
+import DashboardHeader from "./DashboardHeader";
+
 interface IDefaultLayoutProps{
   navItems:any[]
   newsFeeds:INewsFeed
@@ -46,11 +41,11 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">
-          
           <Row>
            <DashboardContainer colSize={6} headerTitle="News">
-              <NewsFeedList {...this.props}/>
+              <NewsFeedContainer/>
            </DashboardContainer>
+           <AlertsContainer/>
            <DashboardContainer colSize={3} headerTitle="Critical Alerts"><CriticalAlerts/></DashboardContainer>
            <DashboardContainer colSize={3} headerTitle="Documents by Type"> <DocReceived/></DashboardContainer>
           </Row>
@@ -61,17 +56,11 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
             </Container>
           </main>
           <AppAside fixed={true} hidden={true}>
-            aside
+            Some desktop only components
           </AppAside>
         </div>
         <AppFooter>
-          <div>
-            <a href="http://www.datamasons.com/">Data Masons</a>
-            <span>© 2018 Data Masons Software</span>
-          </div>
-          <div className="ml-auto">
-            <span>Version</span>
-          </div>
+          <DashboardFooter/>
         </AppFooter>  
       </div>
     );

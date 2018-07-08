@@ -1,13 +1,10 @@
 import axios from "axios";
-import _ from "lodash";
 import buildQuery from "odata-query";
 import Notifications from 'react-notification-system-redux';
-
-import Parser from 'rss-parser';
-
 import {AlertGroupSet, DocReceivedCount, TopErrorLog} from "./../__mocks__/MockData";
-
+import { BASE_URL, RSS_FEED_URL, RSS_PARSER, SERVICES } from "./../configs/"
 import {  
+    LOAD_ALERT_GROUP_DETAILS_SUCCESS,    
     LOAD_ALERT_GROUP_SUCCESS,
     LOAD_DATA, 
     LOAD_DOC_RECEIVED_COUNT,
@@ -20,22 +17,6 @@ import {
 axios.defaults.paramsSerializer = (params):string=>{ 
     return buildQuery(params).substring(1);
 }
-const parser = new Parser({customFields: {
-    item: [
-      ['content:encoded', 'contentEncoded'],
-    ]
-  }});
-const RSS_FEED = "https://www.datamasons.com/customer-blog/rss.xml";
-const BASE_URL = "http://192.168.104.125:5001";
-const SERVICES ={
-    endpoints:{
-        addItem:"/api/ShipVia/Add/",
-        deleteItem:"/api/ShipVia/Delete/",
-        shipViaSet:"/odata/ShipViaSet",
-        updateItem:"/api/ShipVia/Update/",
-    }
-}
-
 const erroNotificationOptions = {
     autoDismiss: 10,
     message: '',
@@ -49,27 +30,12 @@ export const testNotification = (msg:string) => (dispatch, getState) => {
         message: msg
     }));
 }
-
-const loadDataState = () => {
-    return {
-        type: LOAD_DATA
-    };
-};
-const loadDataError = (error) => {
-    return {
-        error,
-        type: LOAD_ERROR
-    };
-};
-
 export const loadNewsFeed = () => (dispatch, getState)=> {
     dispatch(loadDataState());
-    const url = RSS_FEED;
+    const url = RSS_FEED_URL;
     return axios.get(url)
                 .then((response)=>{
-                    console.log(response);
-                    parser.parseString(response.data).then((data)=>{
-                        console.log('feed data', data)
+                    RSS_PARSER.parseString(response.data).then((data)=>{
                         dispatch(loadNewsFeedSuccess(data));
                     })
                     dispatch(Notifications.success({
@@ -84,39 +50,106 @@ export const loadNewsFeed = () => (dispatch, getState)=> {
                     }));
                 });
 };
-
-
 export const loadAlertGroupSet = () => (dispatch, getState)=> {
     dispatch(loadDataState());
-    dispatch(loadAlertGroupSetSuccess(AlertGroupSet.value));
+    const url = BASE_URL + SERVICES.endpoints.alertGroupSet;
+    return axios.get(url)
+                .then((response:any)=>{
+                    console.log(response)                           
+                    dispatch(loadAlertGroupSetSuccess(response.data.value));
+                    console.log('iamhere')
+                    if(response.data.value){
+                        response.data.value.forEach((element:any) => {
+                            dispatch(loadAlertGroupDetails(element.GroupTile))
+                        });
+                    }
+                })
+                .catch((error)=>{
+                    dispatch(loadDataError(error));
+                    dispatch(Notifications.error({
+                        ...erroNotificationOptions,
+                        message: url +" :: " + error.message
+                    }));
+                })
+    
 };
-
+export const loadAlertGroupDetails = (GroupTile) => (dispatch, getState)=> {
+    dispatch(loadDataState());
+    const filter = [{GroupTile}]
+    const url = BASE_URL + SERVICES.endpoints.alertSet;
+    return axios.get(url,{params:{filter}})
+                .then((response:any)=>{
+                    console.log(response)                           
+                    dispatch(loadAlertDetailsSuccess(response.data.value, GroupTile));
+                })
+                .catch((error)=>{
+                    dispatch(loadDataError(error));
+                    dispatch(Notifications.error({
+                        ...erroNotificationOptions,
+                        message: url +" :: " + error.message
+                    }));
+                })
+    
+};
 
 export const loadDocReceivedCount = () => (dispatch, getState)=> {
     dispatch(loadDataState());
-    dispatch(loadDocReceivedCountSuccess(AlertGroupSet.value));
+    const url = BASE_URL + SERVICES.endpoints.docReceivedCount;
+    return axios.get(url)
+                .then((response:any)=>{
+                    console.log(response)                           
+                    dispatch(loadDocReceivedCountSuccess(AlertGroupSet.value));
+                })
+                .catch((error)=>{
+                    dispatch(loadDataError(error));
+                    dispatch(Notifications.error({
+                        ...erroNotificationOptions,
+                        message: url +" :: " + error.message
+                    }));
+                })
 };
 
 
 export const loadTopErrorLogs = () => (dispatch, getState)=> {
     dispatch(loadDataState());
-    dispatch(loadTopErrorLogsSuccess(AlertGroupSet.value));
+    const url = BASE_URL + SERVICES.endpoints.errorLog;
+    return axios.get(url)
+                .then((response:any)=>{
+                    console.log("**Top Error Logs***************",response)                           
+                    dispatch(loadTopErrorLogsSuccess(response.data.value));
+                })
+                .catch((error)=>{
+                    dispatch(loadDataError(error));
+                    dispatch(Notifications.error({
+                        ...erroNotificationOptions,
+                        message: url +" :: " + error.message
+                    }));
+                })
 };
 
+const loadDataState = () => {
+    return {
+        type: LOAD_DATA
+    };
+};
+const loadDataError = (error) => {
+    return {
+        error,
+        type: LOAD_ERROR
+    };
+};
 const loadNewsFeedSuccess = (data:any) => {
     return {
         data, 
         type: LOAD_NEWS_FEED_SUCCESS
     };
 };
-
 const loadAlertGroupSetSuccess = (data:any) => {
     return {
         data, 
         type: LOAD_ALERT_GROUP_SUCCESS
     };
 };
-
 const loadDocReceivedCountSuccess = (data:any) => {
     return {
         data, 
@@ -127,5 +160,12 @@ const loadTopErrorLogsSuccess = (data:any) => {
     return {
         data, 
         type: LOAD_TOP_ERROR_LOGS
+    };
+};
+const loadAlertDetailsSuccess = (data:any, GroupTile) => {
+    return {
+        GroupTile,
+        data, 
+        type: LOAD_ALERT_GROUP_DETAILS_SUCCESS
     };
 };

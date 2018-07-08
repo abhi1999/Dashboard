@@ -6,6 +6,7 @@ import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler }
 class DashboardHeader extends React.Component{
     public render(){
         return <React.Fragment>
+            <div>VantagePoint 5 &nbsp;</div>
             <AppSidebarToggler className="d-lg-none" display="md" mobile={true}/>
             <AppSidebarToggler className="d-md-down-none" display="lg"/>
             <Nav className="d-md-down-none" navbar={true}>

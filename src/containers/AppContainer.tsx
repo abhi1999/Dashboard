@@ -25,25 +25,18 @@ const mapDispatchToProps = (dispatch) => {
   const {
     loadAlertGroupSet,
     loadDocReceivedCount,
-    loadNewsFeed,
     loadTopErrorLogs,
     testNotification
   } = bindActionCreators(actionCreators, dispatch)
   return {
     loadAlertGroupSet,
     loadDocReceivedCount,
-    loadNewsFeed,
     loadTopErrorLogs,
     testNotification,
     loadAllLookup(){
-      loadNewsFeed()
       loadDocReceivedCount();
       loadAlertGroupSet();
       loadTopErrorLogs();
-      // dispatch(loadAlertGroupSet())
-      // dispatch(loadDocReceivedCount())
-      // dispatch(loadNewsFeed());
-      // dispatch(loadTopErrorLogs());
     }
   }
 }

@@ -12,15 +12,15 @@ declare let process: any;
 declare let module: any;
 
 const configureStore =(preloadedState?:any)=>{
-    
-    const middleware = [promise(), ReduxThunk, createLogger()];
-
+    const middleware = [promise(), ReduxThunk];
+    if(process.env.NODE_ENV !== 'production') {
+        middleware.push(createLogger());
+    }
     const store = createStore(
         rootReducer, 
         preloadedState,
         compose(applyMiddleware(...middleware))
     )
-
     if(module.hot){
         module.hot.accept("../reducers", ()=>{
             const nextRootReducer = require("../reducers");

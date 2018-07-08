@@ -28,6 +28,7 @@
     "react-notification-system-redux": "^1.2.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
+    "react-spinners": "^0.3.2",
     "react-table": "^6.8.6",
     "reactstrap": "^6.0.1",
     "redux": "^4.0.0",
@@ -45,7 +46,8 @@
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "test-build": "http-server ./build"
+    "test-build": "http-server ./build",
+    "serve": "serve -s build"
   },
   "devDependencies": {
     "@types/jest": "^23.1.1",
@@ -53,10 +55,11 @@
     "@types/react": "^16.4.0",
     "@types/react-dom": "^16.0.6",
     "create-react-app": "^1.5.2",
-    "typescript": "^2.9.2",
     "http-server": "^0.11.1",
     "react-scripts-ts": "2.16.0",
-    "redux-devtools-extension": "^2.13.2"
+    "redux-devtools-extension": "^2.13.2",
+    "serve": "^9.2.0",
+    "typescript": "^2.9.2"
   },
   "engines": {
     "node": "8.11.2",

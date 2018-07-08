@@ -50,16 +50,6 @@ class NewsFeedItem extends React.Component<INewsFeedItemProps, INewsFeedItemStat
               </Card>
             </Fade>
     }
-    public render1(){
-        return <div>
-            {this.props.item ? this.props.item.title : ""}
-            <div>
-                {this.props.item && this.props.item.categories ? this.props.item.categories.map((c,index)=>{
-                    return <span key={index}>{c};</span>
-                }):"" }
-            </div>
-        </div>
-    }
     private toggle() {
         this.setState({ collapse: !this.state.collapse });
     }

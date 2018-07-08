@@ -8,8 +8,6 @@ import './App.css';
 // Styles
 // CoreUI Icons Set
 import '@coreui/icons/css/coreui-icons.min.css';
-// Import Flag Icons Set
-import 'flag-icon-css/css/flag-icon.min.css';
 // Import Font Awesome Icons Set
 import 'font-awesome/css/font-awesome.min.css';
 // Import Simple Line Icons Set
@@ -20,7 +18,6 @@ import './../styles/style.css'
 import { INewsFeed } from "./../domain/DataModel"
 
 
-
 interface IAppProps{
   alertGroupSet:any[],
   notifications:any,
@@ -28,7 +25,6 @@ interface IAppProps{
   newsFeeds:INewsFeed,
   loadAlertGroupSet:()=>{},
   loadAllLookup:()=>{},
-  loadNewsFeed: ()=>{},
 }
 
 class App extends React.Component<IAppProps> {
@@ -65,8 +61,6 @@ class App extends React.Component<IAppProps> {
     );
   }
   private reloadData(){
-    // this.props.loadNewsFeed();
-    // this.props.loadAlertGroupSet();
     this.props.loadAllLookup();
   }
 }
