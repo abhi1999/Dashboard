@@ -4,8 +4,6 @@ import {
   AppFooter,
   AppHeader,
   AppSidebar,
-  AppSidebarFooter,
-  AppSidebarForm,
   AppSidebarHeader,
   AppSidebarMinimizer,
   AppSidebarNav,
@@ -13,26 +11,27 @@ import {
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container, Row } from 'reactstrap';
-import AlertsContainer from "./../../containers/Alerts/AlertsContainer"
-import NewsFeedContainer from "./../../containers/NewsFeed/NewsFeedContainer"
-import { INewsFeed } from "./../../domain/DataModel"
-import CriticalAlerts from "./../charts/CriticalAlerts"
-import DocReceived from "./../charts/DocReceived";
-import DashboardContainer from "./../widgets/DashboardContainer"
-import DashboardFooter from "./DashboardFooter"
-import DashboardHeader from "./DashboardHeader";
+import Dashboard from "./../../views/dashboard"
+import Favorites from "./../../views/favorites"
+import Footer from "./Footer"
+import Header from "./Header";
 
-interface IDefaultLayoutProps{
-  navItems:any[]
-  newsFeeds:INewsFeed
-}
-
-class DefaultLayout extends React.Component<IDefaultLayoutProps> {
+class DefaultLayout extends React.Component<any> {
   public render() {
+    const routes = [
+      { path: '/', exact: true, name: 'Home' },
+      { path: '/dashboard', name: 'Dashboard', component: Dashboard },
+      { path: '/favorites', name: 'Favorites', component: Favorites },
+      { path: '/QuoteToCash', name: 'Quote To Cash', component: Favorites },
+      { path: '/ProcureToPay', name: 'Procure To Pay', component: Favorites },
+      { path: '/logistics', name: 'Logistics', component: Favorites },
+      { path: '/automotiveplanning', name: 'Automotive Planning', component: Favorites },
+      { path: '/product', name: 'Product Management', component: Favorites },
+    ];
     return (
       <div className="app">
         <AppHeader fixed={true}>
-          <DashboardHeader/>
+          <Header/>
         </AppHeader>
         <div className="app-body">
           <AppSidebar fixed={true} display="lg">
@@ -41,26 +40,26 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">
-          <Row>
-           <DashboardContainer colSize={6} headerTitle="News">
-              <NewsFeedContainer/>
-           </DashboardContainer>
-           <AlertsContainer/>
-           <DashboardContainer colSize={3} headerTitle="Critical Alerts"><CriticalAlerts/></DashboardContainer>
-           <DashboardContainer colSize={3} headerTitle="Documents by Type"> <DocReceived/></DashboardContainer>
-          </Row>
+            <AppBreadcrumb appRoutes={routes}/> 
             <Container fluid={true}>
               <Switch>
-                <Redirect from="/" to="/dashboard" />
+                {routes.map((route:any, idx) => {
+                    return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
+                        <route.component {...props} />
+                      )} />)
+                      : (null);
+                  },
+                )}
+              <Redirect from="/" to="/dashboard" />
               </Switch>
-            </Container>
+            </Container>          
           </main>
           <AppAside fixed={true} hidden={true}>
             Some desktop only components
           </AppAside>
         </div>
         <AppFooter>
-          <DashboardFooter/>
+          <Footer/>
         </AppFooter>  
       </div>
     );

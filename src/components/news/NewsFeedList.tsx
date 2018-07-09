@@ -20,13 +20,7 @@ class NewsFeedList extends React.Component<INewsFeedListProps, INewsFeedListStat
         this.state={
             showCount:this.initalShowCount
         }
-    }
-    public componentWillMount(){
-        if(this.props.loadNewsFeed){
-            this.props.loadNewsFeed().then(()=>{
-                console.log('loaded via container')
-            })
-        }
+        this.props.loadNewsFeed()
     }
     public render(){
         const {newsFeeds} = this.props;

@@ -17,12 +17,12 @@ const initialState = {
         {  
             icon: 'fa fa-dollar',
             name: 'Quote To Cash',
-            url: '/q2c',
+            url: '/QuoteToCash',
         },
         {  
             icon: 'fa - fa-credit-card',
-            name: 'Procure to Pay',
-            url: '/p2p',
+            name: 'Procure To Pay',
+            url: '/ProcureToPay',
         },
         {  
             icon: 'fa fa-rocket',

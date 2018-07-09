@@ -55,9 +55,7 @@ export const loadAlertGroupSet = () => (dispatch, getState)=> {
     const url = BASE_URL + SERVICES.endpoints.alertGroupSet;
     return axios.get(url)
                 .then((response:any)=>{
-                    console.log(response)                           
                     dispatch(loadAlertGroupSetSuccess(response.data.value));
-                    console.log('iamhere')
                     if(response.data.value){
                         response.data.value.forEach((element:any) => {
                             dispatch(loadAlertGroupDetails(element.GroupTile))
@@ -79,7 +77,6 @@ export const loadAlertGroupDetails = (GroupTile) => (dispatch, getState)=> {
     const url = BASE_URL + SERVICES.endpoints.alertSet;
     return axios.get(url,{params:{filter}})
                 .then((response:any)=>{
-                    console.log(response)                           
                     dispatch(loadAlertDetailsSuccess(response.data.value, GroupTile));
                 })
                 .catch((error)=>{
@@ -97,7 +94,6 @@ export const loadDocReceivedCount = () => (dispatch, getState)=> {
     const url = BASE_URL + SERVICES.endpoints.docReceivedCount;
     return axios.get(url)
                 .then((response:any)=>{
-                    console.log(response)                           
                     dispatch(loadDocReceivedCountSuccess(AlertGroupSet.value));
                 })
                 .catch((error)=>{
@@ -115,7 +111,6 @@ export const loadTopErrorLogs = () => (dispatch, getState)=> {
     const url = BASE_URL + SERVICES.endpoints.errorLog;
     return axios.get(url)
                 .then((response:any)=>{
-                    console.log("**Top Error Logs***************",response)                           
                     dispatch(loadTopErrorLogsSuccess(response.data.value));
                 })
                 .catch((error)=>{

@@ -31,8 +31,6 @@ class App extends React.Component<IAppProps> {
   public constructor(props){
     super(props)
     this.reloadData= this.reloadData.bind(this);
-  }
-  public componentDidMount(){
     this.reloadData();
   }
   public render() {
@@ -43,7 +41,6 @@ class App extends React.Component<IAppProps> {
           }
       }
     }
-    console.log(this.props.alertGroupSet)
     return (
       <div className="App">
         <HashRouter>
@@ -51,7 +48,7 @@ class App extends React.Component<IAppProps> {
               <Route path='/home' render={(props) => (
                   <div>home</div>
                   )}/>
-              <Route path="/dashboard" name="Home" render={(props) => (
+              <Route path="/" name="Home" render={(props) => (
                   <DefaultLayout {...this.props}/>
                   )}/>
             </Switch>

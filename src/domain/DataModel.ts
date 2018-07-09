@@ -30,28 +30,8 @@ export interface INewsFeedItem{
     pubDate:string;
     title:string
 }
-/*
-export namespace NewFeeds{
 
-    export interface INewsFeed{
-        description:string;
-        language:string;
-        link:string;
-        pubDate:string;
-        title:string;
-        items:INewsFeedItem[]
-    }
-    export interface INewsFeedItem{
-        content:string;
-        contentEncoded:string;
-        contentSnippet:string;
-        creator:string;
-        date:string;
-        guid:string;
-        isoDate:string;
-        link:string;
-        pubDate:string;
-        title:string
-    }
+export interface IChartDataItem{
+    label:string;
+    value:number
 }
-*/

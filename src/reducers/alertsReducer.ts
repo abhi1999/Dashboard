@@ -34,7 +34,7 @@ export const alertsReducer = (state = initialState, action)=>{
                 alertGroupSet:action.data
             }
         case LOAD_ALERT_GROUP_DETAILS_SUCCESS:
-            const newState = _.clone(state);
+            const newState = _.cloneDeep(state);
             const item = newState.alertGroupDetails.find(d=> d.GroupTile === action.GroupTile);
             if(item){
                 item.values = action.data
