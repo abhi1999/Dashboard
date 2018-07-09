@@ -28,6 +28,7 @@
     "react-notification-system-redux": "^1.2.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
+    "react-scroll-to-component": "^1.0.2",
     "react-spinners": "^0.3.2",
     "react-table": "^6.8.6",
     "reactstrap": "^6.0.1",
