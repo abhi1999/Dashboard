@@ -1,7 +1,6 @@
 import axios from "axios";
 import buildQuery from "odata-query";
 import Notifications from 'react-notification-system-redux';
-import {AlertGroupSet, DocReceivedCount, TopErrorLog} from "./../__mocks__/MockData";
 import { BASE_URL, RSS_FEED_URL, RSS_PARSER, SERVICES } from "./../configs/"
 import {  
     LOAD_ALERT_GROUP_DETAILS_SUCCESS,    
@@ -94,7 +93,7 @@ export const loadDocReceivedCount = () => (dispatch, getState)=> {
     const url = BASE_URL + SERVICES.endpoints.docReceivedCount;
     return axios.get(url)
                 .then((response:any)=>{
-                    dispatch(loadDocReceivedCountSuccess(AlertGroupSet.value));
+                    dispatch(loadDocReceivedCountSuccess(response.data.value));
                 })
                 .catch((error)=>{
                     dispatch(loadDataError(error));

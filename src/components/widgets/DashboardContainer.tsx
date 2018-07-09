@@ -62,7 +62,6 @@ class DashboardContainer extends React.Component<IDashboardContainerProps, IDash
         }
 
         this.setState({ colSize }, ()=>{
-            console.log("scrollto")
             setTimeout(()=>{scrollToComponent(this.containerRef.current, { offset:-200, align:'top', duration: 150, ease:'inCirc'})},500)
         })
         if(this.props.onMaximize) {
