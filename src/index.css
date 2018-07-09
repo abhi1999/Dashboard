@@ -12,3 +12,19 @@ body {background-color:#f3f3f3;}
 
 /* .sidebar .nav-link:hover { color:#3a96dd;} */
 
+body {color:#333;}
+.row {margin:15px 0 0 15px;}
+.card-header {background-color:#ffffff;border-bottom:none;color:#777777;font-size:1rem;}
+.card {border:none;
+-webkit-box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.075);
+-moz-box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.075);
+box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.075);}
+.card-body .card {box-shadow:none;}
+h5.card-title {font-size:0.8rem;}
+.sidebar .nav-link:hover {color:#ffffff!important;}
+.app-header .nav-item {font-size:1.4rem;border-right:solid 1px #d4d4d4;}
+.app-header .navbar-nav {border-left:solid 1px #d4d4d4;}
+.ml-auto navbar-nav {border:none;}
+.ml-auto navbar-nav input {background-color:#c7e0f4;border-radius:0;border:solid 1px #3a96dd;}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {color:#777777;}
+h3 {font-size:1rem;}
