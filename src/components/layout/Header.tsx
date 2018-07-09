@@ -6,7 +6,7 @@ import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler }
 class Header extends React.Component{
     public render(){
         return <React.Fragment>
-            <div>VantagePoint 5 &nbsp;</div>
+            <div>VP5</div>
             <AppSidebarToggler className="d-lg-none" display="md" mobile={true}/>
             <AppSidebarToggler className="d-md-down-none" display="lg"/>
             <Nav className="d-md-down-none" navbar={true}>
@@ -23,15 +23,14 @@ class Header extends React.Component{
                     <NavLink href="#"><i className="icon-notebook"/></NavLink>
                 </NavItem>
             </Nav>
-            <Nav className="ml-auto" navbar={true}>
+            <Nav className="lg-auto" navbar={true}>
                 <Input type="search" name="search" id="exampleSearch" placeholder="Search..." />
                 <NavItem className="d-md-down-none">
-                    <NavLink href="#"><i className="icon-globe"/><Badge pill={true} color="danger">5</Badge></NavLink>
-                    
+                    <NavLink href="#"><i className="icon-globe"/><Badge pill={true} color="danger">5</Badge></NavLink>                    
                 </NavItem>
-                <NavItem><i className="icon-refresh"/></NavItem>
+                <NavItem className="d-md-down-none"><i className="icon-refresh"/></NavItem>
             </Nav>
-            <AppHeaderDropdown direction="down">
+            <AppHeaderDropdown direction="down" className="d-md-down-none">
                 <DropdownToggle nav={true}>
                     <h6>Vantage Point EDI</h6>
                     <small>Dynamics 365 Company</small>
