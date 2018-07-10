@@ -4,7 +4,6 @@ const initialState = {
     loading:false, 
     navItems:[
         {  
-            badge: { variant: 'info', text: 'NEW' },
             icon: 'fa fa-home',
             name: 'Dashboard',
             url: '/dashboard',

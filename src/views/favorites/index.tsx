@@ -7,7 +7,7 @@ class Favorites extends React.Component<any, any>{
     }
     public render(){
         return <Row>
-           Not yet Implemented
+                Not Implemented
           </Row>   
     }
 }
