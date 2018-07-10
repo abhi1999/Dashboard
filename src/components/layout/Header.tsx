@@ -26,8 +26,9 @@ class Header extends React.Component{
                     <NavLink href="#"><i className="icon-notebook" title="Notes"/></NavLink>
                 </NavItem>
             </Nav>
-            <Nav className="lg-auto" navbar={true}>
-                <Input type="search" name="search" id="exampleSearch" placeholder="Search..." />
+            <Nav className="ml-auto" navbar={true}>
+                <NavItem className="d-md-down-none"> <Input type="search" name="search" id="exampleSearch" placeholder="Search..." />
+                </NavItem>
                 <NavItem className="d-md-down-none">
                     <NavLink href="#"><i className="icon-globe"/><Badge pill={true} color="danger">5</Badge></NavLink>                    
                 </NavItem>
