@@ -32,7 +32,7 @@ class DashboardContainer extends React.Component<IDashboardContainerProps, IDash
         this.setState({colSize:nextProps.colSize})
     }
     public render(){
-        return <Col md={this.state.colSize} > 
+        return <Col md={this.state.colSize} className="dashboard-container-widget" > 
                 <Card>
                 <CardHeader>
                   {this.props.headerTitle} {this.props.badgeText !== undefined? <Badge pill={true} color="info">{this.props.badgeText}</Badge>:""}

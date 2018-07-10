@@ -1,4 +1,5 @@
 import * as  React from 'react';
+import  {Fade} from "reactstrap";
 import { INewsFeed, INewsFeedItem } from "./../../domain/DataModel"
 import NewsFeedItem from "./NewsFeedItem"
 
@@ -24,14 +25,16 @@ class NewsFeedList extends React.Component<INewsFeedListProps, INewsFeedListStat
     }
     public render(){
         const {newsFeeds} = this.props;
-        return <div>
+        return <Fade timeout={300} in={true}>
+                <div className="news-feed-list">
                 {newsFeeds && newsFeeds.items ? newsFeeds.items.map((item:INewsFeedItem, index:number)=>{
                     if(this.state.showCount === 0 || index<this.state.showCount){
                         return <NewsFeedItem key={index} item={item} />;
                     }else {return "";}
                 }) :""}
-                {this.renderPaging()}
+                <small>{this.renderPaging()}</small>
             </div>
+        </Fade>
     }
     private renderPaging(){
         if(this.props.newsFeeds === undefined || this.props.newsFeeds.items === undefined || this.props.newsFeeds.items.length === 0){
@@ -41,10 +44,10 @@ class NewsFeedList extends React.Component<INewsFeedListProps, INewsFeedListStat
             return <span/>
         }
         else if(this.state.showCount !== 0){
-            return <a onClick={()=>{this.toggleShowAll(true)}}>Show All</a>
+            return <a  className="btn " onClick={()=>{this.toggleShowAll(true)}}><i className={"icon-arrow-down"}/> Show All</a>
         }
         else{
-            return <a onClick={()=>{this.toggleShowAll(false)}}>Show Top 3</a>            
+            return <a className="btn " onClick={()=>{this.toggleShowAll(false)}}><i className={"icon-arrow-up"}/> Show Top 3</a>            
         }
     }
     private toggleShowAll(showAll){
