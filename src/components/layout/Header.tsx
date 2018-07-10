@@ -10,7 +10,7 @@ class Header extends React.Component{
             <AppSidebarToggler className="d-lg-none" display="md" mobile={true}/>
             <AppSidebarToggler className="d-md-down-none" display="lg"/>
             <AppNavbarBrand
-                full={{ src: "./assets/images/logo.png", height: 50, alt: 'Vantage Point 5' }}
+                full={{ src: "./assets/images/vantage-point-logo.png", alt: 'Vantage Point 5' }}
             />
             <Nav className="d-md-down-none" navbar={true}>
                 <NavItem className="px-3">
@@ -32,16 +32,7 @@ class Header extends React.Component{
                     <NavLink href="#"><i className="icon-globe"/><Badge pill={true} color="danger">5</Badge></NavLink>                    
                 </NavItem>
                 <NavItem className="d-md-down-none"><i className="icon-refresh"/></NavItem>
-                <AppHeaderDropdown direction="down" className="d-md-down-none">
-                <DropdownToggle nav={false}><span>VP5</span>
-                </DropdownToggle>
-                <DropdownMenu right={true} style={{ right: 'auto' }}>
-                    <DropdownItem header={true} tag="div" className="text-center"><strong>Actions</strong></DropdownItem>
-                    <DropdownItem><i className="fa fa-bell-o"/> Updates<Badge color="info">42</Badge></DropdownItem>
-                    <DropdownItem><i className="fa fa-bell-o"/> Inflows<Badge color="success">190</Badge></DropdownItem>
-                    <DropdownItem><i className="fa fa-bell-o"/> Outflows<Badge color="danger">45</Badge></DropdownItem>
-                </DropdownMenu>
-                </AppHeaderDropdown>
+                
             </Nav>
             <AppAsideToggler className="d-md-down-none" />
         </React.Fragment>
