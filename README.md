@@ -13,8 +13,8 @@ Run this following command to install all the dependencies for this UI project. 
 npm install
 ```
 
-### Local developmemnt/ debug
-Run the following command to debug the application locally.  This will start a webpack local dev server to serve static content.  The dev server is currently configured on port number 9003, which can be changed in pacakge.json start script.
+### Local development/ debug
+Run the following command to debug the application locally.  This will start a webpack local dev server to serve static content.  The dev server is currently configured on port number 9005, which can be changed in pacakge.json start script.
 ```
 npm start
 ```

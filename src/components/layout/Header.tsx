@@ -1,26 +1,29 @@
+import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import * as  React from 'react';
 import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Input, Nav, NavItem, NavLink } from 'reactstrap';
 
-import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
+// import logo from  "./../../assets/images/vantage-point-logo.png";
 
 class Header extends React.Component{
     public render(){
         return <React.Fragment>
-            <div>VP5</div>
             <AppSidebarToggler className="d-lg-none" display="md" mobile={true}/>
             <AppSidebarToggler className="d-md-down-none" display="lg"/>
+            <AppNavbarBrand
+                full={{ src: "./assets/images/logo.png", height: 50, alt: 'Vantage Point 5' }}
+            />
             <Nav className="d-md-down-none" navbar={true}>
                 <NavItem className="px-3">
-                    <NavLink href="#"><i className="icon-settings"/></NavLink>
+                    <NavLink href="#"><i className="icon-settings" title="Settings"/></NavLink>
                 </NavItem>
                 <NavItem className="px-3">
-                    <NavLink href="#"><i className="icon-cloud-download"/></NavLink>
+                    <NavLink href="#"><i className="icon-cloud-download" title="Download"/></NavLink>
                 </NavItem>
                 <NavItem className="px-3">
-                    <NavLink href="#"><i className="icon-cloud-upload"/></NavLink>
+                    <NavLink href="#"><i className="icon-cloud-upload" title="Update"/></NavLink>
                 </NavItem>
                 <NavItem className="px-3">
-                    <NavLink href="#"><i className="icon-notebook"/></NavLink>
+                    <NavLink href="#"><i className="icon-notebook" title="Notes"/></NavLink>
                 </NavItem>
             </Nav>
             <Nav className="lg-auto" navbar={true}>
@@ -29,11 +32,8 @@ class Header extends React.Component{
                     <NavLink href="#"><i className="icon-globe"/><Badge pill={true} color="danger">5</Badge></NavLink>                    
                 </NavItem>
                 <NavItem className="d-md-down-none"><i className="icon-refresh"/></NavItem>
-            </Nav>
-            <AppHeaderDropdown direction="down" className="d-md-down-none">
-                <DropdownToggle nav={true}>
-                    <h6>Vantage Point EDI</h6>
-                    <small>Dynamics 365 Company</small>
+                <AppHeaderDropdown direction="down" className="d-md-down-none">
+                <DropdownToggle nav={false}><span>VP5</span>
                 </DropdownToggle>
                 <DropdownMenu right={true} style={{ right: 'auto' }}>
                     <DropdownItem header={true} tag="div" className="text-center"><strong>Actions</strong></DropdownItem>
@@ -42,9 +42,8 @@ class Header extends React.Component{
                     <DropdownItem><i className="fa fa-bell-o"/> Outflows<Badge color="danger">45</Badge></DropdownItem>
                 </DropdownMenu>
                 </AppHeaderDropdown>
+            </Nav>
             <AppAsideToggler className="d-md-down-none" />
-            
-
         </React.Fragment>
     }
 }

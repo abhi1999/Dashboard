@@ -30,7 +30,7 @@ const radar = {
       pointHoverBorderColor: 'rgba(255,99,132,1)',
     },
   ],
-  labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
+  labels: ['Type 1', 'Type 2', 'Type 3', 'Quote', 'Bill', 'Proposal', 'Something Else'],
 };
 
 interface IDocReceivedProps{
