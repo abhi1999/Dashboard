@@ -19,7 +19,7 @@ class Dashboard extends React.Component<any, any>{
            <AlertsContainer/>
            <TopErrorsContainer/>
            <DashboardContainer colSize={3} headerTitle="Critical Alerts (mock)"><CriticalAlerts/></DashboardContainer>
-           <DashboardContainer colSize={3} headerTitle="Documents by Type (mock)"> <DocReceived/></DashboardContainer>
+           <DashboardContainer colSize={3} headerTitle="Documents By Type (mock)"> <DocReceived/></DashboardContainer>
           </Row>   
     }
 }

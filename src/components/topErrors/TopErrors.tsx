@@ -13,7 +13,7 @@ class TopErrors extends React.Component<ITopErrorsProps, any>{
     public render(){
         const {topErrors} = this.props
         return <React.Fragment>
-           <DashboardContainer colSize={4} headerTitle={"Exceptions by process"}> 
+           <DashboardContainer colSize={4} headerTitle={"Exceptions By Process"}> 
                 <HorizontalBar data={this.getChartData(topErrors)} options={ChartOptions}/>
             </DashboardContainer>
         </React.Fragment>
