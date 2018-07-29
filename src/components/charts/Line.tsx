@@ -1,5 +1,5 @@
 import * as  React from 'react';
-import { HorizontalBar, Line, Pie } from 'react-chartjs-2';
+import { Line, Pie } from 'react-chartjs-2';
 import {ChartBackgroundColors, ChartOptions} from "./../../configs/chartOptions"
 
 interface IPieComponentProps{
@@ -20,7 +20,7 @@ class PieComponent extends React.Component<IPieComponentProps, IPieComponentStat
         return <div>
                 {this.state.pieData ? 
                   <div className="chart-wrapper">
-                    <HorizontalBar data={this.state.pieData} options={ChartOptions}/>
+                    <Pie data={this.state.pieData} options={ChartOptions}/>
                   </div>
                   : <span>No Data found</span>}
             </div>

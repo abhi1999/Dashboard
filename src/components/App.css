@@ -13,3 +13,7 @@ require("!style!css!react-table/react-table.css");
     transition: all 400ms ease;
 }
   
+
+.dashboard-component-loading{
+    margin-left:40%;
+}

@@ -1,13 +1,16 @@
 import _ from 'lodash';
 import {    
-    LOAD_ALERT_GROUP_DETAILS_SUCCESS,        
+    DATA_LOAD_ERROR,
+    DATA_LOAD_START,
+    LOAD_ALERT_GROUP_DETAILS_SUCCESS,    
+    LOAD_ALERT_GROUP_PRESETS,    
     LOAD_ALERT_GROUP_SUCCESS, 
-    LOAD_DATA, 
-    LOAD_ERROR
+    SET_ALERT_GROUP_PRESET
     } from './../constants';
 
 const initialState = {
     alertGroupDetails:[],
+    alertGroupPresets:[],
     alertGroupSet:[],
     error:false,
     loading:false, 
@@ -18,7 +21,7 @@ export const alertsReducer = (state = initialState, action)=>{
         return state;
     }
     switch(action.type){
-        case LOAD_DATA:
+        case DATA_LOAD_START:
             if(action.alertGroup){
                 return {
                     ...state,
@@ -43,7 +46,9 @@ export const alertsReducer = (state = initialState, action)=>{
                 newState.alertGroupDetails.push({GroupTile:action.GroupTile, values:action.data})
             }
             return newState;
-        case LOAD_ERROR:
+        case LOAD_ALERT_GROUP_PRESETS:
+            return {...state};
+        case DATA_LOAD_ERROR:
             if(action.newFeeds){
                 return {
                     ...state,
@@ -53,6 +58,9 @@ export const alertsReducer = (state = initialState, action)=>{
             else {
                 return state
             };
+        case SET_ALERT_GROUP_PRESET:
+            console.log('***********************',action)
+            return {...state};
         default:
             return state;
     }

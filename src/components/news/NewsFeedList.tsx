@@ -1,6 +1,7 @@
 import * as  React from 'react';
 import  {Fade} from "reactstrap";
 import { INewsFeed, INewsFeedItem } from "./../../domain/DataModel"
+import { LoadingComponent } from "./../widgets/"
 import NewsFeedItem from "./NewsFeedItem"
 
 interface INewsFeedListProps{
@@ -26,6 +27,7 @@ class NewsFeedList extends React.Component<INewsFeedListProps, INewsFeedListStat
     public render(){
         const {newsFeeds} = this.props;
         return <Fade timeout={300} in={true}>
+                {this.props.loading? <LoadingComponent/>:""}
                 <div className="news-feed-list">
                 {newsFeeds && newsFeeds.items ? newsFeeds.items.map((item:INewsFeedItem, index:number)=>{
                     if(this.state.showCount === 0 || index<this.state.showCount){
@@ -37,7 +39,7 @@ class NewsFeedList extends React.Component<INewsFeedListProps, INewsFeedListStat
         </Fade>
     }
     private renderPaging(){
-        if(this.props.newsFeeds === undefined || this.props.newsFeeds.items === undefined || this.props.newsFeeds.items.length === 0){
+        if(this.props.loading === false && (this.props.newsFeeds === undefined || this.props.newsFeeds.items === undefined || this.props.newsFeeds.items.length === 0)){
             return <span>No items found</span>
         }
         else if(this.props.newsFeeds && this.props.newsFeeds.items && this.props.newsFeeds.items.length <= 3){

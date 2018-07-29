@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as actionCreators from "./../../actions/mainAction";
+import * as actionCreators from "./../../actions";
 import NewsFeedList from "./../../components/news/NewsFeedList";
 
 const mapStateToProps = (state) => {

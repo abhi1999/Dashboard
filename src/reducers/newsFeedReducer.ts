@@ -1,4 +1,4 @@
-import { LOAD_DATA, LOAD_ERROR, LOAD_NEWS_FEED_SUCCESS } from './../constants';
+import { DATA_LOAD_ERROR, DATA_LOAD_START, LOAD_NEWS_FEED_SUCCESS } from './../constants';
 const initialState = {
     error:false,
     loading:false, 
@@ -9,7 +9,7 @@ export const newsFeedReducer = (state = initialState, action)=>{
         return state;
     }        
     switch(action.type){
-        case LOAD_DATA:
+        case DATA_LOAD_START:
             if(action.newFeeds){
                 return {
                     ...state,
@@ -22,9 +22,9 @@ export const newsFeedReducer = (state = initialState, action)=>{
         case LOAD_NEWS_FEED_SUCCESS:
             return {
                 ...state,
-                newsFeeds:action.data,
+                error:false,loading:false, newsFeeds:action.data,
             }
-        case LOAD_ERROR:
+        case DATA_LOAD_ERROR:
             if(action.newFeeds){
                 return {
                     ...state,

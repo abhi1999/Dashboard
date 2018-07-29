@@ -1,4 +1,4 @@
-import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
+import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarMinimizer, AppSidebarToggler } from '@coreui/react';
 import * as  React from 'react';
 import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Input, Nav, NavItem, NavLink } from 'reactstrap';
 
@@ -8,10 +8,12 @@ class Header extends React.Component{
     public render(){
         return <React.Fragment>
             <AppSidebarToggler className="d-lg-none" display="md" mobile={true}/>
-            <AppSidebarToggler className="d-md-down-none" display="lg"/>
             <AppNavbarBrand
                 full={{ src: "./assets/images/vantage-point-logo.png", alt: 'Vantage Point 5' }}
+                minimized={{ src: "./assets/images/favicon.ico", alt: 'Vantage Point 5' }}
             />
+            <AppSidebarToggler className="d-md-down-none" display="lg"/>
+            
             <Nav className="d-md-down-none" navbar={true}>
                 <NavItem className="px-3">
                     <NavLink href="#"><i className="icon-settings" title="Settings"/></NavLink>

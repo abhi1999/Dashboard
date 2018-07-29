@@ -1,6 +1,14 @@
-import { LOAD_DATA, LOAD_ERROR } from './../constants';
+import _ from "lodash";
+import {     
+    DATA_LOAD_ERROR,
+    DATA_LOAD_START, 
+    LOAD_DASHBOARD_MENU_ITEM_DETAILS,
+    LOAD_DASHBOARD_MENU_LIST,
+} from './../constants';
 
 const initialState = {
+    dashboardMenuItemDetails:[],
+    dashboardMenuItems:[],
     loading:false, 
     navItems:[
         {  
@@ -47,16 +55,28 @@ export const mainReducer = (state = initialState, action)=>{
     }
         
     switch(action.type){
-        case LOAD_DATA:
+        case DATA_LOAD_START:
             return {
                 ...state,
                 loading:true
             }
-        case LOAD_ERROR:
+        case DATA_LOAD_ERROR:
             return {
                 ...state,
                 loading:false
             }
+        case LOAD_DASHBOARD_MENU_LIST:
+            return {...state, dashboardMenuItems:action.data};
+        case LOAD_DASHBOARD_MENU_ITEM_DETAILS:
+            const newState = _.cloneDeep(state);
+            const item = newState.dashboardMenuItemDetails.find(d=> d.ShortCutID === action.ShortCutID);
+            if(item){
+                item.values = action.data
+            }
+            else {
+                newState.dashboardMenuItemDetails.push({ShortCutID:action.ShortCutID, values:action.data})
+            }
+            return {...newState};
         default:
             return state;
     }

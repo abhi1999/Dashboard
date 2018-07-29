@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as actionCreators from "./../../actions/mainAction";
+import * as actionCreators from "./../../actions";
 import TopError from "./../../components/topErrors/TopErrors";
 
 const mapStateToProps = (state) => {
@@ -19,10 +19,9 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   const {
-    loadNewsFeed,
+    
   } = bindActionCreators(actionCreators, dispatch)
   return {
-    loadNewsFeed,
   }
 }
 const TopErrorsContainer = connect(mapStateToProps, mapDispatchToProps)(TopError);

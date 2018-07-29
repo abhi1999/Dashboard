@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import {    
-    LOAD_DATA, 
-    LOAD_ERROR,
-    LOAD_TOP_ERROR_LOGS
+    DATA_LOAD_ERROR, DATA_LOAD_START,
+    LOAD_EXCEPTION_BY_PROCESS_LOGS
 } from './../constants';
 
 const initialState = {
@@ -16,7 +15,7 @@ export const topErrorsReducer = (state = initialState, action)=>{
         return state;
     }
     switch(action.type){
-        case LOAD_DATA:
+        case DATA_LOAD_START:
             if(action.topErrors){
                 return {
                     ...state,
@@ -26,12 +25,12 @@ export const topErrorsReducer = (state = initialState, action)=>{
             else {
                 return state;
             }
-        case LOAD_TOP_ERROR_LOGS:
+        case LOAD_EXCEPTION_BY_PROCESS_LOGS:
             return {
                 ...state,
                 topErrors:action.data
             }
-        case LOAD_ERROR:
+        case DATA_LOAD_ERROR:
             if(action.topErrors){
                 return {
                     ...state,

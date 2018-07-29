@@ -1,23 +1,30 @@
 import * as  React from 'react';
+import { FadeLoader, RingLoader } from 'react-spinners';
 import Pie from "./../charts/Pie"
+import { LoadingComponent } from "./../widgets/"
 import DashboardContainer from "./../widgets/DashboardContainer"
+import AlertView from "./AlertView"
+import AlertViewToggle from "./AlertViewToggle"
+
 interface IAlertsProps{
     alertGroupSet:any[]
     alertGroupDetails:any[]
+    loadAlertPresets:()=>{}
 }
 class Alerts extends React.Component<IAlertsProps, any>{
     public constructor(props) {
         super(props);
+        this.props.loadAlertPresets();
     }
     public render(){
         const {alertGroupDetails, alertGroupSet} = this.props
         return <React.Fragment>
-            {alertGroupSet? 
+            {alertGroupSet && alertGroupSet.length>0? 
                 alertGroupSet.map(a=>{
                     return <DashboardContainer key={a.GroupTile} colSize={3} headerTitle={a.Caption} badgeText={a.quantity}>
-                        <Pie data={this.getPieData(a.GroupTile, alertGroupDetails)}/>
+                        <AlertView alertId={a.GroupTile} data={this.getPieData(a.GroupTile, alertGroupDetails)} {...this.props}/>
                     </DashboardContainer>})
-            :""}    
+            :<DashboardContainer colSize={3} headerTitle="Alerts"><LoadingComponent/></DashboardContainer>}    
         </React.Fragment>
     }
     private getPieData(GroupTile, details){
@@ -30,6 +37,7 @@ class Alerts extends React.Component<IAlertsProps, any>{
         }
         return []
     }
+    
 }
 
 export default Alerts;

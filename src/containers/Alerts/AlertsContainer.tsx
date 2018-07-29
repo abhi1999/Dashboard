@@ -1,19 +1,21 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as actionCreators from "./../../actions/mainAction";
+import * as actionCreators from "./../../actions";
 import Alerts from "./../../components/alerts/Alerts";
 
 const mapStateToProps = (state) => {
   const {
     alertsReducer:{
         alertGroupDetails,
+        alertGroupPresets,
         alertGroupSet,
         error,
-        loading,   
+        loading,
       },
   }= state;
   return {
     alertGroupDetails,
+    alertGroupPresets,
     alertGroupSet,
     error,
     loading, 
@@ -21,10 +23,12 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   const {
-    loadNewsFeed,
+    loadAlertPresets,
+    setAlertPreset,
   } = bindActionCreators(actionCreators, dispatch)
   return {
-    loadNewsFeed,
+    loadAlertPresets,
+    setAlertPreset,
   }
 }
 const AlertsContainer = connect(mapStateToProps, mapDispatchToProps)(Alerts);

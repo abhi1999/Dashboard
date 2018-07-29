@@ -1,12 +1,12 @@
 import * as MainActions from "./../actions/mainAction"
 import {  
+    DATA_LOAD_ERROR,
+    DATA_LOAD_START,
     LOAD_ALERT_GROUP_DETAILS_SUCCESS,    
     LOAD_ALERT_GROUP_SUCCESS,
-    LOAD_DATA, 
     LOAD_DOC_RECEIVED_COUNT,
-    LOAD_ERROR,
+    LOAD_EXCEPTION_BY_PROCESS_LOGS,
     LOAD_NEWS_FEED_SUCCESS,
-    LOAD_TOP_ERROR_LOGS,
 } from './../constants';
 import {AlertGroupSet, DocReceivedCount, TopErrorLog} from "./MockData";
 
@@ -42,7 +42,7 @@ const loadDocReceivedCountSuccess = (data:any) => {
 const loadTopErrorLogsSuccess = (data:any) => {
     return {
         data, 
-        type: LOAD_TOP_ERROR_LOGS
+        type: LOAD_EXCEPTION_BY_PROCESS_LOGS
     };
 };
 const loadAlertDetailsSuccess = (data:any, GroupTile) => {

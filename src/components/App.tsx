@@ -23,7 +23,6 @@ interface IAppProps{
   notifications:any,
   navItems:any[],
   newsFeeds:INewsFeed,
-  loadAlertGroupSet:()=>{},
   loadAllLookup:()=>{},
 }
 

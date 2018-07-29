@@ -1,7 +1,6 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as actionCreators from "../actions/mainAction";
-// import * as actionCreators from "./../__mocks__/mockActions";
+import * as actionCreators from "../actions";
 import App from "./../components/App"
 
 const mapStateToProps = (state) => {
@@ -25,19 +24,20 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const {
     loadAlertGroupSet,
+    loadDashboardMenuList,
     loadDocReceivedCount,
-    loadTopErrorLogs,
+    loadExceptionByProcessLogs,
     testNotification
   } = bindActionCreators(actionCreators, dispatch)
   return {
     loadAlertGroupSet,
     loadDocReceivedCount,
-    loadTopErrorLogs,
     testNotification,
     loadAllLookup(){
+      loadDashboardMenuList();
       loadDocReceivedCount();
       loadAlertGroupSet();
-      loadTopErrorLogs();
+      loadExceptionByProcessLogs();
     }
   }
 }
