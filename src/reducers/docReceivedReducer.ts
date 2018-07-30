@@ -1,21 +1,21 @@
 import {    
     DATA_LOAD_ERROR, DATA_LOAD_START,
-    LOAD_EXCEPTION_BY_PROCESS_LOGS
+    LOAD_DOC_RECEIVED_COUNT
 } from './../constants';
 
 const initialState = {
+    docReceivedByType:[],
     error:false,
     loading:false, 
-    topErrors:[]
 }
 
-export const topErrorsReducer = (state = initialState, action)=>{
+export const docReceivedReducer = (state = initialState, action)=>{
     if(!action){
         return state;
     }
     switch(action.type){
         case DATA_LOAD_START:
-            if(action[LOAD_EXCEPTION_BY_PROCESS_LOGS]){
+            if(action[LOAD_DOC_RECEIVED_COUNT]){
                 return {
                     ...state,
                     error:false,
@@ -25,14 +25,14 @@ export const topErrorsReducer = (state = initialState, action)=>{
             else {
                 return state;
             }
-        case LOAD_EXCEPTION_BY_PROCESS_LOGS:
+        case LOAD_DOC_RECEIVED_COUNT:
             return {
                 ...state,
+                docReceivedByType:action.data,
                 loading:false,
-                topErrors:action.data
             }
         case DATA_LOAD_ERROR:
-            if(action[LOAD_EXCEPTION_BY_PROCESS_LOGS]){
+            if(action[LOAD_DOC_RECEIVED_COUNT]){
                 return {
                     ...state,
                     error:true, 
@@ -47,4 +47,4 @@ export const topErrorsReducer = (state = initialState, action)=>{
     }
 }
 
-export default topErrorsReducer;
+export default docReceivedReducer;

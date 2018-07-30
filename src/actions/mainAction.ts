@@ -22,9 +22,11 @@ export const loadDataState = (type?) => {
     if(type) {action[type]=true;}
     return action
 };
-export const loadDataError = (error) => {
-    return {
+export const loadDataError = (error, type?) => {
+    const action = {
         error,
         type: DATA_LOAD_ERROR
     };
+    if(type) {action[type]=true;}
+    return action
 };

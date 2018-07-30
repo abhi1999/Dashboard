@@ -10,10 +10,11 @@ export const newsFeedReducer = (state = initialState, action)=>{
     }        
     switch(action.type){
         case DATA_LOAD_START:
-            if(action.newFeeds){
+            if(action[LOAD_NEWS_FEED_SUCCESS]){
                 return {
                     ...state,
-                    loading:true
+                    error:false,
+                    loading:true,
                 }
             }
             else {
@@ -22,10 +23,10 @@ export const newsFeedReducer = (state = initialState, action)=>{
         case LOAD_NEWS_FEED_SUCCESS:
             return {
                 ...state,
-                error:false,loading:false, newsFeeds:action.data,
+                error:false, loading:false, newsFeeds:action.data,
             }
         case DATA_LOAD_ERROR:
-            if(action.newFeeds){
+            if(action[LOAD_NEWS_FEED_SUCCESS]){
                 return {
                     ...state,
                     error:true, loading:false, 

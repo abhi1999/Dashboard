@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch) => {
     testNotification,
     loadAllLookup(){
       loadDashboardMenuList();
-      loadDocReceivedCount();
+      loadDocReceivedCount("2018-02-02");
       loadAlertGroupSet();
       loadExceptionByProcessLogs();
     }

@@ -10,7 +10,7 @@ import {loadDataError, loadDataState} from "./mainAction"
 
 
 export const loadDashboardMenuList = () => (dispatch, getState)=> {
-    dispatch(loadDataState("businessProcess"));
+    dispatch(loadDataState(LOAD_DASHBOARD_MENU_LIST));
     const orderBy = ["ShortcutOrder"]    
     const url = BASE_URL + SERVICES.endpoints.shortcutMenuItems;
     return axios.get(url, {params:{orderBy}})
@@ -23,7 +23,7 @@ export const loadDashboardMenuList = () => (dispatch, getState)=> {
                     }
                 })
                 .catch((error)=>{
-                    dispatch(loadDataError(error));
+                    dispatch(loadDataError(error, LOAD_DASHBOARD_MENU_LIST));
                     dispatch(Notifications.error({
                         ...ErroNotificationOptions,
                         message: url +" :: " + error.message
@@ -32,16 +32,15 @@ export const loadDashboardMenuList = () => (dispatch, getState)=> {
     
 };
 export const loadDashboardMenuItemDetails = (ShortCutID) => (dispatch, getState)=> {
-    dispatch(loadDataState("businessProcess"));
+    dispatch(loadDataState(LOAD_DASHBOARD_MENU_ITEM_DETAILS));
     const filter = [{ShortCutID}]
     const url = BASE_URL + SERVICES.endpoints.shortcutMenuItemDetails;
-    console.log('iamhere')
     return axios.get(url,{params:{filter}})
                 .then((response:any)=>{
                     dispatch(loadDashboardMenuItemDetailsSuccess(response.data.value, ShortCutID));
                 })
                 .catch((error)=>{
-                    dispatch(loadDataError(error));
+                    dispatch(loadDataError(error,LOAD_DASHBOARD_MENU_ITEM_DETAILS));
                     dispatch(Notifications.error({
                         ...ErroNotificationOptions,
                         message: url +" :: " + error.message

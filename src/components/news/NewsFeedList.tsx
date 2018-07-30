@@ -1,7 +1,7 @@
 import * as  React from 'react';
 import  {Fade} from "reactstrap";
 import { INewsFeed, INewsFeedItem } from "./../../domain/DataModel"
-import { LoadingComponent } from "./../widgets/"
+import { LoadingOrErrorComponent } from "./../widgets/"
 import NewsFeedItem from "./NewsFeedItem"
 
 interface INewsFeedListProps{
@@ -27,15 +27,17 @@ class NewsFeedList extends React.Component<INewsFeedListProps, INewsFeedListStat
     public render(){
         const {newsFeeds} = this.props;
         return <Fade timeout={300} in={true}>
-                {this.props.loading? <LoadingComponent/>:""}
-                <div className="news-feed-list">
-                {newsFeeds && newsFeeds.items ? newsFeeds.items.map((item:INewsFeedItem, index:number)=>{
-                    if(this.state.showCount === 0 || index<this.state.showCount){
-                        return <NewsFeedItem key={index} item={item} />;
-                    }else {return "";}
-                }) :""}
-                <small>{this.renderPaging()}</small>
-            </div>
+                <LoadingOrErrorComponent {...this.props}/>
+                {this.props.loading || this.props.error? "":
+                    <div className="news-feed-list">
+                        {newsFeeds && newsFeeds.items ? newsFeeds.items.map((item:INewsFeedItem, index:number)=>{
+                            if(this.state.showCount === 0 || index<this.state.showCount){
+                                return <NewsFeedItem key={index} item={item} />;
+                            }else {return "";}
+                        }) :""}
+                        <small>{this.renderPaging()}</small>
+                    </div>
+                }
         </Fade>
     }
     private renderPaging(){

@@ -22,10 +22,11 @@ export const alertsReducer = (state = initialState, action)=>{
     }
     switch(action.type){
         case DATA_LOAD_START:
-            if(action.alertGroup){
+            if(action[LOAD_ALERT_GROUP_DETAILS_SUCCESS] || action[LOAD_ALERT_GROUP_SUCCESS]){
                 return {
                     ...state,
-                    loading:true
+                    error:false,
+                    loading:true,
                 }
             }
             else {
@@ -34,7 +35,9 @@ export const alertsReducer = (state = initialState, action)=>{
         case LOAD_ALERT_GROUP_SUCCESS:
             return {
                 ...state,
-                alertGroupSet:action.data
+                alertGroupSet:action.data,
+                error:false,
+                loading:false,
             }
         case LOAD_ALERT_GROUP_DETAILS_SUCCESS:
             const newState = _.cloneDeep(state);
@@ -45,11 +48,11 @@ export const alertsReducer = (state = initialState, action)=>{
             else {
                 newState.alertGroupDetails.push({GroupTile:action.GroupTile, values:action.data})
             }
-            return newState;
+            return {...newState, error:false, loading:false, };
         case LOAD_ALERT_GROUP_PRESETS:
             return {...state};
         case DATA_LOAD_ERROR:
-            if(action.newFeeds){
+            if(action[LOAD_ALERT_GROUP_DETAILS_SUCCESS] || action[LOAD_ALERT_GROUP_SUCCESS]){
                 return {
                     ...state,
                     error:true, loading:false, 
@@ -59,7 +62,6 @@ export const alertsReducer = (state = initialState, action)=>{
                 return state
             };
         case SET_ALERT_GROUP_PRESET:
-            console.log('***********************',action)
             return {...state};
         default:
             return state;

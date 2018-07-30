@@ -8,7 +8,7 @@ import {
 import {loadDataError, loadDataState} from "./mainAction"
 
 export const loadNewsFeed = () => (dispatch, getState)=> {
-    dispatch(loadDataState("newFeeds"));
+    dispatch(loadDataState(LOAD_NEWS_FEED_SUCCESS));
     const url = RSS_FEED_URL;
     return axios.get(url)
                 .then((response)=>{
@@ -20,7 +20,7 @@ export const loadNewsFeed = () => (dispatch, getState)=> {
                     }));
                 })
                 .catch((error)=>{
-                    dispatch(loadDataError(error));
+                    dispatch(loadDataError(error, LOAD_NEWS_FEED_SUCCESS));
                     dispatch(Notifications.error({
                         ...ErroNotificationOptions,
                         message: url +" :: " + error.message

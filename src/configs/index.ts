@@ -6,7 +6,7 @@ export const SERVICES ={
     endpoints:{
         alertGroupSet:"/odata/ApiAlertGroupSet",
         alertSetDetails:"/odata/ApiAlertSet",
-        docReceivedCount:"/odata/ApiGetDocReceivedCount?fromDate=2017-02-02",
+        docReceivedCount:"/odata/ApiGetDocReceivedCount",
         errorLog:"/odata/ApiGetTopErrorLog",
         shortcutMenuItemDetails:"/odata/ApiProcessTileView",
         shortcutMenuItems:"/odata/ApiDashboardShortcutSet",

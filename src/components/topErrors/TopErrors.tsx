@@ -1,11 +1,11 @@
 import * as  React from 'react';
-import {HorizontalBar, Line} from 'react-chartjs-2';
-import {ChartBackgroundColors, ChartOptions} from "./../../configs/chartOptions";
-import {DashboardContainer, LoadingComponent} from "./../widgets";
+import Charts from "./../charts";
+import {DashboardContainer, LoadingOrErrorComponent} from "./../widgets";
 
 interface ITopErrorsProps{
     topErrors:any[],
-    loading:boolean
+    loading:boolean,
+    error:boolean
 }
 class TopErrors extends React.Component<ITopErrorsProps, any>{
     public constructor(props) {
@@ -14,22 +14,16 @@ class TopErrors extends React.Component<ITopErrorsProps, any>{
     public render(){
         const {topErrors} = this.props
         return <React.Fragment>
-           
-           <DashboardContainer colSize={4} headerTitle={"Exceptions By Process"}> 
+            <DashboardContainer colSize={4} headerTitle={"Exceptions By Process"}> 
+            <LoadingOrErrorComponent {...this.props}/>
             {
-                (this.props.loading)? <LoadingComponent/>: <HorizontalBar data={this.getChartData(topErrors)} options={ChartOptions}/>
+                (this.props.loading || this.props.error)? "": <Charts data={this.getData(topErrors)} type="HorizontalBar"/>
             }
             </DashboardContainer>
         </React.Fragment>
     }
-    private getChartData(topErrors){
-        const data:any = { datasets:[{ backgroundColor:ChartBackgroundColors, data:[], hoverBackgroundColor:ChartBackgroundColors}], labels:[]}
-        if(topErrors){
-            topErrors.forEach(e=>{
-                data.datasets[0].data.push(e.Count); data.labels.push(e.LogProcess)
-            })
-        }
-        return data;
+    private getData(topErrors){
+        return topErrors.map(e=>({label:e.LogProcess, value:e.Count}));
     }
 }
 

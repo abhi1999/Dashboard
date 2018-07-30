@@ -1,26 +1,29 @@
 import * as  React from 'react';
-import {DashboardContainer, LoadingComponent} from "./../widgets"
+import {DashboardContainer, LoadingOrErrorComponent} from "./../widgets"
 import AlertView from "./AlertView"
 
 interface IAlertsProps{
     alertGroupSet:any[]
-    alertGroupDetails:any[]
+    alertGroupDetails:any[],
+    error:boolean
     loadAlertPresets:()=>{}
+    loading:boolean
 }
 class Alerts extends React.Component<IAlertsProps, any>{
     public constructor(props) {
         super(props);
+        console.log('*****************', props)
         this.props.loadAlertPresets();
     }
     public render(){
         const {alertGroupDetails, alertGroupSet} = this.props
         return <React.Fragment>
-            {alertGroupSet && alertGroupSet.length>0? 
+            {this.props.loading || this.props.error? <DashboardContainer colSize={3} headerTitle="Alerts"><LoadingOrErrorComponent {...this.props}/></DashboardContainer>:
                 alertGroupSet.map(a=>{
                     return <DashboardContainer key={a.GroupTile} colSize={3} headerTitle={a.Caption} badgeText={a.quantity}>
                         <AlertView alertId={a.GroupTile} data={this.getChartData(a.GroupTile, alertGroupDetails)} {...this.props}/>
                     </DashboardContainer>})
-            :<DashboardContainer colSize={3} headerTitle="Alerts"><LoadingComponent/></DashboardContainer>}    
+            }    
         </React.Fragment>
     }
     private getChartData(GroupTile, details){

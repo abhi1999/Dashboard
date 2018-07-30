@@ -56,9 +56,10 @@ export const businessFlowReducer = (state = initialState, action)=>{
         
     switch(action.type){
         case DATA_LOAD_START:
-            if(action.businessProcess){
+            if(action[LOAD_DASHBOARD_MENU_ITEM_DETAILS] || action[LOAD_DASHBOARD_MENU_LIST]){
                 return {
                     ...state,
+                    error:false,
                     loading:true
                 }
             }
@@ -66,10 +67,15 @@ export const businessFlowReducer = (state = initialState, action)=>{
                 return state;
             }
         case DATA_LOAD_ERROR:
-            return {
-                ...state,
-                loading:false
+            if(action[LOAD_DASHBOARD_MENU_ITEM_DETAILS] || action[LOAD_DASHBOARD_MENU_LIST]){
+                return {
+                        ...state,
+                    error:true, loading:false, 
+                }    
             }
+            else {
+                return state
+            };
         case LOAD_DASHBOARD_MENU_LIST:
             {
                 const newState = _.cloneDeep(state);

@@ -1,11 +1,12 @@
 import * as  React from 'react';
 import { Badge, Card, CardBody, CardFooter, CardHeader, Col, Collapse, Fade, Row, Table } from 'reactstrap';
 import Chart from "./../charts";
-import { GridContainer, LoadingComponent } from "./../widgets/"
+import { GridContainer, LoadingOrErrorComponent } from "./../widgets/"
 
 interface IBusinessProcessFlowViewProps{
     dashboardMenuItemDetails:any[]
     dashboardMenuItems:any[]
+    error:boolean,
     loading:boolean
     match:any
 }
@@ -27,7 +28,8 @@ class BusinessProcessFlowView extends React.Component<IBusinessProcessFlowViewPr
                 </CardHeader>
                 <Collapse isOpen={true} id="collapseExample">
                   <CardBody>
-                    {this.props.loading? <LoadingComponent/>:
+                    <LoadingOrErrorComponent {...this.props}/>  
+                    {this.props.loading || this.props.error? "":
                         <Chart data={this.getChartData()} chartOptions={{"height":400, scales:{xAxes:[{ticks:{beginAtZero:true}}]}}} type="horizontalbar"/>
                     }
                   </CardBody>

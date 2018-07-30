@@ -12,7 +12,7 @@ import {loadDataError, loadDataState} from "./mainAction"
 
 
 export const loadAlertGroupSet = () => (dispatch, getState)=> {
-    dispatch(loadDataState());
+    dispatch(loadDataState(LOAD_ALERT_GROUP_SUCCESS));
     const url = BASE_URL + SERVICES.endpoints.alertGroupSet;
     return axios.get(url)
                 .then((response:any)=>{
@@ -24,7 +24,7 @@ export const loadAlertGroupSet = () => (dispatch, getState)=> {
                     }
                 })
                 .catch((error)=>{
-                    dispatch(loadDataError(error));
+                    dispatch(loadDataError(error, LOAD_ALERT_GROUP_SUCCESS));
                     dispatch(Notifications.error({
                         ...ErroNotificationOptions,
                         message: url +" :: " + error.message
@@ -33,7 +33,7 @@ export const loadAlertGroupSet = () => (dispatch, getState)=> {
     
 };
 export const loadAlertGroupDetails = (GroupTile) => (dispatch, getState)=> {
-    dispatch(loadDataState());
+    dispatch(loadDataState(LOAD_ALERT_GROUP_DETAILS_SUCCESS));
     const filter = [{GroupTile}]
     const url = BASE_URL + SERVICES.endpoints.alertSetDetails;
     return axios.get(url,{params:{filter}})
@@ -41,7 +41,7 @@ export const loadAlertGroupDetails = (GroupTile) => (dispatch, getState)=> {
                     dispatch(loadAlertDetailsSuccess(response.data.value, GroupTile));
                 })
                 .catch((error)=>{
-                    dispatch(loadDataError(error));
+                    dispatch(loadDataError(error, LOAD_ALERT_GROUP_DETAILS_SUCCESS));
                     dispatch(Notifications.error({
                         ...ErroNotificationOptions,
                         message: url +" :: " + error.message

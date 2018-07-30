@@ -1,16 +1,24 @@
 import * as  React from 'react';
-import { FadeLoader, RingLoader } from 'react-spinners';
 import DashboardContainer from "./DashboardContainer"
+import ErrorComponent from "./ErrorComponent";
 import GridContainer from "./Grid"
-class LoadingComponent extends React.Component<any, any>{
+import LoadingComponent from "./LoadingComponent";
+interface ILoadingOrErrorComponentProps{
+    loading?:boolean;
+    error?:boolean
+}
+class LoadingOrErrorComponent extends React.Component<ILoadingOrErrorComponentProps, any>{
     public render(){
-        return <div className='dashboard-component-loading' >
-        <FadeLoader height={10} width={2} radius={1} margin="2px" color={'#123abc'}/>
-      </div>
+        return <React.Fragment>
+            {this.props.loading? <LoadingComponent/>:""}
+            {this.props.error? <ErrorComponent/>:""}
+        </React.Fragment>
     }
 }
 export {
     DashboardContainer,
+    ErrorComponent,
     GridContainer,
     LoadingComponent,
+    LoadingOrErrorComponent
 }

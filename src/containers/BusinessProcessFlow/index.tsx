@@ -8,13 +8,15 @@ const mapStateToProps = (state) => {
     businessFlowReducer:{
         dashboardMenuItemDetails,
         dashboardMenuItems,
+        error,
         loading, 
       },
   }= state;
   return {
-        dashboardMenuItemDetails,
-        dashboardMenuItems,
-       loading,
+      dashboardMenuItemDetails,
+      dashboardMenuItems,
+      error,
+      loading,
   }
 }
 const mapDispatchToProps = (dispatch) => {
