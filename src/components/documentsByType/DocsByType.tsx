@@ -17,13 +17,13 @@ class DocsByType extends React.Component<ITopErrorsProps, any>{
             <DashboardContainer colSize={4} headerTitle={"Documents Received by Type"}> 
             <LoadingOrErrorComponent {...this.props}/>
             {
-                (this.props.loading || this.props.error)? "": <Charts data={this.getData(docReceivedByType)} type="HorizontalBar"/>
+                (this.props.loading || this.props.error)? "": <Charts data={this.getData(docReceivedByType)} type="bar"/>
             }
             </DashboardContainer>
         </React.Fragment>
     }
     private getData(docReceivedByType){
-        return docReceivedByType.map(e=>({label:e.Doc_Desc, value:e.Count}));
+        return docReceivedByType.map(e=>({label:e.Mdate, value:e.Count}));
     }
 }
 

@@ -4,6 +4,7 @@ import CriticalAlerts from "./../../components/charts/CriticalAlerts"
 import DocReceived from "./../../components/charts/DocReceived";
 import {DashboardContainer} from "./../../components/widgets"
 import AlertsContainer from "./../../containers/Alerts/AlertsContainer"
+import DocReceivedByTypeContainer from "./../../containers/DocReceivedByType/DocReceivedByTypeContainer";
 import NewsFeedContainer from "./../../containers/NewsFeed/NewsFeedContainer"
 import TopErrorsContainer from "./../../containers/TopError/TopErrorsContainer"
 
@@ -18,6 +19,7 @@ class Dashboard extends React.Component<any, any>{
                     </DashboardContainer>
                     <AlertsContainer/>
                     <TopErrorsContainer/>
+                    <DocReceivedByTypeContainer/>
                 </Row> );  
     }
 }
