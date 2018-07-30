@@ -7,6 +7,7 @@ interface IDashboardContainerProps{
     colSize:number
     maxColSize?:number
     children?:any;
+    enableMaximize?:boolean
     headerTitle?:string
     badgeText?:string
     onMaximize?:(isMaximized:boolean)=>{}
@@ -37,7 +38,10 @@ class DashboardContainer extends React.Component<IDashboardContainerProps, IDash
                 <CardHeader>
                   {this.props.headerTitle} {this.props.badgeText !== undefined? <Badge pill={true} color="info">{this.props.badgeText}</Badge>:""}
                   <div className="card-header-actions" ref={this.containerRef}>
-                    <a className="card-header-action btn"  onClick={this.toggleColSize}><i className={classnames({"icon-size-fullscreen":this.state.colSize!== this.getMaxColSize()}, {"icon-size-actual":this.state.colSize === this.getMaxColSize()})}/></a>
+                  {
+                      (this.props.enableMaximize === undefined || this.props.enableMaximize)?
+                        <a className="card-header-action btn"  onClick={this.toggleColSize}><i className={classnames({"icon-size-fullscreen":this.state.colSize!== this.getMaxColSize()}, {"icon-size-actual":this.state.colSize === this.getMaxColSize()})}/></a>:""
+                    }
                   </div>
                 </CardHeader>
                 <Collapse isOpen={true} id="collapseExample">

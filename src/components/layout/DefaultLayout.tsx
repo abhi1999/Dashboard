@@ -11,8 +11,9 @@ import {
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container, Row } from 'reactstrap';
-import Dashboard from "./../../views/dashboard"
-import Favorites from "./../../views/favorites"
+import BussinessProcess from "./../../containers/BusinessProcessFlow";
+import Dashboard from "./../../views/dashboard";
+import Favorites from "./../../views/favorites";
 import Footer from "./Footer"
 import Header from "./Header";
 
@@ -27,6 +28,7 @@ class DefaultLayout extends React.Component<any> {
       { path: '/logistics', name: 'Logistics', component: Favorites },
       { path: '/automotiveplanning', name: 'Automotive Planning', component: Favorites },
       { path: '/product', name: 'Product Management', component: Favorites },
+      { path: '/businessProcess/:ShortCutID', name: '', component: BussinessProcess },
     ];
     return (
       <div className="app">

@@ -1,10 +1,11 @@
 import * as  React from 'react';
 import {HorizontalBar, Line} from 'react-chartjs-2';
-import {ChartBackgroundColors, ChartOptions} from "./../../configs/chartOptions"
-import DashboardContainer from "./../widgets/DashboardContainer"
+import {ChartBackgroundColors, ChartOptions} from "./../../configs/chartOptions";
+import {DashboardContainer, LoadingComponent} from "./../widgets";
 
 interface ITopErrorsProps{
-    topErrors:any[]
+    topErrors:any[],
+    loading:boolean
 }
 class TopErrors extends React.Component<ITopErrorsProps, any>{
     public constructor(props) {
@@ -13,8 +14,11 @@ class TopErrors extends React.Component<ITopErrorsProps, any>{
     public render(){
         const {topErrors} = this.props
         return <React.Fragment>
+           
            <DashboardContainer colSize={4} headerTitle={"Exceptions By Process"}> 
-                <HorizontalBar data={this.getChartData(topErrors)} options={ChartOptions}/>
+            {
+                (this.props.loading)? <LoadingComponent/>: <HorizontalBar data={this.getChartData(topErrors)} options={ChartOptions}/>
+            }
             </DashboardContainer>
         </React.Fragment>
     }

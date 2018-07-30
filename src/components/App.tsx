@@ -20,6 +20,7 @@ import { INewsFeed } from "./../domain/DataModel"
 
 interface IAppProps{
   alertGroupSet:any[],
+  dashboardMenuItems:any[],
   notifications:any,
   navItems:any[],
   newsFeeds:INewsFeed,

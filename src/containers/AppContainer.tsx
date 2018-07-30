@@ -7,14 +7,18 @@ const mapStateToProps = (state) => {
   const {
       mainReducer:{
         alertGroupSet,
+        dashboardMenuItems,
         loading,
-        navItems,
         newsFeeds,
+      },
+      businessFlowReducer:{        
+        navItems,
       },
       notifications
   }= state;
   return {
       alertGroupSet,
+      dashboardMenuItems,
       loading,
       navItems,
       newsFeeds,

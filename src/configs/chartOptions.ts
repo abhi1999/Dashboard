@@ -7,9 +7,7 @@ export const ChartOptions = {
     },
     maintainAspectRatio: false,
     tooltips: {
-        custom: (tooltipModel)=>{
-          console.log(tooltipModel)
-          CustomTooltips(tooltipModel)},
+        custom: CustomTooltips,
         enabled: false,
       },    
     }

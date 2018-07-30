@@ -10,6 +10,20 @@ body {background-color:#f3f3f3;}
 
 .sidebar .nav-link.active {background:#000000;}
 
+.business-process-flow-item.nav-item{
+  /*text-transform: lowercase;*/
+  white-space: nowrap;
+  overflow-x: hidden
+}
+
+.business-process-flow-item.nav-item::first-letter {
+  text-transform: uppercase;
+  font-size: 3em;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  letter-spacing: 5px;
+}
+
 /* .sidebar .nav-link:hover { color:#3a96dd;} */
 
 body {color:#777777;}

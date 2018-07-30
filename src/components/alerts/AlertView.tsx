@@ -1,8 +1,6 @@
 import * as  React from 'react';
-import * as P from "./../charts"
-import Pie from "./../charts/Pie"
+import Chart from "./../charts"
 import AlertViewToggle from "./AlertViewToggle"
-
 interface IAlertViewState{
     isOpen: boolean
     selected:string
@@ -20,13 +18,16 @@ class AlertView extends React.Component<IAlertViewProps, IAlertViewState>{
     public render(){
         return <React.Fragment>
             {this.renderChart()}
-            <AlertViewToggle selected="Pie" presets={["Pie", "Line", "Table"]} onChange={(selected)=>{this.setState({selected})}}/>
+            <AlertViewToggle selected="Pie" presets={["Pie", "Bar", "Table"]} onChange={(selected)=>{this.setState({selected})}}/>
         </React.Fragment>
     }
     private renderChart(){
         switch(this.state.selected){
             case "Pie":
-                return <Pie data={this.props.data}/>;
+                return <Chart data={this.props.data} type={this.state.selected}/>;
+            case "Bar":
+                return <Chart data={this.props.data} type={"HorizontalBar"}/>;
+
             default:
                 return <div>default - {this.state.selected}</div>
         }
