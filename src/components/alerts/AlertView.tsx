@@ -1,6 +1,9 @@
 import * as  React from 'react';
-import Chart from "./../charts"
+import { Badge, Card, CardBody, CardFooter, CardHeader, Col, Collapse, Fade, Row, Table } from 'reactstrap';
+import {GetFields} from "../../utils/"
+import Chart from "../charts"
 import AlertViewToggle from "./AlertViewToggle"
+
 interface IAlertViewState{
     isOpen: boolean
     selected:string
@@ -18,16 +21,23 @@ class AlertView extends React.Component<IAlertViewProps, IAlertViewState>{
     public render(){
         return <React.Fragment>
             {this.renderChart()}
-            <AlertViewToggle selected="Pie" presets={["Pie", "Bar", "Table"]} onChange={(selected)=>{this.setState({selected})}}/>
+            <AlertViewToggle selected="Pie" presets={["Pie", "Doughnut", "Bar", "Table"]} onChange={(selected)=>{this.setState({selected})}}/>
         </React.Fragment>
     }
     private renderChart(){
         switch(this.state.selected){
             case "Pie":
+            case "Doughnut":
                 return <Chart data={this.props.data} type={this.state.selected}/>;
             case "Bar":
                 return <Chart data={this.props.data} type={"HorizontalBar"}/>;
-
+            case "Table":
+                const headers = GetFields(this.props.data);
+                return <Table>
+                            <tbody>
+                                {this.props.data.map((r,i)=><tr key={i}> {headers.map(h=><td key={h}>{r[h]}</td>)} </tr>)}
+                            </tbody>
+                        </Table>
             default:
                 return <div>default - {this.state.selected}</div>
         }

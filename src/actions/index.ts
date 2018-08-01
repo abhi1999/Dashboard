@@ -4,6 +4,7 @@ import {loadDocReceivedCount} from "./docReceivedAction";
 import {loadExceptionByProcessLogs} from "./exceptionProcessAction";
 import {testNotification} from "./mainAction";
 import {loadNewsFeed} from "./newFeedAction";
+import {loadProductActivitySummary} from "./productActivityAction"
 export  {
     loadAlertGroupDetails, 
     loadAlertGroupSet, 
@@ -12,6 +13,7 @@ export  {
     loadDocReceivedCount,
     loadExceptionByProcessLogs,
     loadNewsFeed,
+    loadProductActivitySummary,
     setAlertPreset, 
     testNotification,
 }

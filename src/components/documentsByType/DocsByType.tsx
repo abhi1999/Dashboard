@@ -1,4 +1,5 @@
 import * as  React from 'react';
+import {TransformToMultiSeriesChartData} from "./../../utils";
 import Charts from "./../charts";
 import {DashboardContainer, LoadingOrErrorComponent} from "./../widgets";
 
@@ -17,13 +18,14 @@ class DocsByType extends React.Component<ITopErrorsProps, any>{
             <DashboardContainer colSize={4} headerTitle={"Documents Received by Type"}> 
             <LoadingOrErrorComponent {...this.props}/>
             {
-                (this.props.loading || this.props.error)? "": <Charts data={this.getData(docReceivedByType)} type="bar"/>
+                (this.props.loading || this.props.error)? "": <Charts chartData={this.getData(docReceivedByType)} chartOptions={{legend:{display:true, position:'top'}}} type="bar"/>
             }
             </DashboardContainer>
         </React.Fragment>
     }
     private getData(docReceivedByType){
-        return docReceivedByType.map(e=>({label:e.Mdate, value:e.Count}));
+        return TransformToMultiSeriesChartData(docReceivedByType, "Mdate","Doc_Desc","Count" );
+        // return docReceivedByType.map(e=>({label:e.Mdate, value:e.Count}));
     }
 }
 

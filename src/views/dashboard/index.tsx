@@ -6,6 +6,7 @@ import {DashboardContainer} from "./../../components/widgets"
 import AlertsContainer from "./../../containers/Alerts/AlertsContainer"
 import DocReceivedByTypeContainer from "./../../containers/DocReceivedByType/DocReceivedByTypeContainer";
 import NewsFeedContainer from "./../../containers/NewsFeed/NewsFeedContainer"
+import ProductActivityContainer from "./../../containers/ProductActivity/ProductActivityContainer";
 import TopErrorsContainer from "./../../containers/TopError/TopErrorsContainer"
 
 class Dashboard extends React.Component<any, any>{
@@ -20,6 +21,7 @@ class Dashboard extends React.Component<any, any>{
                     <AlertsContainer/>
                     <TopErrorsContainer/>
                     <DocReceivedByTypeContainer/>
+                    <ProductActivityContainer/>
                 </Row> );  
     }
 }

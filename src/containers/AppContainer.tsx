@@ -31,7 +31,9 @@ const mapDispatchToProps = (dispatch) => {
     loadDashboardMenuList,
     loadDocReceivedCount,
     loadExceptionByProcessLogs,
-    testNotification
+    loadProductActivitySummary,
+    testNotification,
+
   } = bindActionCreators(actionCreators, dispatch)
   return {
     loadAlertGroupSet,
@@ -39,9 +41,11 @@ const mapDispatchToProps = (dispatch) => {
     testNotification,
     loadAllLookup(){
       loadDashboardMenuList();
-      loadDocReceivedCount("2018-07-29");
+      const date = new Date()
+      loadDocReceivedCount(date.getFullYear()+"-" + (date.getMonth()+1) + "-"+ date.getDate());
       loadAlertGroupSet();
       loadExceptionByProcessLogs();
+      loadProductActivitySummary();
     }
   }
 }

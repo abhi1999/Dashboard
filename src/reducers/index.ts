@@ -6,6 +6,7 @@ import businessFlowReducer from "./businessFlowReducer";
 import docReceivedReducer from "./docReceivedReducer"
 import mainReducer from "./mainReducer";
 import newsFeedReducer from "./newsFeedReducer";
+import productActivityReducer from "./productActivityReducer"
 import topErrorsReducer from "./topErrorsReducer";
 
 const appReducer = combineReducers({
@@ -15,6 +16,7 @@ const appReducer = combineReducers({
     mainReducer, 
     newsFeedReducer,
     notifications: Notifications.reducer,
+    productActivityReducer,
     topErrorsReducer,
 })
 export default appReducer;

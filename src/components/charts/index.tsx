@@ -6,6 +6,7 @@ interface IChartProps{
    data?:any[],
    chartOptions?:any;
    chartSettings?:any,
+   chartData?:any
    type?:string
 }
 interface IChartState{
@@ -33,28 +34,32 @@ class Chart extends React.Component<IChartProps, IChartState>{
         const type = this.props.type ? this.props.type : ""; 
         switch(type.toLowerCase()){
             case "bar":
-                return <Bar data={this.state.data} options={ChartOptions} {...this.props.chartOptions}/>;
+                return <Bar data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} />;
             case "doughnut":
-                return <Doughnut data={this.state.data} options={{...this.props.chartOptions, ChartOptions}} {...this.props.chartSettings}/>;
+                return <Doughnut data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} />;
             case "polar":
-                return <Polar data={this.state.data} options={ChartOptions} {...this.props.chartOptions}/>;
+                return <Polar data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} />;
             case "radar":
-                return <Radar data={this.state.data} options={ChartOptions} {...this.props.chartOptions}/>;
+                return <Radar data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} />;
             case "line":
-                return <Line data={this.state.data} options={ChartOptions} {...this.props.chartOptions}/>;
+                return <Line data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}}  />;
             case "horizontalbar":
-                return <HorizontalBar data={this.state.data} options={ChartOptions} {...this.props.chartOptions}/>;
+                return <HorizontalBar data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}}  />;
             case "pie":
             default:
-                return <Pie data={this.state.data} options={ChartOptions} {...this.props.chartOptions}/>
+                return <Pie data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} />
 
         }
     }
     private getChartData(props){
-      const data:any = { datasets:[{ backgroundColor:ChartBackgroundColors, data:[], hoverBackgroundColor:ChartBackgroundColors}], labels:[]}
+      const {data, chartData} = props
+      if(chartData !== undefined ){
+        return chartData;
+      }
+      const singleSeriesData:any = { datasets:[{ backgroundColor:ChartBackgroundColors, data:[], hoverBackgroundColor:ChartBackgroundColors}], labels:[]}
       if(props.data && props.data.length>0){
-        props.data.forEach((item:any)=>{ data.datasets[0].data.push(item.value); data.labels.push(item.label)})
-        return data;
+        data.forEach((item:any)=>{ singleSeriesData.datasets[0].data.push(item.value); singleSeriesData.labels.push(item.label)})
+        return singleSeriesData;
       }
       return undefined;
     }

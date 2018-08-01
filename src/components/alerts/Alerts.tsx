@@ -1,3 +1,4 @@
+import _ from "lodash";
 import * as  React from 'react';
 import {DashboardContainer, LoadingOrErrorComponent} from "./../widgets"
 import AlertView from "./AlertView"
@@ -12,7 +13,6 @@ interface IAlertsProps{
 class Alerts extends React.Component<IAlertsProps, any>{
     public constructor(props) {
         super(props);
-        console.log('*****************', props)
         this.props.loadAlertPresets();
     }
     public render(){
@@ -29,10 +29,11 @@ class Alerts extends React.Component<IAlertsProps, any>{
     private getChartData(GroupTile, details){
         const item = details.find((d)=> d.GroupTile === GroupTile)
         if(item && item.values){
-            return item.values.map(i=> {
+            const data = item.values.map(i=> {
                 const obj:any = {value:i.Quantity, label:i.Caption}
                 return obj;
             })
+            return _.orderBy(data, ['value'],['desc']); 
         }
         return []
     }

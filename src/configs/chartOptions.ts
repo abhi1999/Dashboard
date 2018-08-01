@@ -3,14 +3,18 @@ import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 
 export const ChartOptions = {
     legend:{
-      display:false
+      display:false,
+      labels: {
+        boxWidth: 10
+      },
+      position: 'right',
     },
     maintainAspectRatio: false,
     tooltips: {
         custom: CustomTooltips,
         enabled: false,
-      },    
-    }
+    },   
+  }
 
 export const ChartBackgroundColors = ['#3366CC',
         '#DC3912',

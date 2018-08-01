@@ -8,6 +8,7 @@ export const SERVICES ={
         alertSetDetails:"/odata/ApiAlertSet",
         docReceivedCount:"/odata/ApiGetDocReceivedCount",
         errorLog:"/odata/ApiGetTopErrorLog",
+        productActivtySummary:"/odata/ApiGetProductActivitySummary",
         shortcutMenuItemDetails:"/odata/ApiProcessTileView",
         shortcutMenuItems:"/odata/ApiDashboardShortcutSet",
     }
