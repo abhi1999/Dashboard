@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body {background-color:#f3f3f3;}
+
+.sidebar {background:#002050;}
+
+.sidebar .nav-link.active {background:#000000;}
+
+.business-process-flow-item.nav-item{
+  /*text-transform: lowercase;*/
+  white-space: nowrap;
+  overflow-x: hidden
+}
+
+.business-process-flow-item.nav-item::first-letter {
+  text-transform: uppercase;
+  font-size: 3em;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  letter-spacing: 5px;
+}
+
+/* .sidebar .nav-link:hover { color:#3a96dd;} */
+
+body {color:#777777;}
+.row {margin:15px 0 0 15px;}
+.card-header {background-color:#ffffff;border-bottom:none;color:#777777;font-size:1rem;}
+.card {border:none;
+-webkit-box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.075);
+-moz-box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.075);
+box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.075);}
+.card-body .card {box-shadow:none; background-color:#f2f2f2}
+h5.card-title {font-size:0.8rem;}
+.sidebar .nav-link:hover {color:#ffffff!important;}
+.app-header .nav-item {font-size:1.4rem;border-right:solid 1px #d4d4d4;}
+.app-header .navbar-nav {border-left:solid 1px #d4d4d4;}
+.ml-auto navbar-nav {border:none;}
+.ml-auto navbar-nav input {background-color:#c7e0f4;border-radius:0;border:solid 1px #3a96dd;}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {color:#777777;}
+h3 {font-size:1rem;}
+
+.card-body .card {border: solid 1px #f1f1f1;background-color: #fcfcfc;padding:10px;}
+.badge-danger {background-color: #ff0006;    font-size: .75rem;}
+.breadcrumb {background-color:#000000;}
+.breadcrumb-item.active {color:#ffffff;}
+.sidebar .nav-link:hover {background-color:#213b5e;}
+.sidebar .nav-link.active .nav-icon {color:#ffffff;}
+.app-footer {border-top:none;padding:0 1rem;font-size:0.7rem}
+#exampleSearch {background-color: #c7e0f4;color: #666666;border: solid 1px #3a96dd;border-radius: 0;}
+
+.card-body .card span{font-size:0.75rem;}
+
+.card-footer{font-style:italic;border-top:none; border-bottom: none;}
