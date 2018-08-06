@@ -16,7 +16,6 @@ require("!style!css!react-table/react-table.css");
 
 .dashboard-component-loading{
     margin-left:40%;
-<<<<<<< HEAD
 }
 
 .dashboard-container-widget .card-body{
@@ -28,6 +27,4 @@ require("!style!css!react-table/react-table.css");
 }
 .alert-view-toggle{
     float:right;    
-=======
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
 }

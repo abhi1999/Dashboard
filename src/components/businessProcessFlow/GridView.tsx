@@ -18,23 +18,6 @@ class GridView extends React.Component<IGridViewProps, any>{
         super(props);
         this.onGridReady = this.onGridReady.bind(this);
     }
-<<<<<<< HEAD
-=======
-    /*public render1(){
-        const {data} = this.props;
-        const headers:any =this.getHeaders(data);
-        return <Table>
-                <thead>
-                    <tr>
-                        {headers.map(h=><th key={h}>{h}</th>)}
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map((r,i)=><tr key={i}> {headers.map(h=><td key={h}>{r[h]}</td>)} </tr>)}
-                </tbody>
-            </Table>
-    }*/
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
     public render(){
         const {data} = this.props;
         const columnDefs:any[] =[];

@@ -17,15 +17,11 @@ import Favorites from "./../../views/favorites";
 import Footer from "./Footer"
 import Header from "./Header";
 
-<<<<<<< HEAD
 interface IDefaultLayoutProps{
   reload:()=>void
   navItems:any[]
 }
 class DefaultLayout extends React.Component<IDefaultLayoutProps> {
-=======
-class DefaultLayout extends React.Component<any> {
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
   public render() {
     const routes = [
       { path: '/', exact: true, name: 'Home' },
@@ -41,11 +37,7 @@ class DefaultLayout extends React.Component<any> {
     return (
       <div className="app">
         <AppHeader fixed={true}>
-<<<<<<< HEAD
           <Header {...this.props}/>
-=======
-          <Header/>
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
         </AppHeader>
         <div className="app-body">
           <AppSidebar fixed={true} display="lg">

@@ -16,11 +16,7 @@ class ProductActivitySummary extends React.Component<IProductActivitySummaryProp
     public render(){
         const {productActivitySummary} = this.props
         return <React.Fragment>
-<<<<<<< HEAD
             <DashboardContainer colSize={6} headerTitle={"Product Activity Summary"}> 
-=======
-            <DashboardContainer colSize={4} headerTitle={"Product Activity Summary"}> 
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
             <LoadingOrErrorComponent {...this.props}/>
             {
                 (this.props.loading || this.props.error)? "": <Bar data={this.getData(this.props.productActivitySummary)} />

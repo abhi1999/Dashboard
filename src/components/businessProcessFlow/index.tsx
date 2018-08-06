@@ -1,15 +1,9 @@
-<<<<<<< HEAD
 import _ from "lodash";
-=======
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
 import * as  React from 'react';
 import { Badge, Card, CardBody, CardFooter, CardHeader, Col, Collapse, Fade, Row, Table } from 'reactstrap';
 import Chart from "./../charts";
 import { GridContainer, LoadingOrErrorComponent } from "./../widgets/"
-<<<<<<< HEAD
 import CardView from "./CardView";
-=======
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
 import GridView from "./GridView";
 interface IBusinessProcessFlowViewProps{
     dashboardMenuItemDetails:any[]
@@ -28,10 +22,7 @@ class BusinessProcessFlowView extends React.Component<IBusinessProcessFlowViewPr
         this.getPageTitle = this.getPageTitle.bind(this);
         console.log(this.props.match.params.ShortCutID)
     }
-<<<<<<< HEAD
  
-=======
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
     public render(){
         return <div> 
             <Card>
@@ -42,21 +33,16 @@ class BusinessProcessFlowView extends React.Component<IBusinessProcessFlowViewPr
                   <CardBody>
                     <LoadingOrErrorComponent {...this.props}/>  
                     {this.props.loading || this.props.error? "":
-<<<<<<< HEAD
                         <Chart data={this.getChartData()} chartSettings={{"height":300,}} chartOptions={{ scales:{xAxes:[{ticks:{beginAtZero:true,
                             userCallback: (label, index, labels)=> {
                             if (Math.floor(label) === label) {
                                 return label;
                             }
                         },}}]}}} type="horizontalbar"/>
-=======
-                        <Chart data={this.getChartData()} chartOptions={{"height":400, scales:{xAxes:[{ticks:{beginAtZero:true}}]}}} type="horizontalbar"/>
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
                     }
                   </CardBody>
                 </Collapse>
               </Card>
-<<<<<<< HEAD
               <CardView data={this.getData()}/>  
         </div>
     }
@@ -65,24 +51,13 @@ class BusinessProcessFlowView extends React.Component<IBusinessProcessFlowViewPr
             <GridView data={this.getData()} />
         </GridContainer>    
     }*/
-=======
-              <GridContainer>
-                  <GridView data={this.getData()} groupField="GroupName"/>
-               </GridContainer>
-        </div>
-    }
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
     private getData(){
         const {dashboardMenuItemDetails, match} = this.props;
         const data = dashboardMenuItemDetails.find(i=> i.ShortCutID.toString() === match.params.ShortCutID)
         return data && data.values ? data.values : [];
     }
     private getGroupedData(){
-<<<<<<< HEAD
         const data = _.sortBy(this.getData(),"GroupOrder");
-=======
-        const data = this.getData();
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
         const groupedData:any ={};
         data.forEach(element => {
             if(groupedData[element.GroupName] === undefined){

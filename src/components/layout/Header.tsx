@@ -3,15 +3,10 @@ import * as  React from 'react';
 import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Input, Nav, NavItem, NavLink } from 'reactstrap';
 
 // import logo from  "./../../assets/images/vantage-point-logo.png";
-<<<<<<< HEAD
 interface IHeaderProps{
     reload:()=>void
 }
 class Header extends React.Component<IHeaderProps>{
-=======
-
-class Header extends React.Component{
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
     public render(){
         return <React.Fragment>
             <AppSidebarToggler className="d-lg-none" display="md" mobile={true}/>
@@ -41,11 +36,7 @@ class Header extends React.Component{
                 <NavItem className="d-md-down-none">
                     <NavLink href="#"><i className="icon-globe"/><Badge pill={true} color="danger">5</Badge></NavLink>                    
                 </NavItem>
-<<<<<<< HEAD
                 <NavItem className="d-md-down-none"><i className="icon-refresh" onClick={()=>{this.props.reload()}}/></NavItem>
-=======
-                <NavItem className="d-md-down-none"><i className="icon-refresh"/></NavItem>
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
                 
             </Nav>
             <AppAsideToggler className="d-md-down-none" />

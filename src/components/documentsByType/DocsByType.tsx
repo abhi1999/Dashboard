@@ -15,11 +15,7 @@ class DocsByType extends React.Component<ITopErrorsProps, any>{
     public render(){
         const {docReceivedByType} = this.props
         return <React.Fragment>
-<<<<<<< HEAD
             <DashboardContainer colSize={6} headerTitle={"Documents Received by Type"}> 
-=======
-            <DashboardContainer colSize={4} headerTitle={"Documents Received by Type"}> 
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
             <LoadingOrErrorComponent {...this.props}/>
             {
                 (this.props.loading || this.props.error)? "": <Charts chartData={this.getData(docReceivedByType)} chartOptions={{legend:{display:true, position:'top'}}} type="bar"/>

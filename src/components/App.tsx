@@ -25,10 +25,7 @@ interface IAppProps{
   navItems:any[],
   newsFeeds:INewsFeed,
   loadAllLookup:()=>{},
-<<<<<<< HEAD
   testNotification:(msg:string)=>void
-=======
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
 }
 
 class App extends React.Component<IAppProps> {
@@ -53,11 +50,7 @@ class App extends React.Component<IAppProps> {
                   <div>home</div>
                   )}/>
               <Route path="/" name="Home" render={(props) => (
-<<<<<<< HEAD
                   <DefaultLayout {...this.props} reload={this.reloadData} />
-=======
-                  <DefaultLayout {...this.props}/>
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
                   )}/>
             </Switch>
         </HashRouter>        

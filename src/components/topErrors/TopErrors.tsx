@@ -17,11 +17,7 @@ class TopErrors extends React.Component<ITopErrorsProps, any>{
             <DashboardContainer colSize={4} headerTitle={"Exceptions By Process"}> 
             <LoadingOrErrorComponent {...this.props}/>
             {
-<<<<<<< HEAD
                 (this.props.loading || this.props.error)? "": <Charts data={this.getData(topErrors)} type="HorizontalBar" chartPresets={["Pie", "Bar","HorizontalBar" ]}/>
-=======
-                (this.props.loading || this.props.error)? "": <Charts data={this.getData(topErrors)} type="HorizontalBar"/>
->>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
             }
             </DashboardContainer>
         </React.Fragment>
