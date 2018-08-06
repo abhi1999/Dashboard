@@ -2,7 +2,10 @@
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "rules":{
     "no-console": false,
+<<<<<<< HEAD
     "no-debugger": false,
+=======
+>>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
     "jsx-no-lambda": false,
     "ordered-imports": [
       true,

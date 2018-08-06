@@ -20,8 +20,12 @@ const isLocalhost = Boolean(
 );
 
 export default function register() {
+<<<<<<< HEAD
     // if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
       if (true) {
+=======
+    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+>>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
  // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(
       process.env.PUBLIC_URL!,

@@ -1,7 +1,10 @@
 import * as  React from 'react';
 import { Bar, Doughnut, HorizontalBar, Line, Pie, Polar, Radar } from 'react-chartjs-2';
 import {ChartBackgroundColors, ChartOptions} from "./../../configs/chartOptions"
+<<<<<<< HEAD
 import ChartViewToggle from "./ChartViewToggle";
+=======
+>>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
 
 interface IChartProps{
    data?:any[],
@@ -9,7 +12,10 @@ interface IChartProps{
    chartSettings?:any,
    chartData?:any
    type?:string
+<<<<<<< HEAD
    chartPresets?:string[],
+=======
+>>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
 }
 interface IChartState{
    data:any
@@ -36,6 +42,7 @@ class Chart extends React.Component<IChartProps, IChartState>{
         const type = this.props.type ? this.props.type : ""; 
         switch(type.toLowerCase()){
             case "bar":
+<<<<<<< HEAD
                 return <Bar data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} {...this.props.chartSettings}/>;
             case "doughnut":
                 return <Doughnut data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} {...this.props.chartSettings}/>;
@@ -58,6 +65,24 @@ class Chart extends React.Component<IChartProps, IChartState>{
             return <ChartViewToggle defaultSelection={type} presets={this.props.chartPresets} onChange={(selected)=>{console.log({selected})}}/>
         }
         return"";
+=======
+                return <Bar data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} />;
+            case "doughnut":
+                return <Doughnut data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} />;
+            case "polar":
+                return <Polar data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} />;
+            case "radar":
+                return <Radar data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} />;
+            case "line":
+                return <Line data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}}  />;
+            case "horizontalbar":
+                return <HorizontalBar data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}}  />;
+            case "pie":
+            default:
+                return <Pie data={this.state.data} options={{...ChartOptions,...this.props.chartOptions}} />
+
+        }
+>>>>>>> 38045a84843171c0e74fb30298d0ce2b412a791e
     }
     private getChartData(props){
       const {data, chartData} = props
