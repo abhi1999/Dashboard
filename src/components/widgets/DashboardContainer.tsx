@@ -20,7 +20,7 @@ class DashboardContainer extends React.Component<IDashboardContainerProps, IDash
     public constructor(props) {
         super(props);
         this.state = {
-          colSize:3
+          colSize:this.props.colSize? this.props.colSize: 3
         };
         this.containerRef = React.createRef()
         this.toggleColSize = this.toggleColSize.bind(this);

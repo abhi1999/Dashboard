@@ -24,7 +24,7 @@ class BusinessProcessFlowView extends React.Component<IBusinessProcessFlowViewPr
     }
  
     public render(){
-        return <div> 
+        return <div className="process-flow"> 
             <Card>
                 <CardHeader>
                   {this.getPageTitle()}

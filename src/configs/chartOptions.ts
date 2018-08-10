@@ -16,7 +16,7 @@ export const ChartOptions = {
     },   
   }
 
-export const ChartBackgroundColors1 = ['#3366CC',
+export const ChartBackgroundColors = ['#3366CC',
         '#DC3912',
         '#FF9900',
         '#109618',
@@ -37,7 +37,7 @@ export const ChartBackgroundColors1 = ['#3366CC',
         '#5574A6',
         '#3B3EAC',
         ]
-export const ChartBackgroundColors =
+export const ChartBackgroundColors1 =
 ['#e6f1ff',
 '#cce2ff',
 '#b3d4ff',

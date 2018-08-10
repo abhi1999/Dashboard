@@ -31,25 +31,18 @@ require("!style!css!react-table/react-table.css");
 
 
 .text-muted {color: #979796!important;font-style: italic;}
-
 .news-feed-list .btn {float: right; font-size: 0.75rem;text-transform: lowercase;}
-
 .card {margin-bottom: 0.5rem; }
-
 .card-title {margin-bottom:0;}
-
 .card-header {padding-bottom: 0;}
-
 .card-body .card span {font-size:.75rem;}
-
 .card-footer {padding:0;background-color:transparent;}
-
 .btn-group-sm>.btn, .btn-sm {color:#777;background-color:transparent;border-color:#ccc;margin-top:-12px;}
-
 .btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {color: #555555;background-color: #f0f3f5;border-color: #ccc;}
-
 .dropdown-menu {color:#777;border-color:#ccc;min-width: 6rem;}
-
 .dropdown-item {border-color:#ccc;color:#777;font-size: .75rem;padding: 7px 20px;}
 
 
+.process-flow .card-header-actions{
+    margin-right:0;
+}
