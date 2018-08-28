@@ -12,9 +12,9 @@ axios.defaults.paramsSerializer = (params):string=>{
 }
 */
 
-//if(process.env.NODE_ENV !== 'production') {
+// if(process.env.NODE_ENV !== 'production') {
     mockBehavior(axios)
-//}
+// }
 
 ApplyAuthenticationBehavior(axios)
 
