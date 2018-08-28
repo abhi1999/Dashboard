@@ -24,7 +24,7 @@ class CardView extends React.Component{
             if(groupedData.hasOwnProperty(key)){
                 rows.push(<React.Fragment>
                         <h2 key={"header"+key}>{groupedData[key][0].GroupName}</h2>
-                        <Row key={key}> {groupedData[key].map(d=> <Col md={2}><ProcessStepCard item={d}/></Col>)}</Row>
+                        <Row key={key}> {groupedData[key].map(d=> <Col xl={2} lg={3} md={4} sm={6} xs={12} className={key.toLocaleLowerCase().replace(" ","-")} ><ProcessStepCard item={d}/></Col>)}</Row>
                     </React.Fragment>
                 )
             }

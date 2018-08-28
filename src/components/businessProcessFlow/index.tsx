@@ -1,10 +1,6 @@
 import _ from "lodash";
 import * as  React from 'react';
-import { Badge, Card, CardBody, CardFooter, CardHeader, Col, Collapse, Fade, Row, Table } from 'reactstrap';
-import Chart from "./../charts";
-import { GridContainer, LoadingOrErrorComponent } from "./../widgets/"
 import CardView from "./CardView";
-import GridView from "./GridView";
 interface IBusinessProcessFlowViewProps{
     dashboardMenuItemDetails:any[]
     dashboardMenuItems:any[]
@@ -25,24 +21,6 @@ class BusinessProcessFlowView extends React.Component<IBusinessProcessFlowViewPr
  
     public render(){
         return <div className="process-flow"> 
-            <Card>
-                <CardHeader>
-                  {this.getPageTitle()}
-                </CardHeader>
-                <Collapse isOpen={true} id="collapseExample">
-                  <CardBody>
-                    <LoadingOrErrorComponent {...this.props}/>  
-                    {this.props.loading || this.props.error? "":
-                        <Chart data={this.getChartData()} chartSettings={{"height":300,}} chartOptions={{ scales:{xAxes:[{ticks:{beginAtZero:true,
-                            userCallback: (label, index, labels)=> {
-                            if (Math.floor(label) === label) {
-                                return label;
-                            }
-                        },}}]}}} type="horizontalbar"/>
-                    }
-                  </CardBody>
-                </Collapse>
-              </Card>
               <CardView data={this.getData()}/>  
         </div>
     }

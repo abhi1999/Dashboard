@@ -1,9 +1,10 @@
-import "ag-grid-enterprise";
 import {AgGridReact} from "ag-grid-react";
+import "ag-grid-enterprise";
 import "ag-grid/dist/styles/ag-grid.css";
 import "ag-grid/dist/styles/ag-theme-balham.css";
+
+
 import * as  React from 'react';
-import { Badge, Card, CardBody, CardFooter, CardHeader, Col, Collapse, Fade, Row, Table } from 'reactstrap';
 import {GetFields} from "../../utils/"
 
 interface IGridViewProps{

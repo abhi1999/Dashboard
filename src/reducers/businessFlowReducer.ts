@@ -16,36 +16,67 @@ const initialState = {
             name: 'Dashboard',
             url: '/dashboard',
         },
-      /*  {  
-            icon: 'icon-star',
-            name: 'Favorites',
-            url: '/favorites',
+        {   name: 'Configuration',
+            url: '/config',
+            icon: 'fa fa-gear',
+            children: [
+            {  
+                icon: 'fa fa-list',
+                name: 'Carriers',
+                url: '/carriers',
+            },
+            {
+                icon: 'fa fa-list',
+                name: 'Error Codes',
+                url: '/errorCodes',
+            },
+        ]
         },
-        {  
-            icon: 'fa fa-dollar',
-            name: 'Quote To Cash',
-            url: '/QuoteToCash',
+        {
+            name: 'Scheduler',
+            url: '/scheduler',
+            icon: 'fa fa-clock-o',
+            children: [{  
+                icon: 'fa fa-tasks',
+                name: 'Status',
+                url: '/status',
+            },
+            {  
+                icon: 'fa fa-list',
+                name: 'Workflows',
+                url: '/workflows',
+            },
+            {  
+                icon: 'fa fa-sticky-note-o',
+                name: 'Tasks',
+                url: '/tasks',
+            },
+            {  
+                icon: 'fa fa-clock-o',
+                name: 'Schedulers',
+                url: '/schedulers',
+            },
+            {  
+                icon: 'fa fa-arrows-alt',
+                name: 'Networks',
+                url: '/networks',
+            },
+            {  
+                icon: 'fa fa-database',
+                name: 'Databases',
+                url: '/databases',
+            },
+            {  
+                icon: 'fa fa-folder-open-o',
+                name: 'Folders',
+                url: '/folders',
+            },
+            {  
+                icon: 'fa fa-subscript',
+                name: 'Variables',
+                url: '/variables',
+            }]
         },
-        {  
-            icon: 'fa fa-credit-card',
-            name: 'Procure To Pay',
-            url: '/ProcureToPay',
-        },
-        {  
-            icon: 'fa fa-rocket',
-            name: 'Logistics',
-            url: '/logistics',
-        },
-        {  
-            icon: 'fa fa-car',
-            name: 'Automotive Planning',
-            url: '/automotiveplanning',
-        },
-        {  
-            icon: 'fa fa-institution ',
-            name: 'Product Management',
-            url: '/product',
-        },*/
     ],
 }
 

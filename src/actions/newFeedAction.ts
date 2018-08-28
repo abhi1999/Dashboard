@@ -8,6 +8,19 @@ import {
 import {loadDataError, loadDataState} from "./mainAction"
 
 export const loadNewsFeed = () => (dispatch, getState)=> {
+
+    
+    // axios.delete("http://localhost:9005/1", { foo: "bar" } );
+
+    axios({
+        method: 'DELETE',
+        url: 'http://localhost:9005/3',
+        data: {
+            foo: "bar3"
+        }
+      }).then((data)=>{console.log(data)}).catch((e)=>{console.log('****yay capture the response text***',e.response);})
+
+
     dispatch(loadDataState(LOAD_NEWS_FEED_SUCCESS));
     const url = RSS_FEED_URL;
     return axios.get(url)

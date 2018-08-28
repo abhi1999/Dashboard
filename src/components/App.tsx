@@ -2,6 +2,8 @@ import * as React from 'react';
 import Notifications from 'react-notification-system-redux';
 import {BrowserRouter as Router, HashRouter, Link, Route, Switch} from "react-router-dom";
 import DefaultLayout from "./layout/DefaultLayout";
+import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 
 import './App.css';
 
@@ -17,7 +19,7 @@ import './../styles/style.css'
 
 import { INewsFeed } from "./../domain/DataModel"
 
-
+import JsonTreeComponent from "./jsonEditView"
 interface IAppProps{
   alertGroupSet:any[],
   dashboardMenuItems:any[],
@@ -44,17 +46,22 @@ class App extends React.Component<IAppProps> {
     }
     return (
       <div className="App">
-        <HashRouter>
-            <Switch>
-              <Route path='/home' render={(props) => (
-                  <div>home</div>
-                  )}/>
-              <Route path="/" name="Home" render={(props) => (
-                  <DefaultLayout {...this.props} reload={this.reloadData} />
-                  )}/>
-            </Switch>
-        </HashRouter>        
-        <Notifications notifications={this.props.notifications} style={defaultStyle} />
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <HashRouter>
+              <Switch>
+                <Route path='/home' render={(props) => (
+                    <div>home</div>
+                    )}/>
+                <Route path='/JsonEdit' render={(props) => (
+                    <JsonTreeComponent/>
+                    )}/>
+                <Route path="/" name="Home" render={(props) => (
+                    <DefaultLayout {...this.props} reload={this.reloadData} />
+                    )}/>
+              </Switch>
+          </HashRouter>        
+          <Notifications notifications={this.props.notifications} style={defaultStyle} />
+        </MuiPickersUtilsProvider>
       </div>
     );
   }

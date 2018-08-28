@@ -55,3 +55,108 @@ h3 {font-size:1rem;}
 .card-body .card span{font-size:0.75rem;}
 
 .card-footer{font-style:italic;border-top:none; border-bottom: none;}
+
+
+
+
+
+
+body {font-family: SegoeUI,Helvetica Neue,Helvetica,Arial,sans-serif;background-color:#e7e7e7;}
+.header-fixed .app-body {margin-top:50px;}
+.app-header{background-color:#000;border-bottom:none;height:50px;}
+.app-header .nav-item {border:none;padding:0;margin:0;font-size:1.2rem;}
+.app-header .navbar-nav {border:none;}
+.app-header.navbar a.navbar-brand {display:none;}
+.app-header.navbar::before {content:"Vantage Point EDI";color:#fff;font-size:1.4rem;margin-left:12px;}
+.navbar-toggler {border-radius:0;line-height:30px;height:50px;width:50px;margin-left:15px;}
+.navbar-nav .nav-link {color:#fff;line-height:55px;width:55px;margin:0 1px 0 0;}
+.navbar-nav .nav-link:hover {background-color:#5b5b5b;color:#fff;height:50px;}
+#exampleSearch {width:250px;margin:5px 25px 0 0;}
+.icon-refresh {color:#fff;}
+.pr-3,.px-3 {padding-right:0rem!important;padding-left:0rem!important;}
+.breadcrumb {background-color:#2a70ac;position:fixed;width:100%;z-index:1000;}
+.breadcrumb li, .breadcrumb li a, li.active.breadcrumb-item::before {color:#fff;font-size:.9rem;font-weight:700;}
+.sidebar {background-color:#2d2d2d;}
+.sidebar .nav-link, .sidebar .nav-link .nav-icon {color:#a2a2a2;font-size:.9rem;font-weight:700;}
+.sidebar .nav-link:hover {background-color:#474747;}
+.sidebar .nav-link.active {background-color:#818181;}
+.main .container-fluid {padding:52px 20px 0 0;}
+.card {box-shadow:none;border:solid 1px #c1c1c1;border-radius:0;}
+.card-header {color:#000;font-size:1.2rem;font-weight:200;}
+.card-body {padding-bottom:0rem;}
+.dashboard-container-widget .card-body {min-height:180px;}
+.news-feed-list-item.card {margin-bottom:.75rem;}
+.badge-info {background-color:#307BB5;color:#fff;}
+.badge-pill {line-height:.8rem;font-size:.75rem;}
+.btn-secondary {background-color:#fff;}
+.app-footer {background-color:#e7e7e7;font-style:italic;}
+
+This is how I am linking to the fonts, we need to compile it into the application:
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Light"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.ttf) format("truetype");
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Semilight"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.ttf) format("truetype");
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.ttf) format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Bold"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.ttf) format("truetype");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Semibold"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.ttf) format("truetype");
+    font-weight: 700;
+}
+
+h2 {color:#000;font-weight:200;font-size:1.6rem;padding-left:30px;min-height:25px;}
+
+.business-flow-card-container .card {border:none!important;}
+/*
+.business-flow-card-container .card-body {text-align:left;min-height:75px;padding:.5rem;border:solid 1px #c1c1c1;border-top:0;}
+.business-flow-card-container .card-text{font-size:.80rem!important;line-height:1.1rem;color:#515151;}
+.business-flow-card-container .card h5 {margin-bottom:0;border:solid 1px #c1c1c1;border-bottom:0;}
+.business-flow-card-container .quote .card h5 {background-color:#afe5b2;}
+.business-flow-card-container .purchase-order .card h5 {background-color:#0cc1a9;}
+.business-flow-card-container .shipment .card h5 {background-color:#008a00;}
+.business-flow-card-container .pick-pack .card h5  {background-color:#00b0f0;}
+.business-flow-card-container .invoice .card h5  {background-color:#126bf0;}
+.business-flow-card-container .cash .card h5  {background-color:#253e8f;}
+.business-flow-card-container .transformations .card h5  {background-color:#ec2954;}
+.business-flow-card-container .inquiry .card h5  {background-color:#9e0b0f;}
+.business-flow-card-container a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {color:#fff;}
+*/

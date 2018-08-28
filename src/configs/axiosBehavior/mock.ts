@@ -6,12 +6,17 @@ export const applyMock = (axios)=>{
         axios.interceptors.request.use( (config)=> {
             const mock = mockAPIReponse.find(r=> {
                 const mockParams = r.params === undefined ? "":r.params;
-                const requestParams = config.paramsSerializer? config.paramsSerializer(config.params):"";
-                return r.url === config.url && mockParams  === requestParams;
+                const requestParams = config.paramsSerializer? config.paramsSerializer(config.params):JSON.stringify(config.params);
+                
+                return r.url === config.url && (requestParams === undefined || mockParams  === requestParams);
             })
             if(mock){
                 console.log('mockresponse')
                 return Promise.reject({message:"MockResponse", data:mock.data, config})
+            }
+            else {
+                if(window.req === undefined) {window.req=[];}
+                window.req.push({url:config.url, params:config.paramsSerializer? config.paramsSerializer(config.params):JSON.stringify(config.params), config})
             }
             return config;
         }, (error) =>{

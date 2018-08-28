@@ -33,7 +33,13 @@ const mapDispatchToProps = (dispatch) => {
     loadExceptionByProcessLogs,
     loadProductActivitySummary,
     testNotification,
-
+    workflowGetAll,
+    taskGetAll,
+    schedulerGetAll,
+    networkGetAll,
+    databaseGetAll,
+    folderGetAll,
+    variableGetAll
   } = bindActionCreators(actionCreators, dispatch)
   return {
     loadAlertGroupSet,
@@ -46,7 +52,14 @@ const mapDispatchToProps = (dispatch) => {
       loadAlertGroupSet();
       loadExceptionByProcessLogs();
       loadProductActivitySummary();
-    }
+    },
+    workflowGetAll,
+    taskGetAll,
+    schedulerGetAll,
+    networkGetAll,
+    databaseGetAll,
+    folderGetAll,
+    variableGetAll
   }
 }
 const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);

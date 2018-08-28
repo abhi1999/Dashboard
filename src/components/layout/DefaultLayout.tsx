@@ -17,6 +17,17 @@ import Favorites from "./../../views/favorites";
 import Footer from "./Footer"
 import Header from "./Header";
 
+import TaskStatusListView from "../../views/scheduler/TaskStatusListView";
+import WorkflowListView from "../../views/scheduler/WorkflowListView";
+import TaskListView from "../../views/scheduler/TaskListView";
+import SchedulerListView from "../../views/scheduler/SchedulerListView";
+import NetworkListView from "../../views/scheduler/NetworkListView";
+import DatabaseListView from "../../views/scheduler/DatabaseListView";
+import FolderListView from "../../views/scheduler/FolderListView";
+import VariableListView from "../../views/scheduler/VariableListView";
+import CarrierListView from "../../views/carrier/CarrierListView";
+import ErrorCodeListView from "./../../views/ErrorCodeListView";
+
 interface IDefaultLayoutProps{
   reload:()=>void
   navItems:any[]
@@ -33,6 +44,16 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
       { path: '/automotiveplanning', name: 'Automotive Planning', component: Favorites },
       { path: '/product', name: 'Product Management', component: Favorites },
       { path: '/businessProcess/:ShortCutID', name: '', component: BussinessProcess },
+      { path: '/status', name: 'Status', component: TaskStatusListView },
+      { path: '/workflows', name: 'Workflows', component: WorkflowListView },
+      { path: '/tasks', name: 'Tasks', component: TaskListView },
+      { path: '/schedulers', name: 'Schedulers', component: SchedulerListView },
+      { path: '/networks', name: 'Networks', component: NetworkListView },
+      { path: '/databases', name: 'Databases', component: DatabaseListView },
+      { path: '/folders', name: 'Folders', component: FolderListView },
+      { path: '/variables', name: 'Variables', component: VariableListView },
+      { path: '/carriers', name: 'Carriers', component: CarrierListView },
+      { path: '/errorCodes', name: 'ErrorCodes', component: ErrorCodeListView },
     ];
     return (
       <div className="app">
@@ -42,7 +63,7 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
         <div className="app-body">
           <AppSidebar fixed={true} display="lg">
             <AppSidebarHeader/>
-            <AppSidebarNav navConfig={{items:this.props.navItems}}/>
+            <AppSidebarNav navConfig={{items:this.props.navItems}} location={window.location}/>
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">

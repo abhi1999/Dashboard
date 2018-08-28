@@ -1,20 +1,23 @@
 {
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "rules":{
+    "variable-name": false,
+    "object-literal-sort-keys": false,
     "no-console": false,
     "no-debugger": false,
     "jsx-no-lambda": false,
     "ordered-imports": [
-      true,
+      false,
       {
-        "import-sources-order": "lowercase-last",
-        "named-imports-order": "lowercase-first"
+        "import-sources-order": "any",
+        "named-imports-order": "any"
       }
     ]
   },
   "jsRules":{
     "no-console": false,
-    "jsx-no-lambda":false
+    "jsx-no-lambda":false,
+    "object-literal-sort-keys": false
   },
   "linterOptions": {
     "exclude": [
