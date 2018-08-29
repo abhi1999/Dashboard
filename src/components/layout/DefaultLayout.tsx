@@ -28,6 +28,9 @@ import VariableListView from "../../views/scheduler/VariableListView";
 import CarrierListView from "../../views/carrier/CarrierListView";
 import ErrorCodeListView from "./../../views/ErrorCodeListView";
 
+import JsonTreeComponent from "./../jsonEditView"
+
+
 interface IDefaultLayoutProps{
   reload:()=>void
   navItems:any[]
@@ -77,6 +80,10 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
                       : (null);
                   },
                 )}
+                <Route path='/JsonEdit' render={(props) => (
+                    <JsonTreeComponent/>
+                    )}/>
+
               <Redirect from="/" to="/dashboard" />
               </Switch>
             </Container>          

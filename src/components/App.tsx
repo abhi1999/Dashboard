@@ -19,7 +19,6 @@ import './../styles/style.css'
 
 import { INewsFeed } from "./../domain/DataModel"
 
-import JsonTreeComponent from "./jsonEditView"
 interface IAppProps{
   alertGroupSet:any[],
   dashboardMenuItems:any[],
@@ -51,9 +50,6 @@ class App extends React.Component<IAppProps> {
               <Switch>
                 <Route path='/home' render={(props) => (
                     <div>home</div>
-                    )}/>
-                <Route path='/JsonEdit' render={(props) => (
-                    <JsonTreeComponent/>
                     )}/>
                 <Route path="/" name="Home" render={(props) => (
                     <DefaultLayout {...this.props} reload={this.reloadData} />
