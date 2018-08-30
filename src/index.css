@@ -142,9 +142,22 @@ body {font-family: SegoeUI,Helvetica Neue,Helvetica,Arial,sans-serif;background-
     font-weight: 700;
 }
 
-h2 {color:#000;font-weight:200;font-size:1.6rem;padding-left:30px;min-height:25px;}
 
+h2 {color:#000;font-weight:200;font-size:1.6rem;padding-left:30px;min-height:25px;}
 .business-flow-card-container .card {border:none!important;}
+.business-flow-card-container .card-body {text-align:left;min-height:75px;padding:.5rem;border:solid 1px #c1c1c1;border-top:0;}
+.business-flow-card-container .card-text{font-size:.80rem!important;line-height:1.1rem;color:#515151;}
+.business-flow-card-container .card h5 {margin-bottom:0;border:solid 1px #c1c1c1;border-bottom:0;}
+.business-flow-card-container .quote .card h5 {background-color:#afe5b2;}
+.business-flow-card-container .purchase-order .card h5 {background-color:#0cc1a9;}
+.business-flow-card-container .shipment---wms .card h5 {background-color:#008a00;}
+.business-flow-card-container .shipment---pick-and-pack .card h5  {background-color:#00b0f0;}
+.business-flow-card-container .invoice .card h5  {background-color:#126bf0;}
+.business-flow-card-container .cash .card h5  {background-color:#253e8f;}
+.business-flow-card-container .transformations .card h5  {background-color:#ec2954;}
+.business-flow-card-container .inquiry .card h5  {background-color:#9e0b0f;}
+.business-flow-card-container a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {color:#fff;}
+
 
 .sidebar .nav-dropdown.open a.nav-dropdown-toggle  {background-color:#474747;}
 ul li.nav-item ul.nav-dropdown-items li a {padding-left:40px;font-size:0.8rem;}

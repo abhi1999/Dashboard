@@ -1,7 +1,7 @@
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarMinimizer, AppSidebarToggler } from '@coreui/react';
 import * as  React from 'react';
 import { connect } from 'react-redux';
-import { Nav, NavItem } from 'reactstrap';
+import { Nav, NavLink, NavItem } from 'reactstrap';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { getVersionInfo, getErrorInfo } from './../../actions/Setting';
 import { MdInfo, MdErrorOutline, MdCheckBox } from 'react-icons/md';
@@ -81,12 +81,13 @@ class Header extends React.Component<any, IHeaderState>{
             />
             
             <Nav className="d-md-down-none" navbar={true}>
-                <NavItem className="px-3">
-                    <MdErrorOutline size={24} color='Grey' onClick={ () => { this.toggleErrorInfo(); }} />
+                <NavItem className="">
+                    <NavLink href="#"><i className="icon-exclamation icons" onClick={ () => { this.toggleErrorInfo(); }}/></NavLink>
+                    
                 </NavItem>
 
-                <NavItem className="px-3">
-                    <MdInfo size={24} color='Grey' onClick={ () => { this.toggleVersionInfo(); }} />
+                <NavItem className="">
+                    <NavLink href="#"><i className="icon-info exclamation icons" onClick={ () => { this.toggleVersionInfo(); }}/></NavLink>
                 </NavItem>
             </Nav>
             

@@ -19,18 +19,15 @@ class ProcessStepCardAlt extends React.Component<IProcessStepCardProps, IProcess
     }
     public render(){
         const {item} = this.props;
-        return <Card key={item.ControlID}  outline={false} >
-                <CardTitle >
-                    {
-                        <div className="card-header-actions">
+        return <Card key={item.ControlID}  outline={false}>
+                <CardTitle style={{"backgroundColor":this.getHexColor(item.GroupColor)}}>
+                    <div className="card-header-actions">
                         <a className="card-header-action btn" onClick={this.favClicked}><i className={classnames("fa", {"fa-star-o":!this.state.favSelected}, {"fa-star":this.state.favSelected})}/></a>
                         <a className="card-header-action btn" onClick={this.closeClicked}><i className={classnames("fa fa-close")}/></a>
-                </div>    
-                }
-                    
+                    </div>
                 </CardTitle>
                 <CardBody>
-                <CardText>{item.Title}</CardText>
+                    <CardText>{item.Title}</CardText>
                 </CardBody>
             </Card>
     }
@@ -41,7 +38,7 @@ class ProcessStepCardAlt extends React.Component<IProcessStepCardProps, IProcess
         this.setState({favSelected:!this.state.favSelected})
    }
    private closeClicked(){
-    // do something
-    }
+       // do something
+   }
 }
 export default ProcessStepCardAlt;

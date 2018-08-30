@@ -11,11 +11,24 @@ axios.defaults.paramsSerializer = (params):string=>{
     return query;
 }
 */
+// Adding the params serializer back for odata queries
+axios.interceptors.request.use( async (config)=> {
+    if(config && config.method === "get" && config.url && config.url.indexOf('odata')>-1){
+        config.paramsSerializer = (params):string=>{ 
+            const query = buildQuery(params).substring(1); // Strip question mark. Axios adds one already.
+            return query;
+        }
+    }
+    return config;
+}, (error) =>{
+    return Promise.reject(error);
+});
+
 
 // if(process.env.NODE_ENV !== 'production') {
     mockBehavior(axios)
 // }
 
-ApplyAuthenticationBehavior(axios)
+// ApplyAuthenticationBehavior(axios)
 
 export default axios;
