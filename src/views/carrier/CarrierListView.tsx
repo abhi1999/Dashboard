@@ -7,10 +7,10 @@ import { Card } from 'reactstrap';
 import FlexView from 'react-flexview';
 import { FaSyncAlt,FaPlusCircle,FaTimesCircle,FaEdit,FaClone,FaSort,FaSortUp,FaSortDown,FaTable,FaList } from 'react-icons/fa';
 import { carrierGetAll, carrierDelete } from '../../actions/Carrier';
-import { toastError } from '../../actions/Service';
+import { toastError } from '../../actions/Scheduler/ServiceAction';
 import CarrierView from './CarrierView';
 import { Pagination } from 'antd';
-import { Input } from 'antd';
+import { Input, Checkbox } from 'antd';
 import { ICON_SIZE, ICON_COLOR } from '../../constants/Attributes';
 import uuid from 'uuid-v4';
 import ShipVia from "../../constants/implementations/ShipVia";
@@ -46,6 +46,7 @@ export interface ICarrierListViewState
     Ship_Via_Name:string,
     SCAC:string,
     Ship_Via_Type:string,
+    test:boolean,
     [propName: string]: any, // This is so we can set by name dynamically
 }
 
@@ -70,6 +71,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
             Ship_Via_Name:"",
             SCAC:"",
             Ship_Via_Type:"",
+            test:false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -126,7 +128,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
 
         if (this.state.viewMode==='cards')
         {   // Conditional display elements for either cards or table view
-            toggleButton = <FaTable onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{marginRight: 12}}/>;
+            toggleButton = <FaTable onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} />;
                 
             cardHeader =
                 <FlexView width='100%' wrap={true} >
@@ -176,12 +178,12 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                 ;
         
             detailSection = carrierList.map((item) =>
-                <Card key={item.Id} body={true} outline={true} style={{width: '100%', marginBottom: '1px'}}>
+                <Card key={item.Id} body={true} outline={true} >
                     <FlexView width='100%' wrap={true}>
                         <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                            <FaEdit onClick={() => this.carrierEdit(item)} size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft:12}}/>
-                            <FaTimesCircle onClick={() => this.carrierDelete(item)}  size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft:12}}/>    
-                            <FaClone onClick={() => this.carrierClone(item)} size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft:12}}/>    
+                            <FaEdit onClick={() => this.carrierEdit(item)} size={ICON_SIZE} color={ICON_COLOR} />
+                            <FaTimesCircle onClick={() => this.carrierDelete(item)}  size={ICON_SIZE} color={ICON_COLOR} />    
+                            <FaClone onClick={() => this.carrierClone(item)} size={ICON_SIZE} color={ICON_COLOR}/>    
                         </FlexView>
                         <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
                             {item.Ship_Via_ID}
@@ -204,7 +206,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         }
         else // Table Display
         {
-            toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{marginRight: 12}}/>;
+            toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} />;
 
             cardHeader = <span/>; // This part is blank for the table view
 
@@ -217,9 +219,9 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                         width: 120,
                         Cell: row => (
                             <div>
-                                <FaEdit onClick={() => this.carrierEdit(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft: 12}}/>
-                                <FaTimesCircle onClick={() => this.carrierDelete(row.original)}  size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft: 12}}/>
-                                <FaClone onClick={() => this.carrierClone(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft:12}}/>    
+                                <FaEdit onClick={() => this.carrierEdit(row.original)} size={ICON_SIZE} color={ICON_COLOR}/>
+                                <FaTimesCircle onClick={() => this.carrierDelete(row.original)}  size={ICON_SIZE} color={ICON_COLOR}/>
+                                <FaClone onClick={() => this.carrierClone(row.original)} size={ICON_SIZE} color={ICON_COLOR}/>    
                         </div>
                         )
                     },
@@ -258,11 +260,11 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         }
 
         return (
-            <div>
-                <Card body={true} outline={true} style={{width: '100%'}}>
-                    <FlexView width='100%' wrap={true} style={{marginBottom: 12}}>
+            <div className="carrier-list-view">
+                <Card body={true} outline={true} >
+                    <FlexView width='100%' wrap={true} >
                         <FlexView hAlignContent="left" vAlignContent="center" basis="40" wrap={true}>
-                            <FaSyncAlt onClick={() => this.requery(this.state.pageSize)} size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft: 12}}/>
+                            <FaSyncAlt onClick={() => this.requery(this.state.pageSize)} size={ICON_SIZE} color={ICON_COLOR} />
                         </FlexView>
                         <FlexView hAlignContent="center" vAlignContent="center" grow={true} wrap={true}>
                             <Pagination
@@ -276,7 +278,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                                 />
                         </FlexView>
                         <FlexView hAlignContent="right" vAlignContent="center" basis="120" wrap={true}>
-                            <FaPlusCircle onClick={() => this.carrierAdd()} size={ICON_SIZE} color={ICON_COLOR} style={{marginRight: 12}}/>
+                            <FaPlusCircle onClick={() => this.carrierAdd()} size={ICON_SIZE} color={ICON_COLOR} />
                             {toggleButton}
                         </FlexView>
                     </FlexView>

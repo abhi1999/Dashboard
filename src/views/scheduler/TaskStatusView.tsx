@@ -5,7 +5,7 @@ import { StringChecker, StripAtSign, StripScheduler } from '../../utils/Conversi
 import { COMMAND_START, COMMAND_PAUSE, COMMAND_CONTINUE, COMMAND_TERMINATE } from '../../constants/ServiceParameters';
 import { TYPE_TASK, TYPE_WORKFLOW, STATE_BUSY, STATE_IDLE, STATE_PAUSED, STATE_TERMINATED } from '../../constants/ServiceParameters';
 import { FaMoon, FaHourglass, FaTimesCircle, FaPlayCircle, FaPauseCircle, FaStopCircle } from 'react-icons/fa';
-import { taskCommand } from '../../actions/Service';
+import { taskCommand } from '../../actions/Scheduler/ServiceAction';
 import FlexView from 'react-flexview';
 import TaskState from '../../constants/scheduler/taskState';
 import WorkflowTask from '../../constants/scheduler/workflowTask';

@@ -11,6 +11,7 @@ export default class ShipVia implements IShipVia {
     public User3:string;
     public User4:string;
     public User5:string;
+    public test:boolean;
 
     public constructor(init?:Partial<ShipVia>) {
         Object.assign(this, init);

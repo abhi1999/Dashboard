@@ -13,9 +13,10 @@ export const loadNewsFeed = () => (dispatch, getState)=> {
     const url = RSS_FEED_URL;
     return axios.get(url)
                 .then((response)=>{
-                    RSS_PARSER.parseString(response.data).then((data)=>{
+                     RSS_PARSER.parseString(response.data).then((data)=>{
+                    // const data =[];  
                         dispatch(loadNewsFeedSuccess(data));
-                    })
+                     })
                 })
                 .catch((error)=>{
                     dispatch(loadDataError(error, LOAD_NEWS_FEED_SUCCESS));

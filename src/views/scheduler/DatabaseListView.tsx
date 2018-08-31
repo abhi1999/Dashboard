@@ -1,8 +1,8 @@
 import * as React from "react";
 import { connect } from 'react-redux'
 import DatabaseView from './DatabaseView';
-import { databaseGetAll } from '../../actions/Database';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { databaseGetAll } from '../../actions/Scheduler/DatabaseAction';
+import { networkGetAll } from '../../actions/Scheduler/NetworkAction';
 import { FaPlusCircle } from 'react-icons/fa';
 import { FaCircle } from 'react-icons/fa'; import { FaCheckCircle } from 'react-icons/fa';
 import FlexView from 'react-flexview';
@@ -11,18 +11,20 @@ import Search from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Database from '../../constants/scheduler/database';
+import { Modal } from 'antd';
 
 export interface IDatabaseListViewProps
 {
   // Redux
   database:any,
   databaseGetAll:any,
+  networkGetAll:any,
 }
 
 export interface IDatabaseListViewState
 {
   activeOnly:boolean,
-  modal:boolean,
+  detailView:boolean,
   Field_Filter:string,
   newItem:Database,
   [propName: string]: any, // This is so we can set by name dynamically
@@ -34,7 +36,7 @@ class DatabaseListView extends React.Component <IDatabaseListViewProps,IDatabase
       super(props);
       this.state = {
         activeOnly: true,
-        modal: false,
+        detailView: false,
         Field_Filter: '',
         newItem: new Database()
       };
@@ -45,6 +47,7 @@ class DatabaseListView extends React.Component <IDatabaseListViewProps,IDatabase
 
     public componentWillMount() {
       this.props.databaseGetAll();
+      this.props.networkGetAll();
     }
 
     public render() {
@@ -98,20 +101,20 @@ class DatabaseListView extends React.Component <IDatabaseListViewProps,IDatabase
             </FlexView>
           </Card>
 
-          <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-            <ModalHeader toggle={this.toggleModal}>Add New Database</ModalHeader>
-            <ModalBody>
+          <Modal
+            title="Add New Database"
+            visible={this.state.detailView}
+            footer={null}
+            onCancel={(e)=>this.toggleModal()}>
               <DatabaseView itemId={this.state.newItem.Id} item={this.state.newItem} isNew={true} toggleModal={this.toggleModal} />
-            </ModalBody>
           </Modal>
-
           { itemList }
         </div>
     )};
 
-    public toggleModal() {
+    private toggleModal() {
       this.setState({
-        modal: !this.state.modal
+        detailView: !this.state.detailView
       });
     }
 
@@ -122,11 +125,9 @@ class DatabaseListView extends React.Component <IDatabaseListViewProps,IDatabase
     }
 
     private handleInputChange(event) {
-
-      const target = event.target;
-      const value = target.type === 'checkbox' ? target.checked : target.value;
-      const name = target.name;
-
+      const target:any = event.target;
+      const value:string = target.type === 'checkbox' ? target.checked : target.value;
+      const name:string = target.name;
       if (this!==undefined) {
           this.setState({
               [name]: value
@@ -140,7 +141,8 @@ const mapStateToProps = ({database}) => {
 };
 
 const mapActionsToProps = {
-    databaseGetAll
+    databaseGetAll,
+    networkGetAll
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(DatabaseListView);

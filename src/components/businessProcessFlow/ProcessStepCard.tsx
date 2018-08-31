@@ -24,7 +24,7 @@ class ProcessStepCardAlt extends React.Component<IProcessStepCardProps, IProcess
                     {
                         <div className="card-header-actions">
                         <a className="card-header-action btn" onClick={this.favClicked}><i className={classnames("fa", {"fa-star-o":!this.state.favSelected}, {"fa-star":this.state.favSelected})}/></a>
-                        <a className="card-header-action btn" onClick={this.closeClicked}><i className={classnames("fa fa-close")}/></a>
+                        <a className="card-header-action btn" onClick={this.closeClicked}><i className={classnames("icon-control-play")}/></a>
                 </div>    
                 }
                     

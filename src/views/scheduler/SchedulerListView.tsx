@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from 'react-redux'
 import SchedulerView from './SchedulerView';
-import { schedulerGetAll } from '../../actions/Scheduler';
+import { schedulerGetAll } from '../../actions/Scheduler/SchedulerAction';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import uuid from 'uuid-v4';
 import { FaPlusCircle } from 'react-icons/fa';

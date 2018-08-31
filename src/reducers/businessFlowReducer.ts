@@ -30,6 +30,11 @@ const initialState = {
                 name: 'Error Codes',
                 url: '/errorCodes',
             },
+            {  
+                icon: 'fa fa-list',
+                name: 'Freight Codes',
+                url: '/freightCodes',
+            }
         ]
         },
         {

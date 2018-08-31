@@ -176,3 +176,16 @@ export const ERRORCODE_UPDATE_FAILURE = 'errorcode_update_failure';
 export const ERRORCODE_DELETE = 'errorcode_delete';
 export const ERRORCODE_DELETE_SUCCESS = 'errorcode_delete_success';
 export const ERRORCODE_DELETE_FAILURE = 'errorcode_delete_failure';
+
+export const FREIGHT_CODE_GET_ALL  = 'freight_code_get_all';
+export const FREIGHT_CODE_GET_ALL_SUCCESS = 'freight_code_get_all_success';
+export const FREIGHT_CODE_GET_ALL_FAILURE = 'freight_code_get_all_failure';
+export const FREIGHT_CODE_ADD = 'freight_code_add';
+export const FREIGHT_CODE_ADD_SUCCESS = 'freight_code_add_success';
+export const FREIGHT_CODE_ADD_FAILURE = 'freight_code_add_failure';
+export const FREIGHT_CODE_UPDATE = 'freight_code_update';
+export const FREIGHT_CODE_UPDATE_SUCCESS = 'freight_code_update_success';
+export const FREIGHT_CODE_UPDATE_FAILURE = 'freight_code_update_failure';
+export const FREIGHT_CODE_DELETE = 'freight_code_delete';
+export const FREIGHT_CODE_DELETE_SUCCESS = 'freight_code_delete_success';
+export const FREIGHT_CODE_DELETE_FAILURE = 'freight_code_delete_failure';

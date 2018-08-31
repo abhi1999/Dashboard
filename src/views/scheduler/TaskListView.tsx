@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from 'react-redux'
 import TaskView from './TaskView';
-import { taskGetAll } from '../../actions/Task';
+import { taskGetAll } from '../../actions/Scheduler/TaskAction';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import uuid from 'uuid-v4';
 import { FaPlusCircle, FaCircle, FaCheckCircle } from 'react-icons/fa';

@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from 'react-redux'
 import NetworkView from './NetworkView';
 import { CardColumns } from 'reactstrap';
-import { networkGetAll } from '../../actions/Network';
+import { networkGetAll } from '../../actions/Scheduler/NetworkAction';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import uuid from 'uuid-v4';
 import { FaPlusCircle } from 'react-icons/fa';

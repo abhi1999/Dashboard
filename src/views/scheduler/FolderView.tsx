@@ -2,7 +2,7 @@ import * as React from "react";
 import { StringChecker } from '../../utils/Conversion';
 import { Form, Container, Row, Col } from 'reactstrap';
 import { connect } from "react-redux";
-import { getLastModified } from '../../actions/Service';
+import { getLastModified } from '../../actions/Scheduler/ServiceAction';
 import uuid from 'uuid-v4';
 import TextField from '@material-ui/core/TextField';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -15,7 +15,7 @@ import Divider from '@material-ui/core/Divider';
 import { FaCircle } from 'react-icons/fa';
 import { FaCheckCircle } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { folderAdd, folderUpdate, folderDelete } from '../../actions/Folder';
+import { folderAdd, folderUpdate, folderDelete } from '../../actions/Scheduler/FolderAction';
 import Folder from '../../constants/scheduler/folder';
 
 export interface IFolderViewProps

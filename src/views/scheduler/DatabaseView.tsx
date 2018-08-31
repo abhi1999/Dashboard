@@ -1,26 +1,34 @@
 import * as React from "react";
 import { StringChecker } from '../../utils/Conversion';
-import { Form, Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import { connect } from "react-redux";
-import { getLastModified } from '../../actions/Service';
+import { getLastModified } from '../../actions/Scheduler/ServiceAction';
 import uuid from 'uuid-v4';
-import TextField from '@material-ui/core/TextField';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import { FaCircle } from 'react-icons/fa';
 import { FaCheckCircle } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { databaseAdd, databaseUpdate, databaseDelete } from '../../actions/Database';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Select from '@material-ui/core/Select';
+import { databaseAdd, databaseUpdate, databaseDelete } from '../../actions/Scheduler/DatabaseAction';
+import { Form, Input, Select, Button } from 'antd';
 import Database from '../../constants/scheduler/database';
+import Network from "../../constants/scheduler/network";
+const Option = Select.Option;
+const FormItem = Form.Item;
+const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
 
 export interface IDatabaseViewProps
 {
@@ -45,7 +53,7 @@ export interface IDatabaseViewState
     isExpanded:boolean,
     Field_Active:boolean,
     Field_Name:string,
-    Field_Name_Error:boolean,
+    Field_Name_Status:any,
     Field_Name_Help:string,
     Field_Connection:string,
     Field_Database:string,
@@ -66,6 +74,8 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
       this.handleUpdate = this.handleUpdate.bind(this);
       this.handleDelete = this.handleDelete.bind(this);
       this.handleInputChange = this.handleInputChange.bind(this);
+      this.handleLinkageChange = this.handleLinkageChange.bind(this);
+      this.handleNetworkChange = this.handleNetworkChange.bind(this);
     }
 
     public componentWillMount() {
@@ -82,7 +92,7 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
 
         let actionButtons =
         <div>
-            <Button size="medium" color="secondary"
+            <Button style={{marginLeft:8}}
                     onClick={() =>
                     {
                         this.initState();
@@ -92,21 +102,23 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
                     }}>
                 Cancel
             </Button>
-            <Button size="medium" color="secondary"
+            <Button style={{marginLeft:8}}
                     onClick={() =>
                     {
                         this.handleDelete();
                     }}>
                 Delete
             </Button>
-            <Button size="medium" color="primary"
+            <Button style={{marginLeft:8}}
+                    type="primary"
                     onClick={() =>
                     {
                         if(this.isValid())
                         {
                             this.handleUpdate();
                         }
-                    }}>
+                    }
+                }>
                 Update
             </Button>
         </div>;
@@ -114,14 +126,22 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
     {
         actionButtons =
         <div>
-            <Button size="medium" color="secondary"
-                    onClick={() =>
+            <Button style={{marginLeft:8}}
+                onClick={() =>
+                {
+                    this.props.toggleModal();
+                }}>
+                Cancel
+            </Button>
+            <Button style={{marginLeft:8}}
+                type="primary"
+                onClick={() =>
+                {
+                    if(this.isValid())
                     {
-                        if(this.isValid())
-                        {
-                            this.handleAdd();
-                        }
-                    }}>
+                        this.handleAdd();
+                    }
+                }}>
                 Add
             </Button>
         </div>
@@ -137,7 +157,7 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
         <td style={{width: '100%'}}>
             <ExpansionPanel expanded={this.state.isExpanded} onChange={this.expansionChange(null)} CollapseProps={{ unmountOnExit: true }}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>} style={{width: '100%'}}>
-                <div style={{width: '100%', fontWeight: 'bold', marginLeft:8, marginTop:8}}>{ this.state.Field_Name }</div>
+                    <div style={{width: '100%', fontWeight: 'bold', marginLeft:8, marginTop:8}}>{ this.state.Field_Name }</div>
                 </ExpansionPanelSummary>
                 <Divider/>
                 <ExpansionPanelActions>
@@ -145,90 +165,80 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
                 </ExpansionPanelActions>
                 <Divider/>
                 <ExpansionPanelDetails >
-                  <Form name="DetailForm" id="DetailForm" style={{width: '100%'}}>
-                      <Container>
-                        <Row>
-                            <Col>
-                                <TextField
-                                        margin="normal"
-                                        fullWidth={true}
-                                        error={this.state.Field_Name_Error}
-                                        name="Field_Name"
-                                        value={StringChecker(this.state.Field_Name)}
-                                        onChange={this.handleInputChange}
-                                        helperText={this.state.Field_Name_Help}
-                                    />
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <TextField
-                                        margin="normal"
-                                        fullWidth={true}
-                                        name="Field_Connection"
-                                        value={StringChecker(this.state.Field_Connection)}
-                                        onChange={this.handleInputChange}
-                                        helperText="Connection"
-                                    />
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <TextField
-                                        margin="normal"
-                                        fullWidth={true}
-                                        name="Field_Database"
-                                        value={StringChecker(this.state.Field_Database)}
-                                        onChange={this.handleInputChange}
-                                        helperText="Database"
-                                    />
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <FormControl className="w-100 mb-2">
-                                <Select
-                                    value={StringChecker(this.state.Field_Linkage)}
-                                    onChange={this.handleInputChange}
-                                    inputProps={{
-                                    name: 'Field_Linkage'
-                                    }}
-                                >
-                                    <MenuItem value={'VB6'}>VB6</MenuItem>
-                                    <MenuItem value={'VBNet'}>VBNet</MenuItem>
-                                </Select>
-                                <FormHelperText>Linkage</FormHelperText>
-                                </FormControl>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                            <FormControl className="w-100 mb-2">
-                                  <Select
-                                    value={StringChecker(this.state.Field_Network)}
-                                    onChange={this.handleInputChange}
-                                    inputProps={{
-                                      name: 'Field_Network'
-                                    }}
-                                  >
-                                {
-                                  this.props.network.networkList.map((network) => {
-                                          return (
-                                            <MenuItem
-                                              key={network.Id}
-                                              value={network.Name}>
-                                              {network.Name}
-                                            </MenuItem>
-                                          );
-                                        })
-                                      }
-                                  </Select>
-                                  <FormHelperText>Network</FormHelperText>
-                                </FormControl>
-                            </Col>
-                        </Row>
-                    </Container>
+                <div style={{width: '100%'}}>
+                  <Form name="DetailForm" id="DetailForm">
+                    <FormItem
+                        style={{height:24}}
+                        {...formItemLayout}
+                        label="Name"
+                        validateStatus={this.state.Field_Name_Status}
+                        help={this.state.Field_Name_Help}
+                        >
+                        <Input
+                            name="Field_Name"
+                            value={StringChecker(this.state.Field_Name)}
+                            onChange={this.handleInputChange}
+                            />
+                    </FormItem>
+                    <FormItem
+                        style={{height:24}}
+                        {...formItemLayout}
+                        label="Connection"
+                        >
+                        <Input
+                            name="Field_Connection"
+                            value={StringChecker(this.state.Field_Connection)}
+                            onChange={this.handleInputChange}
+                            />
+                    </FormItem>
+                    <FormItem
+                        style={{height:24}}
+                        {...formItemLayout}
+                        label="Database"
+                        >
+                        <Input
+                            placeholder="Database"
+                            name="Field_Database"
+                            value={StringChecker(this.state.Field_Database)}
+                            onChange={this.handleInputChange}
+                            />
+                    </FormItem>
+                    <FormItem
+                        style={{height:24}}
+                        {...formItemLayout}
+                        label="Linkage"
+                        >
+                        <Select
+                            style={{ width: 120 }} 
+                            value={StringChecker(this.state.Field_Linkage)}
+                            onChange={this.handleLinkageChange}
+                            >
+                            <Option key={'VB6'} value={'VB6'}>VB6</Option>
+                            <Option key={'VBNet'} value={'VBNet'}>VBNet</Option>
+                        </Select>
+                    </FormItem>
+                    <FormItem
+                        style={{height:24}}
+                        {...formItemLayout}
+                        label="Network"
+                        >
+                        <Select
+                            placeholder="Network"  
+                            style={{ width: 120 }} 
+                            value={StringChecker(this.state.Field_Network)}
+                            onChange={this.handleNetworkChange}
+                            >
+                            {
+                            this.props.network.networkList.map((network:Network) => {
+                                return (
+                                <Option key={network.Id} value={network.Name}>{network.Name}</Option>
+                                );
+                            })
+                            }
+                        </Select>
+                    </FormItem>
                   </Form>
+                </div>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
             </td>
@@ -243,8 +253,8 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
           isExpanded: this.props.isNew,
           Field_Active: this.props.item.Active,
           Field_Name: this.props.item.Name,
-          Field_Name_Error: false,
-          Field_Name_Help: 'Name',
+          Field_Name_Status: undefined,
+          Field_Name_Help: '',
           Field_Connection: this.props.item.Connection,
           Field_Database: this.props.item.Database,
           Field_Linkage: this.props.item.Linkage,
@@ -268,17 +278,23 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
     }
 
     private handleAdd() {
-        const database = this.packDatabase();
-        this.props.databaseAdd(database);
-        this.props.toggleModal();
+        if (this.isValid())
+        {
+            const database = this.packDatabase();
+            this.props.databaseAdd(database);
+            this.props.toggleModal();
+        }
     }
 
     private handleUpdate() {
-        const database = this.packDatabase();
-        this.props.databaseUpdate(database);
-        this.setState({
-            isExpanded: false
-            });
+        if(this.isValid())
+        {
+            const database = this.packDatabase();
+            this.props.databaseUpdate(database);
+            this.setState({
+                isExpanded: false
+                });
+        }
     }
 
     private handleDelete() {
@@ -311,12 +327,24 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
         return item;
     }
 
+    private handleLinkageChange(value:string) {
+        this.setState({
+            Field_Linkage: value
+        });
+    }
+
+    private handleNetworkChange(value:string) {
+        this.setState({
+            Field_Network: value
+        }); 
+    }
+
     private handleInputChange(event) {
 
         const target:any = event.target;
         const value:string = target.type === 'checkbox' ? target.checked : target.value;
         const name:string = target.name;
-
+        
         if (this!==undefined) {
             this.setState({
                 [name]: value
@@ -328,22 +356,22 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
             if (value.length < 1)
             {
                 this.setState({
-                    Field_Name_Error: true,
+                    Field_Name_Status: 'error',
                     Field_Name_Help: 'Name - cannot be blank.'
                 });
             }
             else if (this.props.database.databaseList.filter((item) => (item.Name === value)).length>0)
             {
                 this.setState({
-                    Field_Name_Error: true,
+                    Field_Name_Status: 'error',
                     Field_Name_Help: 'Name - cannot be the same as another Database.'
                 });
             }
             else
             {
                 this.setState({
-                    Field_Name_Error: false,
-                    Field_Name_Help: 'Name'
+                    Field_Name_Status: undefined,
+                    Field_Name_Help: ''
                 });
             }
         }
@@ -351,7 +379,7 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
 
     private isValid()
     {
-        if (this.state.Field_Name_Error===true)
+        if (this.state.Field_Name_Status==="error")
         {
             return false;
         }

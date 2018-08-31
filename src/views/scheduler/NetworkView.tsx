@@ -2,7 +2,7 @@ import * as React from "react";
 import { StringChecker } from '../../utils/Conversion';
 import { Form, Container, Row, Col } from 'reactstrap';
 import { connect } from "react-redux";
-import { getLastModified } from '../../actions/Service';
+import { getLastModified } from '../../actions/Scheduler/ServiceAction';
 import uuid from 'uuid-v4';
 import TextField from '@material-ui/core/TextField';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import { FaCircle,FaCheckCircle } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { networkAdd, networkUpdate, networkDelete } from '../../actions/Network';
+import { networkAdd, networkUpdate, networkDelete } from '../../actions/Scheduler/NetworkAction';
 import Network from '../../constants/scheduler/network';
 
 export interface INetworkViewProps

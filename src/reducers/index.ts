@@ -10,16 +10,17 @@ import newsFeedReducer from "./newsFeedReducer";
 import topErrorsReducer from "./topErrorsReducer";
 
 import Settings from './Settings';
-import Workflow from './Workflow';
-import Task from './Task';
-import Scheduler from './Scheduler';
-import Network from './Network';
-import Database from './Database';
-import Folder from './Folder';
-import Variable from './Variable';
-import Service from './Service';
+import Workflow from './Scheduler/WorkflowReducer';
+import Task from './Scheduler/TaskReducer';
+import Scheduler from './Scheduler/SchedulerReducer';
+import Network from './Scheduler/NetworkReducer';
+import Database from './Scheduler/DatabaseReducer';
+import Folder from './Scheduler/FolderReducer';
+import Variable from './Scheduler/VariableReducer';
+import Service from './Scheduler/ServiceReducer';
 import Carrier from './Carrier';
 import ErrorCode from './ErrorCode';
+import FreightCode from './FreightCode';
 
 const appReducer = combineReducers({
     alertsReducer,
@@ -40,7 +41,8 @@ const appReducer = combineReducers({
     variable: Variable,
     service: Service,
     carrier: Carrier,
-    errorCode: ErrorCode
+    errorCode: ErrorCode,
+    freightCode: FreightCode
 })
 
 export default appReducer;

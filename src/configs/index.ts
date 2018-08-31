@@ -1,4 +1,5 @@
 import Parser from 'rss-parser';
+// import * as Parser from 'rss-parser/dist/rss-parser';
 
 export const BASE_URL = process.env.REACT_APP_SERVICE_URL;
 export const SCHEDULER_URL = process.env.REACT_APP_SCHEDULER_URL;
@@ -14,6 +15,7 @@ export const SERVICES ={
         shortcutMenuItems:"/odata/ApiDashboardShortcutSet",
     }
 }
+
 export const RSS_PARSER = new Parser({customFields: {
     item: [
       ['content:encoded', 'contentEncoded'],

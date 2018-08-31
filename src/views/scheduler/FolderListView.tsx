@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from 'react-redux'
 import FolderView from './FolderView';
-import { folderGetAll } from '../../actions/Folder';
+import { folderGetAll } from '../../actions/Scheduler/FolderAction';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import uuid from 'uuid-v4';
 import { FaPlusCircle } from 'react-icons/fa';

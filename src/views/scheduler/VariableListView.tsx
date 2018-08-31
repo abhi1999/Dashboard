@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from 'react-redux'
 import VariableView from './VariableView';
 import { CardColumns } from 'reactstrap';
-import { variableGetAll } from '../../actions/Variable';
+import { variableGetAll } from '../../actions/Scheduler/VariableAction';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import uuid from 'uuid-v4';
 import { FaPlusCircle } from 'react-icons/fa';

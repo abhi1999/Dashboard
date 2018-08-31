@@ -5,6 +5,9 @@ import AppContainer from './containers/AppContainer';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from "./store/configureStore";
 
+import "@babel/polyfill";
+
+
 import './index.css';
 
 const store = configureStore();

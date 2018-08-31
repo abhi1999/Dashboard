@@ -26,7 +26,8 @@ import DatabaseListView from "../../views/scheduler/DatabaseListView";
 import FolderListView from "../../views/scheduler/FolderListView";
 import VariableListView from "../../views/scheduler/VariableListView";
 import CarrierListView from "../../views/carrier/CarrierListView";
-import ErrorCodeListView from "./../../views/ErrorCodeListView";
+import ErrorCodeListView from "../../views/ErrorCode/ErrorCodeListView";
+import FreightCode from "./../../views/FreightCode/FreightCodeView";
 
 import JsonTreeComponent from "./../jsonEditView"
 
@@ -57,6 +58,7 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
       { path: '/variables', name: 'Variables', component: VariableListView },
       { path: '/carriers', name: 'Carriers', component: CarrierListView },
       { path: '/errorCodes', name: 'ErrorCodes', component: ErrorCodeListView },
+      { path: '/freightCodes', name: 'Freight Codes', component: FreightCode },
     ];
     return (
       <div className="app">

@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import "react-table/react-table.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { taskStatusListGetAll, serviceGetState, serviceCommand, taskCommand } from '../../actions/Service';
+import { taskStatusListGetAll, serviceGetState, serviceCommand, taskCommand } from '../../actions/Scheduler/ServiceAction';
 import { SERVICE_COMMAND_START, SERVICE_COMMAND_STOP, SERVICE_STATE_RUNNING, SERVICE_STATE_STANDALONE_MODE, SERVICE_STATE_START_PENDING, SERVICE_STATE_STOPPED, SERVICE_STATE_STOP_PENDING, SERVICE_STATE_UNKNOWN } from '../../constants/ServiceParameters';
 import { FaCheckSquare, FaBug, FaExclamationTriangle, FaPlayCircle, FaStopCircle, FaHourglass } from 'react-icons/fa';
 import { Uptime } from '../../utils/Conversion';

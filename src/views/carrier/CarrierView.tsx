@@ -115,10 +115,10 @@ class CarrierView extends React.Component<ICarrierViewProps,ICarrierViewState> {
     }
 
         return (
-            <div style={{width: '100%', marginBottom: 20 }}>
+            <div>
                 {actionButtons}
                 <Divider/>
-                <Form name="DetailForm" id="DetailForm" style={{width: '100%'}}>
+                <Form name="DetailForm" id="DetailForm">
                     <Container>
                         <Row>
                             <Col xs="6">

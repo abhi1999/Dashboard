@@ -1,8 +1,8 @@
 import * as React from "react";
 import { connect } from 'react-redux'
 import WorkflowView from './WorkflowView';
-import { workflowGetAll } from '../../actions/Workflow';
-import { taskGetAll } from '../../actions/Task';
+import { workflowGetAll } from '../../actions/Scheduler/WorkflowAction';
+import { taskGetAll } from '../../actions/Scheduler/TaskAction';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import uuid from 'uuid-v4';
 import { FaPlusCircle } from 'react-icons/fa';
