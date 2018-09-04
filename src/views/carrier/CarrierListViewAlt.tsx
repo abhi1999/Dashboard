@@ -22,7 +22,8 @@ const InputGroup = Input.Group;
 const Option = Select.Option;
 
 import { CarrierListCardItem}  from "./CarrierListCardItem";
-
+import CarrierGridEditControl from "./CarrierGridEditControl";
+import classnames from "classnames";
 
 export interface ICarrierListViewProps {
     // redux
@@ -124,13 +125,14 @@ class CarrierListViewAlt extends React.Component<ICarrierListViewProps, ICarrier
             carrierList = _.orderBy(carrierList, sorted.map((column) => column.id), sorted.map((column) => column.desc ? "desc" : "asc"));
         }
 
-        let toggleButton;
+        const toggleButton = <i className={classnames("fa", {"fa-th":this.state.viewMode === 'cards'}, {"fa-list":this.state.viewMode !== 'cards'})} onClick={ () => { this.toggleViewMode(); }}/>
+        ;
         let cardHeader;
         let detailSection;
         const tablePageSize = Math.min(carrierList.length, pageSize); // Only show rows with data in the table
 
         if (this.state.viewMode === 'cards') {   // Conditional display elements for either cards or table view
-            toggleButton = <FaTable onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
+            // toggleButton = <FaTable onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
 
             cardHeader =
                 <FlexView width='100%' wrap={true} >
@@ -199,7 +201,7 @@ class CarrierListViewAlt extends React.Component<ICarrierListViewProps, ICarrier
         }
         else // Table Display
         {
-            toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
+            // toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
 
             cardHeader = <span />; // This part is blank for the table view
 
@@ -212,9 +214,10 @@ class CarrierListViewAlt extends React.Component<ICarrierListViewProps, ICarrier
                             width: 120,
                             Cell: row => (
                                 <div>
-                                    <FaEdit onClick={() => this.carrierEdit(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                                    <FaTimesCircle onClick={() => this.carrierDelete(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                                    <FaClone onClick={() => this.carrierClone(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
+                                    <CarrierGridEditControl onItemEdit={()=>this.carrierEdit(row.original)}
+                                        onItemDelete={()=>this.carrierDelete(row.original)}
+                                        onItemClone={()=>this.carrierClone(row.original)}
+                                    />
                                 </div>
                             )
                         },
@@ -298,7 +301,7 @@ class CarrierListViewAlt extends React.Component<ICarrierListViewProps, ICarrier
                 <Card body={true} outline={true} style={{ width: '100%' }}>
                     <FlexView width='100%' wrap={true} style={{ marginBottom: 12 }}>
                         <FlexView hAlignContent="left" vAlignContent="center" basis="40" wrap={true}>
-                            <FaSyncAlt onClick={() => this.requery(this.state.pageSize)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
+                            <i className="fa fa-refresh" onClick={ () => { this.requery(this.state.pageSize) }}/>
                         </FlexView>
                         <FlexView hAlignContent="center" vAlignContent="center" grow={true} wrap={true}>
                             <Pagination
@@ -312,7 +315,7 @@ class CarrierListViewAlt extends React.Component<ICarrierListViewProps, ICarrier
                             />
                         </FlexView>
                         <FlexView hAlignContent="right" vAlignContent="center" basis="120" wrap={true}>
-                            <FaPlusCircle onClick={() => this.carrierAdd()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />
+                            <i className="fa fa-plus" onClick={ () => { this.carrierAdd() }}/>
                             {toggleButton}
                         </FlexView>
                     </FlexView>
@@ -350,7 +353,9 @@ class CarrierListViewAlt extends React.Component<ICarrierListViewProps, ICarrier
         }
 
         // Update the state value for the field, as well as the filtered array
-        this.setState({ Ship_Via_Type: value, filtered });
+        this.setState({ Ship_Via_Type: value, filtered:filtered.filter(f=>f.value.length>0) },()=>{this.query(this.state.page,this.state.pageSize)});
+        
+        
     }
     
     private handleTestFilterChange(value: string) {
@@ -530,9 +535,10 @@ class CarrierListViewAlt extends React.Component<ICarrierListViewProps, ICarrier
             filterUpdated = this.state.filtered.concat({ "id": columnId, "value": value });
         }
 
+        
         this.setState({
-            filtered: filterUpdated
-        });
+            filtered: filterUpdated.filter(f=>f.value.length>0)
+        },()=>{this.query(this.state.page,this.state.pageSize)});
     }
 }
 
