@@ -29,7 +29,6 @@ function getSortButton(props, columnId)
 }
 
 function FreightCodeCardView(props) {
-    // let cardPageSize = props.pageSize
     return (
         <div>
             <FlexView width='100%' wrap={true} >

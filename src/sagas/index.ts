@@ -8,9 +8,11 @@ import folderSagas from "./Scheduler/FolderSaga";
 import variableSagas from "./Scheduler/VariableSaga";
 import settingSagas from "./Setting";
 import serviceSagas from "./Scheduler/ServiceSaga";
-import carrierSagas from "./Carrier";
+import carrierSagas from "./CarrierSaga";
 import errorCodeSagas from "./ErrorCode";
 import freightCodeSagas from "./FreightCode";
+import tradeSagas from "./Trade";
+import kitTypeSagas from "./KitType"
 
 export default function* rootSaga(getState:any) {
     yield all([
@@ -25,6 +27,8 @@ export default function* rootSaga(getState:any) {
         serviceSagas(),
         carrierSagas(),
         errorCodeSagas(),
-        freightCodeSagas()
+        freightCodeSagas(),
+        tradeSagas(),
+        kitTypeSagas()
     ]);
 }

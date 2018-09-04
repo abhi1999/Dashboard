@@ -1,0 +1,54 @@
+import { IApiShipList } from '../edidb'
+export class CApiShipList implements IApiShipList {
+    public Asn_ID:number = 0;
+    public Bol_No:string = '';
+    public Pro_No:string = '';
+    public ShipToPeps:boolean;
+    public Ship_Weight:number = 0;
+    public Ship_Date:string = '';
+    public Del_Date:string = '';
+    public Ship_Via_ID:string = '';
+    public Asn_Complete:string = '';
+    public Exp_Flag:string = '';
+    public TP_PartID:string = '';
+    public User1:string = '';
+    public User2:string = '';
+    public Trailer:string = '';
+    public Collect:boolean;
+    public AckID:string = '';
+    public GCN:string = '';
+    public TCN:string = '';
+    public User3:string = '';
+    public User4:string = '';
+    public User5:string = '';
+    public SealNo:string = '';
+    public ExportDate:Date;
+    public CreatedDate:Date;
+    public PackImport:string = '';
+    public VPIDFA:number = 0;
+    public LabelPrinted:boolean;
+    public TP_Name:string = '';
+    public NoteText:string = '';
+    public constructor(init?:Partial<CApiShipList>) { Object.assign(this, init); }
+}
+export const IApiShipList_Bol_No_length = 30;
+export const IApiShipList_Pro_No_length = 30;
+export const IApiShipList_Ship_Date_length = 8;
+export const IApiShipList_Del_Date_length = 8;
+export const IApiShipList_Ship_Via_ID_length = 30;
+export const IApiShipList_Asn_Complete_length = 1;
+export const IApiShipList_Exp_Flag_length = 1;
+export const IApiShipList_TP_PartID_length = 30;
+export const IApiShipList_User1_length = 50;
+export const IApiShipList_User2_length = 50;
+export const IApiShipList_Trailer_length = 50;
+export const IApiShipList_AckID_length = 1;
+export const IApiShipList_GCN_length = 20;
+export const IApiShipList_TCN_length = 20;
+export const IApiShipList_User3_length = 50;
+export const IApiShipList_User4_length = 50;
+export const IApiShipList_User5_length = 50;
+export const IApiShipList_SealNo_length = 200;
+export const IApiShipList_PackImport_length = 1;
+export const IApiShipList_TP_Name_length = 30;
+export const IApiShipList_NoteText_length = 2000;

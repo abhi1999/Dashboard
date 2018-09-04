@@ -27,7 +27,12 @@ import FolderListView from "../../views/scheduler/FolderListView";
 import VariableListView from "../../views/scheduler/VariableListView";
 import CarrierListView from "../../views/carrier/CarrierListView";
 import ErrorCodeListView from "../../views/ErrorCode/ErrorCodeListView";
-import FreightCode from "./../../views/FreightCode/FreightCodeView";
+import FreightCodeView from "./../../views/FreightCode/FreightCodeView";
+import TradeView from "./../../views/Trade/TradeView";
+
+import CarrierList from  "../../views/carrier/CarrierList";
+import CarrierListViewAlt from  "../../views/carrier/CarrierListViewAlt";
+
 
 import JsonTreeComponent from "./../jsonEditView"
 
@@ -57,8 +62,11 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
       { path: '/folders', name: 'Folders', component: FolderListView },
       { path: '/variables', name: 'Variables', component: VariableListView },
       { path: '/carriers', name: 'Carriers', component: CarrierListView },
+      { path: '/carriersaggrid', name: 'CarriersAG-Grid', component: CarrierList },
+      { path: '/carriersalt', name: 'CarriersAlt', component: CarrierListViewAlt },
       { path: '/errorCodes', name: 'ErrorCodes', component: ErrorCodeListView },
-      { path: '/freightCodes', name: 'Freight Codes', component: FreightCode },
+      { path: '/freightCodes', name: 'Freight Codes', component: FreightCodeView },
+      { path: '/trades', name: 'Trading Partners', component: TradeView },
     ];
     return (
       <div className="app">

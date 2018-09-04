@@ -18,9 +18,11 @@ import Database from './Scheduler/DatabaseReducer';
 import Folder from './Scheduler/FolderReducer';
 import Variable from './Scheduler/VariableReducer';
 import Service from './Scheduler/ServiceReducer';
-import Carrier from './Carrier';
+import Carrier from './CarrierReducer';
 import ErrorCode from './ErrorCode';
 import FreightCode from './FreightCode';
+import Trade from './Trade';
+import KitType from './KitTypeReducer'
 
 const appReducer = combineReducers({
     alertsReducer,
@@ -42,7 +44,9 @@ const appReducer = combineReducers({
     service: Service,
     carrier: Carrier,
     errorCode: ErrorCode,
-    freightCode: FreightCode
+    freightCode: FreightCode,
+    trade:Trade,
+    kitType:KitType
 })
 
 export default appReducer;

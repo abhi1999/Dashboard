@@ -1,6 +1,5 @@
 import * as React from "react";
 import { StringChecker } from '../../utils/Conversion';
-import { Container, Row, Col } from 'reactstrap';
 import { connect } from "react-redux";
 import { getLastModified } from '../../actions/Scheduler/ServiceAction';
 import uuid from 'uuid-v4';

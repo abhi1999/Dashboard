@@ -1,0 +1,53 @@
+import { IShipTo } from '../edidb'
+export class CShipTo implements IShipTo {
+    public TP_PartID:string = '';
+    public ShipTo_ID:string = '';
+    public ShipTo_Xref:string = '';
+    public ShipTo_Name:string = '';
+    public ShipTo_Address:string = '';
+    public ShipTo_Address2:string = '';
+    public ShipTo_City:string = '';
+    public ShipTo_State:string = '';
+    public ShipTo_Zip:string = '';
+    public ShipTo_Country:string = '';
+    public ShipTo_CustID:string = '';
+    public ShipTo_DC:string = '';
+    public ShipTo_ShipDateQual:string = '';
+    public ShipTo_StoreName:string = '';
+    public ShipTo_Carrier:string = '';
+    public User1:string = '';
+    public User2:string = '';
+    public User3:string = '';
+    public User4:string = '';
+    public User5:string = '';
+    public ShipTo_rfid:boolean;
+    public ShipTo_GroupID:string = '';
+    public TransitDays:number = 0;
+    public FrozenDays:number = 0;
+    public ShipDlvPattern:string = '';
+    public Loc_Override:string = '';
+    public constructor(init?:Partial<CShipTo>) { Object.assign(this, init); }
+}
+export const IShipTo_TP_PartID_length = 30;
+export const IShipTo_ShipTo_ID_length = 80;
+export const IShipTo_ShipTo_Xref_length = 30;
+export const IShipTo_ShipTo_Name_length = 80;
+export const IShipTo_ShipTo_Address_length = 80;
+export const IShipTo_ShipTo_Address2_length = 80;
+export const IShipTo_ShipTo_City_length = 40;
+export const IShipTo_ShipTo_State_length = 20;
+export const IShipTo_ShipTo_Zip_length = 15;
+export const IShipTo_ShipTo_Country_length = 30;
+export const IShipTo_ShipTo_CustID_length = 30;
+export const IShipTo_ShipTo_DC_length = 30;
+export const IShipTo_ShipTo_ShipDateQual_length = 3;
+export const IShipTo_ShipTo_StoreName_length = 50;
+export const IShipTo_ShipTo_Carrier_length = 30;
+export const IShipTo_User1_length = 50;
+export const IShipTo_User2_length = 50;
+export const IShipTo_User3_length = 50;
+export const IShipTo_User4_length = 50;
+export const IShipTo_User5_length = 50;
+export const IShipTo_ShipTo_GroupID_length = 30;
+export const IShipTo_ShipDlvPattern_length = 20;
+export const IShipTo_Loc_Override_length = 20;

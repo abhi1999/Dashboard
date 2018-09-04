@@ -1,0 +1,55 @@
+import { IPlanSchedPO } from '../edidb'
+export class CPlanSchedPO implements IPlanSchedPO {
+    public tp_partid:string = '';
+    public beg_01:string = '';
+    public beg_02:string = '';
+    public beg_03:string = '';
+    public beg_04:string = '';
+    public beg_05:string = '';
+    public beg_06:string = '';
+    public ctt_01:string = '';
+    public exp_flag:string = '';
+    public sdq_flag:string = '';
+    public cur_02:number = 0;
+    public importdate:Date;
+    public exportdate:number = 0;
+    public misc_id:number = 0;
+    public shiptoid:string = '';
+    public VPID:number = 0;
+    public po1_02:number = 0;
+    public po1_03:string = '';
+    public po1_04:number = 0;
+    public po1_05:string = '';
+    public po1_06:string = '';
+    public po1_07:string = '';
+    public po1_ediqty:number = 0;
+    public po1_edium:string = '';
+    public po1_ediline:string = '';
+    public docline:number = 0;
+    public packsize:number = 0;
+    public etline_no:number = 0;
+    public fcdate1:string = '';
+    public fcdate2:string = '';
+    public PSHID:string = '';
+    public PSIID:string = '';
+    public constructor(init?:Partial<CPlanSchedPO>) { Object.assign(this, init); }
+}
+export const IPlanSchedPO_tp_partid_length = 30;
+export const IPlanSchedPO_beg_01_length = 2;
+export const IPlanSchedPO_beg_02_length = 2;
+export const IPlanSchedPO_beg_03_length = 30;
+export const IPlanSchedPO_beg_04_length = 30;
+export const IPlanSchedPO_beg_05_length = 8;
+export const IPlanSchedPO_beg_06_length = 30;
+export const IPlanSchedPO_ctt_01_length = 1;
+export const IPlanSchedPO_exp_flag_length = 1;
+export const IPlanSchedPO_sdq_flag_length = 1;
+export const IPlanSchedPO_shiptoid_length = 80;
+export const IPlanSchedPO_po1_03_length = 10;
+export const IPlanSchedPO_po1_05_length = 2;
+export const IPlanSchedPO_po1_06_length = 10;
+export const IPlanSchedPO_po1_07_length = 80;
+export const IPlanSchedPO_po1_edium_length = 10;
+export const IPlanSchedPO_po1_ediline_length = 1;
+export const IPlanSchedPO_fcdate1_length = 8;
+export const IPlanSchedPO_fcdate2_length = 8;

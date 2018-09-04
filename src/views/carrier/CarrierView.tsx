@@ -6,14 +6,14 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { carrierAdd, carrierUpdate, carrierDelete } from '../../actions/Carrier';
-import ShipVia from "../../constants/implementations/ShipVia";
+import { carrierAdd, carrierUpdate, carrierDelete } from '../../actions/CarrierAction';
+import ShipViaModel from "../../constants/implementations/ShipViaModel";
 
 export interface ICarrierViewProps
 {
     // Local
     itemId:string,
-    item:ShipVia,
+    item:ShipViaModel,
     isNew:boolean,
     toggleModal:any,
     // Redux
@@ -115,10 +115,10 @@ class CarrierView extends React.Component<ICarrierViewProps,ICarrierViewState> {
     }
 
         return (
-            <div>
+            <div style={{width: '100%', marginBottom: 20 }}>
                 {actionButtons}
                 <Divider/>
-                <Form name="DetailForm" id="DetailForm">
+                <Form name="DetailForm" id="DetailForm" style={{width: '100%'}}>
                     <Container>
                         <Row>
                             <Col xs="6">
@@ -264,7 +264,7 @@ class CarrierView extends React.Component<ICarrierViewProps,ICarrierViewState> {
     {
         const { itemId } = this.props;
         
-        let item:ShipVia = new ShipVia();
+        let item:ShipViaModel = new ShipViaModel();
 
         if (!this.props.isNew)
         {

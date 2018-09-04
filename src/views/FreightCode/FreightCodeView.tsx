@@ -44,6 +44,7 @@ export interface IFreightCodeViewState {
     Frt_Code: string,
     Description: string,
     NMFC: string,
+    Class:string,
     HazMat: boolean,
     Sub: string,
     [propName: string]: any, // This is so we can set by name dynamically
@@ -338,7 +339,6 @@ class FreightCodeView extends React.Component<IFreightCodeViewProps, IFreightCod
 
 
 }
-
 
 const mapStateToProps = ({ freightCode }) => {
     return { freightCode }

@@ -25,6 +25,16 @@ export function BooleanChecker(variable) {
     }
 };
 
+export function ToString(variable)
+{
+    let stringVariable:string = "";
+    if (variable !== 'null' && variable !== 'undefined')
+    {
+        stringVariable = variable.toString();
+    }
+    return stringVariable;
+}
+
 export function StringChecker(stringVariable)
 {
     return (IsNotNull(stringVariable) && typeof stringVariable === "string" && stringVariable.length > 0) ? stringVariable : "";

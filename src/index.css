@@ -161,3 +161,9 @@ h2 {color:#000;font-weight:200;font-size:1.6rem;padding-left:30px;min-height:25p
 
 .sidebar .nav-dropdown.open a.nav-dropdown-toggle  {background-color:#474747;}
 ul li.nav-item ul.nav-dropdown-items li a {padding-left:40px;font-size:0.8rem;}
+
+.carrier-view {
+}
+.carrier-view .header-actions >i {
+    
+}

@@ -189,3 +189,17 @@ export const FREIGHT_CODE_UPDATE_FAILURE = 'freight_code_update_failure';
 export const FREIGHT_CODE_DELETE = 'freight_code_delete';
 export const FREIGHT_CODE_DELETE_SUCCESS = 'freight_code_delete_success';
 export const FREIGHT_CODE_DELETE_FAILURE = 'freight_code_delete_failure';
+
+export const TRADE_GET_ALL  = 'trade_get_all';
+export const TRADE_GET_ALL_SUCCESS = 'trade_get_all_success';
+export const TRADE_GET_ALL_FAILURE = 'trade_get_all_failure';
+export const TRADE_UPDATE = 'trade_update';
+export const TRADE_UPDATE_SUCCESS = 'trade_update_success';
+export const TRADE_UPDATE_FAILURE = 'trade_update_failure';
+export const TRADE_DELETE = 'trade_delete';
+export const TRADE_DELETE_SUCCESS = 'trade_delete_success';
+export const TRADE_DELETE_FAILURE = 'trade_delete_failure';
+
+export const KIT_TYPE_GET_ALL  = 'kit_type_get_all';
+export const KIT_TYPE_GET_ALL_SUCCESS = 'kit_type_get_all_success';
+export const KIT_TYPE_GET_ALL_FAILURE = 'kit_type_get_all_failure';
