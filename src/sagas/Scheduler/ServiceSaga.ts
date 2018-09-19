@@ -1,0 +1,223 @@
+import { all, call, put, takeLatest, select } from 'redux-saga/effects';
+import { IsNotNull, StringChecker } from '../../utils/Conversion';
+import Notifications from 'react-notification-system-redux';
+import { ERROR_OPTIONS } from '../../constants/ServiceParameters';
+
+import { 
+    SERVICE_STATE_RUNNING, 
+    SERVICE_STATE_STOPPED, 
+    SERVICE_STATE_UNKNOWN 
+} from '../../constants/ServiceParameters';
+
+import { axiosSched } from '../../configs/axios'
+import { 
+    TASK_STATUS_LIST_GET_ALL,
+    SERVICE_GET_STATE,
+    SERVICE_COMMAND,
+    TASK_COMMAND,
+    TOAST_ERROR
+} from '../../constants/ActionTypes';
+import { taskStatusListGetAllSuccess, taskStatusListGetAllFailure } from '../../actions/Scheduler/ServiceAction';
+import { serviceGetStateSuccess, serviceGetStateFailure } from '../../actions/Scheduler/ServiceAction';
+import { serviceCommandSuccess, serviceCommandFailure } from '../../actions/Scheduler/ServiceAction';
+import { taskCommandSuccess, taskCommandFailure } from '../../actions/Scheduler/ServiceAction';
+import { taskStatusListGetAll } from '../../actions/Scheduler/ServiceAction';
+import { workflowGetAll } from '../../actions/Scheduler/WorkflowAction';
+import { taskGetAll } from '../../actions/Scheduler/TaskAction';
+import { schedulerGetAll } from '../../actions/Scheduler/SchedulerAction';
+import { networkGetAll } from '../../actions/Scheduler/NetworkAction';
+import { databaseGetAll } from '../../actions/Scheduler/DatabaseAction';
+import { folderGetAll } from '../../actions/Scheduler/FolderAction';
+import { variableGetAll } from '../../actions/Scheduler/VariableAction';
+import ServiceState from '../../constants/scheduler/serviceState';
+import TaskState from '../../constants/scheduler/taskState';
+
+export const getServiceState = (state) => state.service
+
+function* toastErrorRequest(action) {
+    try {
+        yield put(Notifications.error({ ...ERROR_OPTIONS, title: "Error", message: action.payload }));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function* taskStatusListGetAllRequest() {
+    try {
+        const taskStatusList = yield call(taskStatusListGetAllApi);
+        yield put(taskStatusListGetAllSuccess(taskStatusList));
+    } catch (error) {
+        console.log(error);
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
+        yield put(taskStatusListGetAllFailure(error));
+    }
+}
+
+export const taskStatusListGetAllApi = () => {
+
+    const url:string = "/api/workflow/service/tasks";
+
+    return axiosSched.get(url);
+};
+
+const wait = ms => (
+    new Promise(resolve => {
+      setTimeout(() => resolve(), ms)
+    })
+  )
+
+function* serviceGetStateRequest() {
+    while(true) {
+        try {
+            yield call(wait, 3000);
+            const serviceState:any = yield call(serviceGetStateApi);
+            const state:any = yield select(getServiceState);
+
+            const currentServiceState:ServiceState = serviceState.data;
+            const previousServiceState:ServiceState = state.serviceState;
+            
+            let refreshTasks = false;
+            let refreshConfig = false;
+            
+            if (IsNotNull(previousServiceState) && IsNotNull(currentServiceState))
+                {
+                // This logic checks to see if the serviceState has changed, and warrants a refresh of the taskStatusList
+                if (IsNotNull(currentServiceState.CurrentState)
+                    && IsNotNull(previousServiceState.CurrentState)
+                    && currentServiceState.CurrentState !== SERVICE_STATE_UNKNOWN
+                    && previousServiceState.CurrentState !== SERVICE_STATE_UNKNOWN)
+                {
+                    if (currentServiceState.CurrentState !== previousServiceState.CurrentState)
+                    {
+                        refreshTasks = true;
+                    }
+                    else if (currentServiceState.HashValue !== previousServiceState.HashValue)
+                    {
+                        refreshTasks = true;
+                    }
+                    else if (previousServiceState.CurrentState === SERVICE_STATE_RUNNING)
+                    {
+                        if (state.taskStatusList == null || state.taskStatusList.length === 0)
+                        {
+                            refreshTasks = true;
+                        }
+                    }
+                    else if (previousServiceState.CurrentState === SERVICE_STATE_STOPPED)
+                    {
+                        if (IsNotNull(state.taskStatusList) && state.taskStatusList.length > 0)
+                        {
+                            refreshTasks = true;
+                        }
+                    }
+                    if (currentServiceState.CurrentState === SERVICE_STATE_RUNNING)
+                    {
+                        if (previousServiceState.CurrentState !== SERVICE_STATE_RUNNING)
+                        {
+                            refreshConfig = true;
+                        }
+                    }
+                }
+        
+                // The following logic checks to see if a change in the configuration data by another client warrants a refresh here.
+                if (StringChecker(state.lastModified).length === 0)
+                {
+                    state.lastModified = currentServiceState.LastModifiedServer;
+                }
+                else if (currentServiceState.LastModifiedServer !== state.lastModified)
+                {
+                    if (IsNotNull(currentServiceState.LastModifiedServer))
+                    {
+                        if (StringChecker(currentServiceState.ClientId).length > 0 && (currentServiceState.ClientId !== state.clientId))
+                        {
+                            refreshConfig = true;
+                        }
+                    }
+                }
+                
+                if (refreshTasks)
+                {
+                    console.log("%c refreshTasks", "color: red");
+                    yield put(taskStatusListGetAll());
+                }
+        
+                if (refreshConfig)
+                {
+                    yield put(workflowGetAll());
+                    yield put(taskGetAll());
+                    yield put(schedulerGetAll());
+                    yield put(networkGetAll());
+                    yield put(databaseGetAll());
+                    yield put(folderGetAll());
+                    yield put(variableGetAll());
+                }
+            }
+            yield put(serviceGetStateSuccess(serviceState));
+        } catch (error) {
+            console.log(error);
+            yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
+            yield put(serviceGetStateFailure(error));
+        }
+    }
+}
+
+export const serviceGetStateApi = () => {
+
+    const url:string = "/api/workflow/service";
+
+    return axiosSched.get(url);
+};
+
+function* serviceCommandRequest(action) {
+    try {
+        const controlCommand:ServiceState = new ServiceState({
+            ControlCommand: action.payload,
+            CurrentState: "stopped",
+            AdminTaskRunCount: 0,
+        });
+        const serviceState = yield call(serviceCommandApi, controlCommand);
+        yield put(serviceCommandSuccess(serviceState));
+    } catch (error) {
+        console.log(error);
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
+        yield put(serviceCommandFailure(error));
+    }
+}
+
+export const serviceCommandApi = (controlCommand) => {
+
+    const url:string = "/api/workflow/service";
+
+    return axiosSched.put(url, controlCommand);
+};
+
+function* taskCommandRequest(action) {
+    try {
+        const taskCommand:TaskState = new TaskState({
+            TaskCommand: action.payload,
+            TaskId: action.Id
+        })
+        const taskState = yield call(taskCommandApi, taskCommand);
+        yield put(taskCommandSuccess(taskState));
+    } catch (error) {
+        console.log(error);
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.me }));
+        yield put(taskCommandFailure(error));
+    }
+}
+
+export const taskCommandApi = (taskCommand) => {
+
+    const url:string = "/api/workflow/service/task";
+
+    return axiosSched.put(url, taskCommand);
+};
+
+export default function* rootSaga() {
+    yield all([
+        takeLatest(TOAST_ERROR, toastErrorRequest),
+        takeLatest(TASK_STATUS_LIST_GET_ALL, taskStatusListGetAllRequest),
+        takeLatest(SERVICE_GET_STATE, serviceGetStateRequest),
+        takeLatest(SERVICE_COMMAND, serviceCommandRequest),
+        takeLatest(TASK_COMMAND, taskCommandRequest)
+    ]);
+}
