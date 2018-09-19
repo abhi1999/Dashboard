@@ -1,13 +1,10 @@
 import ODataParams from '../constants/params/oDataParams';
 
 import axios from "./../configs/axios";
-import {
-    BASE_URL
-} from "../configs"
 import buildQuery from "odata-query";
 
 export const carrierGet = (params:ODataParams)=>{
-    const endpoint:string = BASE_URL + "/odata/ShipViaSet";
+    const endpoint:string = "/odata/ShipViaSet";
     const count:boolean = true;
     const top = params.top;
     const skip= params.skip;
@@ -36,6 +33,5 @@ export const carrierGet = (params:ODataParams)=>{
         filter
     });
     const url:string = endpoint + oDataParams; 
-    console.log("carrierGetAllApi: " + url);
     return axios.get(url);
 }

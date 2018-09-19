@@ -6,3 +6,6 @@ export class CApiTradeTransObject implements IApiTradeTransObject {
 }
 export const IApiTradeTransObject_TP_PartID_length = 30;
 export const IApiTradeTransObject_TP_Name_length = 30;
+
+export const kApiTradeTransObject_TP_PartID="TP_PartID";
+export const kApiTradeTransObject_TP_Name="TP_Name";

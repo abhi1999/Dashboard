@@ -22,3 +22,15 @@ export const IApiTradeOrderPins_TrackingNo_length = 30;
 export const IApiTradeOrderPins_Lot_length = 30;
 export const IApiTradeOrderPins_LotExp_length = 8;
 export const IApiTradeOrderPins_PO1_LineNo_length = 11;
+
+export const kApiTradeOrderPins_Order_No="Order_No";
+export const kApiTradeOrderPins_TP_Name="TP_Name";
+export const kApiTradeOrderPins_Box_ID="Box_ID";
+export const kApiTradeOrderPins_Int_Item_No="Int_Item_No";
+export const kApiTradeOrderPins_PackQty="PackQty";
+export const kApiTradeOrderPins_Stat_Flag="Stat_Flag";
+export const kApiTradeOrderPins_Asn_ID="Asn_ID";
+export const kApiTradeOrderPins_TrackingNo="TrackingNo";
+export const kApiTradeOrderPins_Lot="Lot";
+export const kApiTradeOrderPins_LotExp="LotExp";
+export const kApiTradeOrderPins_PO1_LineNo="PO1_LineNo";

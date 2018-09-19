@@ -24,3 +24,15 @@ export const IApiShipDetail3_ShipFr_Country_length = 30;
 export const IApiShipDetail3_Cust_PO_length = 30;
 export const IApiShipDetail3_ShipTo_Xref_length = 30;
 export const IApiShipDetail3_Source_length = 13;
+
+export const kApiShipDetail3_Loc_ID="Loc_ID";
+export const kApiShipDetail3_ShipFr_Name="ShipFr_Name";
+export const kApiShipDetail3_ShipFr_Addr1="ShipFr_Addr1";
+export const kApiShipDetail3_ShipFr_Add2="ShipFr_Add2";
+export const kApiShipDetail3_ShipFr_City="ShipFr_City";
+export const kApiShipDetail3_ShipFr_St="ShipFr_St";
+export const kApiShipDetail3_ShipFr_Zip="ShipFr_Zip";
+export const kApiShipDetail3_ShipFr_Country="ShipFr_Country";
+export const kApiShipDetail3_Cust_PO="Cust_PO";
+export const kApiShipDetail3_ShipTo_Xref="ShipTo_Xref";
+export const kApiShipDetail3_Source="Source";

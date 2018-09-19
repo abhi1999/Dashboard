@@ -26,3 +26,17 @@ export const IShippedToTrade_reason_length = 80;
 export const IShippedToTrade_reference_length = 60;
 export const IShippedToTrade_userid_length = 50;
 export const IShippedToTrade_machineid_length = 50;
+
+export const kShippedToTrade_TP_PartID="TP_PartID";
+export const kShippedToTrade_TP_Name="TP_Name";
+export const kShippedToTrade_cusno="cusno";
+export const kShippedToTrade_shiptoid="shiptoid";
+export const kShippedToTrade_itemid="itemid";
+export const kShippedToTrade_purchaseorderno="purchaseorderno";
+export const kShippedToTrade_shipdate="shipdate";
+export const kShippedToTrade_reason="reason";
+export const kShippedToTrade_reference="reference";
+export const kShippedToTrade_userid="userid";
+export const kShippedToTrade_machineid="machineid";
+export const kShippedToTrade_qty="qty";
+export const kShippedToTrade_cm="cm";

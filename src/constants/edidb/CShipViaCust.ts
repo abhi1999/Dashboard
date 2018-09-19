@@ -18,3 +18,12 @@ export const IShipViaCust_User2_length = 50;
 export const IShipViaCust_User3_length = 50;
 export const IShipViaCust_User4_length = 50;
 export const IShipViaCust_User5_length = 50;
+
+export const kShipViaCust_Ship_Via_ID="Ship_Via_ID";
+export const kShipViaCust_TP_PartID="TP_PartID";
+export const kShipViaCust_Cust_Ship_Via_ID="Cust_Ship_Via_ID";
+export const kShipViaCust_User1="User1";
+export const kShipViaCust_User2="User2";
+export const kShipViaCust_User3="User3";
+export const kShipViaCust_User4="User4";
+export const kShipViaCust_User5="User5";

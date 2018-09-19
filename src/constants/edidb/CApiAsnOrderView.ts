@@ -17,3 +17,12 @@ export const IApiAsnOrderView_Acct_Order_No_length = 30;
 export const IApiAsnOrderView_Cust_PO_length = 30;
 export const IApiAsnOrderView_Stat_Flag_length = 1;
 export const IApiAsnOrderView_status_length = 500;
+
+export const kApiAsnOrderView_Order_No="Order_No";
+export const kApiAsnOrderView_TP_PartID="TP_PartID";
+export const kApiAsnOrderView_TP_Name="TP_Name";
+export const kApiAsnOrderView_Order_Date="Order_Date";
+export const kApiAsnOrderView_Acct_Order_No="Acct_Order_No";
+export const kApiAsnOrderView_Cust_PO="Cust_PO";
+export const kApiAsnOrderView_Stat_Flag="Stat_Flag";
+export const kApiAsnOrderView_status="status";

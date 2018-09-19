@@ -1,12 +1,11 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "axios";
+import { axiosSched } from '../../configs/axios'
 import { 
     DATABASE_GET_ALL,
     DATABASE_ADD,
     DATABASE_UPDATE,
     DATABASE_DELETE
 } from '../../constants/ActionTypes';
-import { SCHEDULER_URL } from "../../configs";
 import { databaseGetAllSuccess, databaseGetAllFailure } from '../../actions/Scheduler/DatabaseAction';
 import { databaseAddSuccess, databaseAddFailure } from '../../actions/Scheduler/DatabaseAction';
 import { databaseUpdateSuccess, databaseUpdateFailure } from '../../actions/Scheduler/DatabaseAction';
@@ -21,18 +20,16 @@ function* databaseGetAllRequest() {
         yield put(databaseGetAllSuccess(databaseList));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(databaseGetAllFailure(error));
     }
 }
 
 export const databaseGetAllApi = () => {
 
-    const endpoint:string = SCHEDULER_URL + "/api/workflow/config/databases";
-    const url:string = endpoint;
-    console.log("databaseGetAllApi: " + url);
+    const url:string = "/api/workflow/config/databases";
 
-    return axios.get(url);
+    return axiosSched.get(url);
 };
 
 function* databaseAddRequest(action) {
@@ -41,17 +38,16 @@ function* databaseAddRequest(action) {
         yield put(databaseAddSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(databaseAddFailure(error));
     }
 }
 
 export const databaseAddApi = (action) => {
     const database:Database = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/databases";
-    console.log("databaseAddApi: " + url);
+    const url:string = "/api/workflow/config/databases";
 
-    return axios.post(url, database);
+    return axiosSched.post(url, database);
 };
 
 function* databaseUpdateRequest(action) {
@@ -60,7 +56,7 @@ function* databaseUpdateRequest(action) {
         yield put(databaseUpdateSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(databaseUpdateFailure(error));
     }
   }
@@ -68,10 +64,10 @@ function* databaseUpdateRequest(action) {
 export const databaseUpdateApi = (action) => {
 
     const database:Database = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/databases";
+    const url:string = "/api/workflow/config/databases";
     console.log("databaseUpdateApi: " + url);
 
-    return axios.put(url, database);
+    return axiosSched.put(url, database);
 };
 
 function* databaseDeleteRequest(action) {
@@ -89,10 +85,10 @@ function* databaseDeleteRequest(action) {
 export const databaseDeleteApi = (action) => {
 
     const database:Database = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/databases/" + database.Id + "/" + database.ClientId + "/" + database.LastModified;
+    const url:string = "/api/workflow/config/databases/" + database.Id + "/" + database.ClientId + "/" + database.LastModified;
     console.log("databaseDeleteApi: " + url);
 
-    return axios.delete(url);
+    return axiosSched.delete(url);
 };
 
 export default function* rootSaga() {

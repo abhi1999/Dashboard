@@ -13,3 +13,10 @@ export const IC303v850d_DTM_01_length = 3;
 export const IC303v850d_DTM_02_length = 8;
 export const IC303v850d_SCH_QTY_length = 17;
 export const IC303v850d_SCH_UOM_length = 10;
+
+export const kC303v850d_PO_ID="PO_ID";
+export const kC303v850d_PO1_LineNo="PO1_LineNo";
+export const kC303v850d_DTM_01="DTM_01";
+export const kC303v850d_DTM_02="DTM_02";
+export const kC303v850d_SCH_QTY="SCH_QTY";
+export const kC303v850d_SCH_UOM="SCH_UOM";

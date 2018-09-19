@@ -13,3 +13,12 @@ export class CPlanSchedGrp implements IPlanSchedGrp {
 export const IPlanSchedGrp_psgtype_length = 1;
 export const IPlanSchedGrp_psgqual_length = 10;
 export const IPlanSchedGrp_psgtext_length = 80;
+
+export const kPlanSchedGrp_PSGID="PSGID";
+export const kPlanSchedGrp_PSIID="PSIID";
+export const kPlanSchedGrp_psglevel="psglevel";
+export const kPlanSchedGrp_psgtype="psgtype";
+export const kPlanSchedGrp_psgdocline="psgdocline";
+export const kPlanSchedGrp_pardocline="pardocline";
+export const kPlanSchedGrp_psgqual="psgqual";
+export const kPlanSchedGrp_psgtext="psgtext";

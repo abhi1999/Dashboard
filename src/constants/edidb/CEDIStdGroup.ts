@@ -8,3 +8,7 @@ export class CEDIStdGroup implements IEDIStdGroup {
 export const IEDIStdGroup_STDID_length = 20;
 export const IEDIStdGroup_DGID_length = 5;
 export const IEDIStdGroup_Func_Group_length = 20;
+
+export const kEDIStdGroup_STDID="STDID";
+export const kEDIStdGroup_DGID="DGID";
+export const kEDIStdGroup_Func_Group="Func_Group";

@@ -20,3 +20,14 @@ export const IPlanSchedAdd_loccity_length = 50;
 export const IPlanSchedAdd_locstate_length = 30;
 export const IPlanSchedAdd_loczip_length = 15;
 export const IPlanSchedAdd_loccountry_length = 30;
+
+export const kPlanSchedAdd_PSAID="PSAID";
+export const kPlanSchedAdd_PSGID="PSGID";
+export const kPlanSchedAdd_locname="locname";
+export const kPlanSchedAdd_locadd1="locadd1";
+export const kPlanSchedAdd_locadd2="locadd2";
+export const kPlanSchedAdd_locadd3="locadd3";
+export const kPlanSchedAdd_loccity="loccity";
+export const kPlanSchedAdd_locstate="locstate";
+export const kPlanSchedAdd_loczip="loczip";
+export const kPlanSchedAdd_loccountry="loccountry";

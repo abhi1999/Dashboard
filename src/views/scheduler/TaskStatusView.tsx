@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { Card } from 'reactstrap';
+import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
 import { StringChecker, StripAtSign, StripScheduler } from '../../utils/Conversion';
 import { COMMAND_START, COMMAND_PAUSE, COMMAND_CONTINUE, COMMAND_TERMINATE } from '../../constants/ServiceParameters';
 import { TYPE_TASK, TYPE_WORKFLOW, STATE_BUSY, STATE_IDLE, STATE_PAUSED, STATE_TERMINATED } from '../../constants/ServiceParameters';
@@ -122,27 +122,38 @@ class TaskStatusView extends React.Component<ITaskStatusViewProps,ITaskStatusVie
 
             return (
                 <Card key={ this.props.item.Id }>
-                    <FlexView width='100%' style={{padding: 3}}>
-                        <FlexView hAlignContent="left" vAlignContent="center"  basis={80}>
-                            { typeIcon }
-                            { statusIcon }
+                    <CardHeader>
+                        <FlexView width='100%' style={{padding: 3}} wrap={true}>
+                            <FlexView hAlignContent="left" vAlignContent="center"  basis={80} wrap={true}>
+                                { typeIcon }
+                                &nbsp;
+                                { statusIcon }
+                            </FlexView>
+                            <FlexView grow={true}>
+                                <span/>
+                            </FlexView>
+                            <FlexView hAlignContent="right" vAlignContent="center" basis={80} wrap={true}>
+                                { buttonOne }
+                                &nbsp;
+                                { buttonTwo }
+                            </FlexView>
                         </FlexView>
-                        <FlexView hAlignContent="left" vAlignContent="center" grow={true} >
-                            <div style={{fontWeight: 'bold', padding: 10}}>{ this.state.Field_Name}</div>
+                    </CardHeader>
+                    <CardTitle>
+                        <FlexView hAlignContent="center" vAlignContent="center" grow={true}>
+                            <div style={{fontWeight: 'bold'}}>{ this.state.Field_Name}</div>
                         </FlexView>
-                        <FlexView column={true} hAlignContent="left" vAlignContent="center" style={{paddingRight: 10}} width={180}>
-                            <small>{ (this.state.Field_LastRun) ? (<div>Last Run: {this.state.Field_LastRun}</div>) : <br/> }</small>
-                            <small>{ (this.state.Field_Duration) ? (<div>Duration: {this.state.Field_Duration}</div>) : <br/> }</small>
+                    </CardTitle>
+                    <CardBody style={{marginTop:-20}}>
+                        <FlexView width='100%' style={{padding: 3}} wrap={true}>
+                            <FlexView column={true} hAlignContent="left" vAlignContent="top" wrap={true}>
+                                <small>{ (this.state.Field_LastRun) ? (<div>Last Run: {this.state.Field_LastRun}</div>) : <br/> }</small>
+                                <small>{ (this.state.Field_Duration) ? (<div>Duration: {this.state.Field_Duration}</div>) : <br/> }</small>
+                                <small>{ (this.state.Field_RunCount) ? (<div>Run Count: {this.state.Field_RunCount}</div>) : <br/> }</small>
+                                <small>{ (this.state.Field_Event) ? (<div>{this.state.Field_Event}</div>) : <br/> }</small>
+                            </FlexView>
                         </FlexView>
-                        <FlexView column={true} hAlignContent="left" vAlignContent="center" style={{paddingRight: 10}} width={160}>
-                            <small>{ (this.state.Field_RunCount) ? (<div>Run Count: {this.state.Field_RunCount}</div>) : <br/> }</small>
-                            <small>{ (this.state.Field_Event) ? (<div>{this.state.Field_Event}</div>) : <br/> }</small>
-                        </FlexView>
-                        <FlexView hAlignContent="right" vAlignContent="center" basis={80}>
-                            { buttonOne }
-                            { buttonTwo }
-                        </FlexView>
-                    </FlexView>
+                    </CardBody>
                 </Card>
             );
         };

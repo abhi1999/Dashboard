@@ -9,6 +9,8 @@ import { FaSyncAlt, FaPlusCircle, FaTable, FaList } from 'react-icons/fa';
 import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
 import { Pagination, Input } from 'antd';
 import { freightCodeGetAll, freightCodeDelete } from './../../actions/FreightCode';
+import { ToString } from '../../utils/Conversion';
+import Media from "react-media";
 
 import FreightCode from "../../constants/implementations/FreightCode";
 import ODataParams from '../../constants/params/oDataParams';
@@ -44,8 +46,9 @@ export interface IFreightCodeViewState {
     Frt_Code: string,
     Description: string,
     NMFC: string,
-    Class:string,
-    HazMat: boolean,
+    Class: string,
+    // HazMat: boolean,
+    HazMat: string,
     Sub: string,
     [propName: string]: any, // This is so we can set by name dynamically
 }
@@ -71,7 +74,8 @@ class FreightCodeView extends React.Component<IFreightCodeViewProps, IFreightCod
             Description: "",
             NMFC: "",
             Class: "",
-            HazMat: false,
+            // HazMat:false,
+            HazMat: "All",
             Sub: ""
         }
         this.query = this.query.bind(this);
@@ -82,6 +86,7 @@ class FreightCodeView extends React.Component<IFreightCodeViewProps, IFreightCod
         this.onFilteredChange = this.onFilteredChange.bind(this);
         this.toggleSortMode = this.toggleSortMode.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.handleHazMatFilterChange = this.handleHazMatFilterChange.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.freightCodeAdd = this.freightCodeAdd.bind(this);
         this.freightCodeEdit = this.freightCodeEdit.bind(this);
@@ -101,7 +106,7 @@ class FreightCodeView extends React.Component<IFreightCodeViewProps, IFreightCod
         else if (prevState.pageSize !== this.state.pageSize) {
             this.query()
         }
-        else if (prevState.page !== this.state.page){
+        else if (prevState.page !== this.state.page) {
             this.query()
         }
     }
@@ -117,8 +122,14 @@ class FreightCodeView extends React.Component<IFreightCodeViewProps, IFreightCod
     }
 
     public render() {
-        const { loading, pageSize, sorted, filtered } = this.state;
+        const { loading, pageSize, sorted, filtered, modal } = this.state;
         let { freightCodeList } = this.state;
+
+        if (modal) {
+            return (
+                <FreightCodeDetailView itemId={this.state.freightCodeEdit.Id} item={this.state.freightCodeEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
+            )
+        }
 
         if (sorted.length > 0) {   // Implement the multi-sort with lodash
             freightCodeList = _.orderBy(freightCodeList, sorted.map((column) => column.id), sorted.map((column) => column.desc ? "desc" : "asc"));
@@ -126,19 +137,12 @@ class FreightCodeView extends React.Component<IFreightCodeViewProps, IFreightCod
 
         if (filtered.length > 0) {   // Filter on each column with a value
             filtered.map((column) => {
-                freightCodeList = freightCodeList.filter(item => _.includes(item[column.id].toLowerCase(), column.value.toLowerCase()));
+                freightCodeList = freightCodeList.filter(item => _.includes(ToString(item[column.id]).toLowerCase(), ToString(column.value).toLowerCase()));
             });
         }
 
-        let toggleButton;
         const tablePageSize = Math.min(freightCodeList.length, pageSize); // Only show rows with data in the table;
 
-        if (this.state.viewMode === 'cards') {
-            toggleButton = <FaTable onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
-        }
-        else {
-            toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
-        }
         return (
             <div>
                 <Card body={true} outline={true} style={{ width: '100%' }}>
@@ -152,47 +156,46 @@ class FreightCodeView extends React.Component<IFreightCodeViewProps, IFreightCod
                                 onChange={this.onChangePage}
                                 current={this.state.page}
                                 pageSize={this.state.pageSize}
-                                pageSizeOptions={['1', '2', '3', '10', '50', '100']}
+                                pageSizeOptions={['10', '50', '100']}
                                 onShowSizeChange={this.onShowSizeChange}
                                 total={this.state.freightCodeListCount}
                             />
                         </FlexView>
                         <FlexView hAlignContent="right" vAlignContent="center" basis="120" wrap={true}>
                             <FaPlusCircle onClick={() => this.freightCodeAdd()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />
-                            {toggleButton}
                         </FlexView>
                     </FlexView>
                 </Card>
-                {this.state.viewMode === 'cards' ?
-                    <FreightCodeCardView list={freightCodeList}
-                        freightCodeListCount={this.state.freightCodeListCount}
-                        sorted={sorted}
-                        toggleSortMode={this.toggleSortMode}
-                        handleFilterChange={this.handleFilterChange}
-                        freightCodeEdit={this.freightCodeEdit}
-                        freightCodeDelete={this.freightCodeDelete}
-                        freightCodeClone={this.freightCodeClone}
-                    />
-                    :
-                    <FreightCodeTableView list={freightCodeList}
-                        loading={loading}
-                        sorted={sorted}
-                        filtered={filtered}
-                        pageSize={tablePageSize}
-                        onSortChange={this.onSortedChange}
-                        onFilteredChange={this.onFilteredChange}
-                        freightCodeEdit={this.freightCodeEdit}
-                        freightCodeDelete={this.freightCodeDelete}
-                        freightCodeClone={this.freightCodeClone}
-                    />
-                }
-                <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>Freight Code</ModalHeader>
-                    <ModalBody>
-                        <FreightCodeDetailView itemId={this.state.freightCodeEdit.Id} item={this.state.freightCodeEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
-                    </ModalBody>
-                </Modal>
-
+                <Media query={{ maxWidth: 768 }}>
+                {matches => // Mobile version first
+                    matches ?
+                        <FreightCodeCardView list={freightCodeList}
+                            freightCodeListCount={this.state.freightCodeListCount}
+                            sorted={sorted}
+                            toggleSortMode={this.toggleSortMode}
+                            handleFilterChange={this.handleFilterChange}
+                            freightCodeEdit={this.freightCodeEdit}
+                            freightCodeDelete={this.freightCodeDelete}
+                            freightCodeClone={this.freightCodeClone}
+                            HazMat={this.state.HazMat}
+                            handleHazMatFilterChange={this.handleHazMatFilterChange}
+                        />
+                        :
+                        <FreightCodeTableView list={freightCodeList}
+                            loading={loading}
+                            sorted={sorted}
+                            filtered={filtered}
+                            pageSize={tablePageSize}
+                            onSortChange={this.onSortedChange}
+                            onFilteredChange={this.onFilteredChange}
+                            freightCodeEdit={this.freightCodeEdit}
+                            freightCodeDelete={this.freightCodeDelete}
+                            freightCodeClone={this.freightCodeClone}
+                            HazMat={this.state.HazMat}
+                            handleHazMatFilterChange={this.handleHazMatFilterChange}
+                        />
+                    }
+                </Media>
             </div>
         )
 
@@ -302,6 +305,22 @@ class FreightCodeView extends React.Component<IFreightCodeViewProps, IFreightCod
             filtered: filterUpdated
         });
 
+    }
+
+    private handleHazMatFilterChange(value: string) {
+
+        console.log("hazmat", value);
+        let { filtered } = this.state;
+        // Remove the current filter for this column if there is one
+        filtered = filtered.filter((column: FilterDescriptor) => column.id !== "HazMat")
+
+        // If they selected a value (not "all" or blank), then add the filter back in
+        if (value !== "all" && value.length > 0) {
+            filtered = filtered.concat(new FilterDescriptor({ id: "HazMat", value }));
+        }
+
+        // Update the state value for the field, as well as the filtered array
+        this.setState({ HazMat: value, filtered });
     }
 
     private freightCodeAdd() {

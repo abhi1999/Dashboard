@@ -20,3 +20,15 @@ export const IMisc_TCN_length = 20;
 export const IMisc_DocType_length = 10;
 export const IMisc_DocStatus_length = 1;
 export const IMisc_DocRef_length = 50;
+
+export const kMisc_Misc_ID="Misc_ID";
+export const kMisc_Seg_ID="Seg_ID";
+export const kMisc_TP_PartID="TP_PartID";
+export const kMisc_ICN="ICN";
+export const kMisc_GCN="GCN";
+export const kMisc_TCN="TCN";
+export const kMisc_DocType="DocType";
+export const kMisc_Segment="Segment";
+export const kMisc_DateRecv="DateRecv";
+export const kMisc_DocStatus="DocStatus";
+export const kMisc_DocRef="DocRef";

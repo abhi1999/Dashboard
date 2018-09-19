@@ -12,3 +12,10 @@ export const IAsnIn_TP_PartID_length = 30;
 export const IAsnIn_Bol_No_length = 30;
 export const IAsnIn_Pro_No_length = 30;
 export const IAsnIn_Ship_Via_ID_length = 30;
+
+export const kAsnIn_Asn_ID="Asn_ID";
+export const kAsnIn_TP_PartID="TP_PartID";
+export const kAsnIn_Bol_No="Bol_No";
+export const kAsnIn_Pro_No="Pro_No";
+export const kAsnIn_Ship_Date="Ship_Date";
+export const kAsnIn_Ship_Via_ID="Ship_Via_ID";

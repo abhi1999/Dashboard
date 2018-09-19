@@ -1,12 +1,11 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "axios";
+import { axiosSched } from '../../configs/axios'
 import { 
     NETWORK_GET_ALL,
     NETWORK_ADD,
     NETWORK_UPDATE,
     NETWORK_DELETE
 } from '../../constants/ActionTypes';
-import { SCHEDULER_URL } from "../../configs";;
 import { networkGetAllSuccess, networkGetAllFailure } from '../../actions/Scheduler/NetworkAction';
 import { networkAddSuccess, networkAddFailure } from '../../actions/Scheduler/NetworkAction';
 import { networkUpdateSuccess, networkUpdateFailure } from '../../actions/Scheduler/NetworkAction';
@@ -21,18 +20,16 @@ function* networkGetAllRequest() {
         yield put(networkGetAllSuccess(networkList));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(networkGetAllFailure(error));
     }
 }
 
 export const networkGetAllApi = () => {
 
-    const endpoint:string = SCHEDULER_URL + "/api/workflow/config/networks";
-    const url:string = endpoint;
-    console.log("networkGetAllApi: " + url);
+    const url:string = "/api/workflow/config/networks";
 
-    return axios.get(url);
+    return axiosSched.get(url);
 };
 
 function* networkAddRequest(action) {
@@ -41,7 +38,7 @@ function* networkAddRequest(action) {
         yield put(networkAddSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(networkAddFailure(error));
     }
 }
@@ -49,10 +46,9 @@ function* networkAddRequest(action) {
 export const networkAddApi = (action) => {
 
     const network:Network = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/networks";
-    console.log("networkAddApi: " + url);
+    const url:string = "/api/workflow/config/networks";
 
-    return axios.post(url, network);
+    return axiosSched.post(url, network);
 };
 
 function* networkUpdateRequest(action) {
@@ -61,7 +57,7 @@ function* networkUpdateRequest(action) {
         yield put(networkUpdateSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(networkUpdateFailure(error));
     }
   }
@@ -69,10 +65,9 @@ function* networkUpdateRequest(action) {
 export const networkUpdateApi = (action) => {
 
     const network:Network = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/networks";
-    console.log("networkUpdateApi: " + url);
+    const url:string = "/api/workflow/config/networks";
 
-    return axios.put(url, network);
+    return axiosSched.put(url, network);
 };
 
 function* networkDeleteRequest(action) {
@@ -81,7 +76,7 @@ function* networkDeleteRequest(action) {
         yield put(networkDeleteSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(networkDeleteFailure(error));
     }
   }
@@ -90,10 +85,9 @@ function* networkDeleteRequest(action) {
 export const networkDeleteApi = (action) => {
 
     const network:Network = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/networks/" + network.Id + "/" + network.ClientId + "/" + network.LastModified;
-    console.log("networkDeleteApi: " + url);
+    const url:string = "/api/workflow/config/networks/" + network.Id + "/" + network.ClientId + "/" + network.LastModified;
 
-    return axios.delete(url);
+    return axiosSched.delete(url);
 };
 
 export default function* rootSaga() {

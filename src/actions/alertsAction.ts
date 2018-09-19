@@ -1,5 +1,5 @@
 import Notifications from 'react-notification-system-redux';
-import { BASE_URL, SERVICES } from "./../configs/";
+import { SERVICES } from "./../configs/";
 import axios from "./../configs/axios";
 import {  
     ErroNotificationOptions,
@@ -13,7 +13,7 @@ import {loadDataError, loadDataState} from "./mainAction"
 
 export const loadAlertGroupSet = () => (dispatch, getState)=> {
     dispatch(loadDataState(LOAD_ALERT_GROUP_SUCCESS));
-    const url = BASE_URL + SERVICES.endpoints.alertGroupSet;
+    const url = SERVICES.endpoints.alertGroupSet;
     return axios.get(url)
                 .then((response:any)=>{
                     dispatch(loadAlertGroupSetSuccess(response.data.value));
@@ -27,7 +27,7 @@ export const loadAlertGroupSet = () => (dispatch, getState)=> {
                     dispatch(loadDataError(error, LOAD_ALERT_GROUP_SUCCESS));
                     dispatch(Notifications.error({
                         ...ErroNotificationOptions,
-                        message: url +" :: " + error.message
+                        message:  error.message
                     }));
                 })
     
@@ -35,7 +35,7 @@ export const loadAlertGroupSet = () => (dispatch, getState)=> {
 export const loadAlertGroupDetails = (GroupTile) => (dispatch, getState)=> {
     dispatch(loadDataState(LOAD_ALERT_GROUP_DETAILS_SUCCESS));
     const filter = [{GroupTile}]
-    const url = BASE_URL + SERVICES.endpoints.alertSetDetails;
+    const url = SERVICES.endpoints.alertSetDetails;
     return axios.get(url,{params:{filter}})
                 .then((response:any)=>{
                     dispatch(loadAlertDetailsSuccess(response.data.value, GroupTile));
@@ -44,7 +44,7 @@ export const loadAlertGroupDetails = (GroupTile) => (dispatch, getState)=> {
                     dispatch(loadDataError(error, LOAD_ALERT_GROUP_DETAILS_SUCCESS));
                     dispatch(Notifications.error({
                         ...ErroNotificationOptions,
-                        message: url +" :: " + error.message
+                        message: error.message
                     }));
                 })
     

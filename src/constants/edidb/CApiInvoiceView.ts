@@ -23,3 +23,16 @@ export const IApiInvoiceView_GCN_length = 20;
 export const IApiInvoiceView_TCN_length = 20;
 export const IApiInvoiceView_AckDesc_length = 10;
 export const IApiInvoiceView_Acct_CusNo_length = 50;
+
+export const kApiInvoiceView_ORD_ID="ORD_ID";
+export const kApiInvoiceView_TP_PartID="TP_PartID";
+export const kApiInvoiceView_TP_Name="TP_Name";
+export const kApiInvoiceView_BIG_02="BIG_02";
+export const kApiInvoiceView_BIG_04="BIG_04";
+export const kApiInvoiceView_Exp_Flag="Exp_Flag";
+export const kApiInvoiceView_ImportDate="ImportDate";
+export const kApiInvoiceView_ExportDate="ExportDate";
+export const kApiInvoiceView_GCN="GCN";
+export const kApiInvoiceView_TCN="TCN";
+export const kApiInvoiceView_AckDesc="AckDesc";
+export const kApiInvoiceView_Acct_CusNo="Acct_CusNo";

@@ -5,3 +5,6 @@ export class CAppRoleMap implements IAppRoleMap {
     public loginID:number = 0;
     public constructor(init?:Partial<CAppRoleMap>) { Object.assign(this, init); }
 }
+export const kAppRoleMap_id="id";
+export const kAppRoleMap_roleID="roleID";
+export const kAppRoleMap_loginID="loginID";

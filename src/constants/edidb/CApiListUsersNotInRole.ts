@@ -8,3 +8,8 @@ export class CApiListUsersNotInRole implements IApiListUsersNotInRole {
 }
 export const IApiListUsersNotInRole_login_name_length = 50;
 export const IApiListUsersNotInRole_roleName_length = 50;
+
+export const kApiListUsersNotInRole_login_name="login_name";
+export const kApiListUsersNotInRole_ID="ID";
+export const kApiListUsersNotInRole_roleID="roleID";
+export const kApiListUsersNotInRole_roleName="roleName";

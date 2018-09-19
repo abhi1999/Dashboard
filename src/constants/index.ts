@@ -20,3 +20,8 @@ export const ErroNotificationOptions = {
     position: 'br',
     title: 'Service Error'
 };
+
+// sessionStorage keywords
+export const axClientKey = 'ClientKey';       // axios Header key
+export const axUsername = 'CachedUserName';   // User name to use in API calls
+export const axCompanyID = '5';// 'CachedCompanyID'; // Company number selected at startup

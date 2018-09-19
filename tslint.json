@@ -6,6 +6,7 @@
     "no-console": false,
     "no-debugger": false,
     "jsx-no-lambda": false,
+    "no-bitwise" : false,
     "ordered-imports": [
       false,
       {

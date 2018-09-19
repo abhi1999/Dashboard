@@ -1,12 +1,11 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "axios";
+import { axiosSched } from '../../configs/axios'
 import { 
     FOLDER_GET_ALL,
     FOLDER_ADD,
     FOLDER_UPDATE,
     FOLDER_DELETE
 } from '../../constants/ActionTypes';
-import { SCHEDULER_URL } from "../../configs";
 import { folderGetAllSuccess, folderGetAllFailure } from '../../actions/Scheduler/FolderAction';
 import { folderAddSuccess, folderAddFailure } from '../../actions/Scheduler/FolderAction';
 import { folderUpdateSuccess, folderUpdateFailure } from '../../actions/Scheduler/FolderAction';
@@ -21,18 +20,16 @@ function* folderGetAllRequest() {
         yield put(folderGetAllSuccess(folderList));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(folderGetAllFailure(error));
     }
 }
 
 export const folderGetAllApi = () => {
 
-    const endpoint:string = SCHEDULER_URL + "/api/workflow/config/folders";
-    const url:string = endpoint;
-    console.log("folderGetAllApi: " + url);
+    const url:string = "/api/workflow/config/folders";
 
-    return axios.get(url);
+    return axiosSched.get(url);
 };
 
 function* folderAddRequest(action) {
@@ -41,7 +38,7 @@ function* folderAddRequest(action) {
         yield put(folderAddSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(folderAddFailure(error));
     }
 }
@@ -49,10 +46,9 @@ function* folderAddRequest(action) {
 export const folderAddApi = (action) => {
 
     const folder:Folder = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/folders";
-    console.log("folderAddApi: " + url);
+    const url:string = "/api/workflow/config/folders";
 
-    return axios.post(url, folder);
+    return axiosSched.post(url, folder);
 };
 
 function* folderUpdateRequest(action) {
@@ -61,7 +57,7 @@ function* folderUpdateRequest(action) {
         yield put(folderUpdateSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(folderUpdateFailure(error));
     }
   }
@@ -69,10 +65,9 @@ function* folderUpdateRequest(action) {
 export const folderUpdateApi = (action) => {
 
     const folder:Folder = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/folders";
-    console.log("folderUpdateApi: " + url);
+    const url:string = "/api/workflow/config/folders";
 
-    return axios.put(url, folder);
+    return axiosSched.put(url, folder);
 };
 
 function* folderDeleteRequest(action) {
@@ -81,7 +76,7 @@ function* folderDeleteRequest(action) {
         yield put(folderDeleteSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(folderDeleteFailure(error));
     }
   }
@@ -90,10 +85,10 @@ function* folderDeleteRequest(action) {
 export const folderDeleteApi = (action) => {
 
     const folder:Folder = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/folders/" + folder.Id + "/" + folder.ClientId + "/" + folder.LastModified;
-    console.log("folderDeleteApi: " + url);
+    const url:string = "/api/workflow/config/folders/" + folder.Id + "/" + folder.ClientId + "/" + folder.LastModified;
 
-    return axios.delete(url);
+
+    return axiosSched.delete(url);
 };
 
 export default function* rootSaga() {

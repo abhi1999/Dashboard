@@ -6,3 +6,6 @@ export class CTLECode implements ITLECode {
 }
 export const ITLECode_CDID_length = 5;
 export const ITLECode_Name_length = 50;
+
+export const kTLECode_CDID="CDID";
+export const kTLECode_Name="Name";

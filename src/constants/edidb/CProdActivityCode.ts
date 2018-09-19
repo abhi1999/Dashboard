@@ -6,3 +6,6 @@ export class CProdActivityCode implements IProdActivityCode {
 }
 export const IProdActivityCode_ZA01_length = 3;
 export const IProdActivityCode_ZADesc_length = 40;
+
+export const kProdActivityCode_ZA01="ZA01";
+export const kProdActivityCode_ZADesc="ZADesc";

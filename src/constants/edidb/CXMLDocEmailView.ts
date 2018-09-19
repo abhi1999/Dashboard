@@ -16,3 +16,12 @@ export const IXMLDocEmailView_Reference_length = 1000;
 export const IXMLDocEmailView_Status_length = 500;
 export const IXMLDocEmailView_Direction_length = 500;
 export const IXMLDocEmailView_GCN_length = 50;
+
+export const kXMLDocEmailView_ID="ID";
+export const kXMLDocEmailView_Partner="Partner";
+export const kXMLDocEmailView_Document_Group="Document_Group";
+export const kXMLDocEmailView_Reference="Reference";
+export const kXMLDocEmailView_Status="Status";
+export const kXMLDocEmailView_Direction="Direction";
+export const kXMLDocEmailView_Export_Date="Export_Date";
+export const kXMLDocEmailView_GCN="GCN";

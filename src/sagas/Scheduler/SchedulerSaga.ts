@@ -1,12 +1,11 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "axios";
+import { axiosSched } from '../../configs/axios'
 import { 
     SCHEDULER_GET_ALL,
     SCHEDULER_ADD,
     SCHEDULER_UPDATE,
     SCHEDULER_DELETE
 } from '../../constants/ActionTypes';
-import { SCHEDULER_URL } from "../../configs";
 import { schedulerGetAllSuccess, schedulerGetAllFailure } from '../../actions/Scheduler/SchedulerAction';
 import { schedulerAddSuccess, schedulerAddFailure } from '../../actions/Scheduler/SchedulerAction';
 import { schedulerUpdateSuccess, schedulerUpdateFailure } from '../../actions/Scheduler/SchedulerAction';
@@ -14,6 +13,7 @@ import { schedulerDeleteSuccess, schedulerDeleteFailure } from '../../actions/Sc
 import Notifications from 'react-notification-system-redux';
 import { ERROR_OPTIONS } from '../../constants/ServiceParameters';
 import Scheduler from '../../constants/scheduler/scheduler';
+import { axClientKey } from '../../constants';
 
 function* schedulerGetAllRequest() {
     try {
@@ -21,18 +21,16 @@ function* schedulerGetAllRequest() {
         yield put(schedulerGetAllSuccess(schedulerList));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(schedulerGetAllFailure(error));
     }
 }
 
 export const schedulerGetAllApi = () => {
 
-    const endpoint:string = SCHEDULER_URL + "/api/workflow/config/schedulers";
-    const url:string = endpoint;
-    console.log("schedulerGetAllApi: " + url);
+    const url:string = "/api/workflow/config/schedulers";
 
-    return axios.get(url);
+    return axiosSched.get(url);
 };
 
 function* schedulerAddRequest(action) {
@@ -41,7 +39,7 @@ function* schedulerAddRequest(action) {
         yield put(schedulerAddSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(schedulerAddFailure(error));
     }
 }
@@ -49,10 +47,9 @@ function* schedulerAddRequest(action) {
 export const schedulerAddApi = (action) => {
 
     const scheduler:Scheduler = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/schedulers";
-    console.log("schedulerAddApi: " + url);
+    const url:string = "/api/workflow/config/schedulers";
 
-    return axios.post(url, scheduler);
+    return axiosSched.post(url, scheduler);
 };
 
 function* schedulerUpdateRequest(action) {
@@ -61,7 +58,7 @@ function* schedulerUpdateRequest(action) {
         yield put(schedulerUpdateSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(schedulerUpdateFailure(error));
     }
   }
@@ -69,10 +66,9 @@ function* schedulerUpdateRequest(action) {
 export const schedulerUpdateApi = (action) => {
 
     const scheduler:Scheduler = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/schedulers";
-    console.log("schedulerUpdateApi: " + url);
+    const url:string = "/api/workflow/config/schedulers";
 
-    return axios.put(url, scheduler);
+    return axiosSched.put(url, scheduler);
 };
 
 function* schedulerDeleteRequest(action) {
@@ -81,7 +77,7 @@ function* schedulerDeleteRequest(action) {
         yield put(schedulerDeleteSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(schedulerDeleteFailure(error));
     }
   }
@@ -90,10 +86,9 @@ function* schedulerDeleteRequest(action) {
 export const schedulerDeleteApi = (action) => {
 
     const scheduler:Scheduler = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/schedulers/" + scheduler.Id + "/" + scheduler.ClientId + "/" + scheduler.LastModified;
-    console.log("schedulerDeleteApi: " + url);
+    const url:string = "/api/workflow/config/schedulers/" + scheduler.Id + "/" + scheduler.ClientId + "/" + scheduler.LastModified;
 
-    return axios.delete(url);
+    return axiosSched.delete(url);
 };
 
 export default function* rootSaga() {

@@ -8,7 +8,7 @@ import { FaCheckSquare, FaBug, FaExclamationTriangle, FaPlayCircle, FaStopCircle
 import { Uptime } from '../../utils/Conversion';
 import TaskStatusView from './TaskStatusView';
 import FlexView from 'react-flexview';
-import { Card } from 'reactstrap';
+import { Card, Col as ColRS, Row } from 'reactstrap';
 import Search from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -134,10 +134,17 @@ class TaskStatusListView extends React.Component <ITaskStatusListViewProps, ITas
                         </FlexView>
                     </FlexView>
                 </Card>
+                <Row>
 
                 {itemList.map((item) => {
-                    return(<TaskStatusView key={item.Id} itemId={item.Id} item={item}/>);
+                    return(
+                        <ColRS xl={4} lg={4} md={4} sm={6} xs={12} key={item.Id}>
+                            <TaskStatusView key={item.Id} itemId={item.Id} item={item}/>
+                        </ColRS>
+                    );
                 })}
+
+                </Row>
 
             </div>
         );

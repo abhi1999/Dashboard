@@ -1,7 +1,6 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "axios";
+import axios from "../configs/axios";
 import { ERRORCODE_GET_ALL, ERRORCODE_ADD, ERRORCODE_UPDATE, ERRORCODE_DELETE } from '../constants/ActionTypes';
-import { BASE_URL } from "../configs";
 import { errorCodeGetAllSuccess, errorCodeGetAllFailure } from '../actions/ErrorCode';
 import { errorCodeAddSuccess, errorCodeAddFailure } from '../actions/ErrorCode';
 import { errorCodeUpdateSuccess, errorCodeUpdateFailure } from '../actions/ErrorCode';
@@ -17,7 +16,7 @@ function* errorCodeGetAllRequest(action:any) {
         yield put(errorCodeGetAllSuccess(errorCodeList));
     } catch (error) {
         yield put(Notifications.error({ ...ERROR_OPTIONS,
-            message: error.config.url
+            message: error.message
         }));
         yield put(errorCodeGetAllFailure(error));
     }
@@ -25,10 +24,12 @@ function* errorCodeGetAllRequest(action:any) {
 
 export const errorCodeGetAllApi = (action:any) => {
 
-    const endpoint:string = BASE_URL + "/odata/ErrorCodeSet";
+    const endpoint:string = "/odata/ErrorCodeSet";
     const count:boolean = true;
     const top:string = action.payload.top;
     const skip:string = action.payload.skip;
+
+    console.log("PARAMS: " + count + " " + top + " " + skip);
 
     const orderBy:string[] = [];
     if (action.payload.sorted) {
@@ -56,7 +57,6 @@ export const errorCodeGetAllApi = (action:any) => {
 
     const url:string = endpoint + oDataParams; 
 
-    console.log("errorCodeGetAllApi: " + url);
     return axios.get(url);
 };
 
@@ -67,7 +67,7 @@ function* errorCodeAddRequest(action:any) {
     } catch (error) {
         console.error(error);
         yield put(Notifications.error({ ...ERROR_OPTIONS,
-            message: error.config.url
+            message: error.message
         }));
         yield put(errorCodeAddFailure(error));
     }
@@ -76,9 +76,11 @@ function* errorCodeAddRequest(action:any) {
 export const errorCodeAddApi = (action:any) => {
 
     const errorCode:IErrorCode = action.payload;
-    const url:string = BASE_URL + "/api/ErrorCode/Add/";
+    const url:string = "/api/ErrorCode/Add/";
 
-    console.log("errorCodeAddApi: " + url);
+    console.log("errorCodeAddApi: " + url + " " + JSON.stringify(errorCode));
+    console.log("Error Code", errorCode)
+    
     return axios.post(url, errorCode);
 };
 
@@ -89,7 +91,7 @@ function* errorCodeUpdateRequest(action:any) {
     } catch (error) {
         console.error(error);
         yield put(Notifications.error({ ...ERROR_OPTIONS,
-            message: error.config.url
+            message: error.message
         }));
         yield put(errorCodeUpdateFailure(error));
     }
@@ -98,9 +100,8 @@ function* errorCodeUpdateRequest(action:any) {
 export const errorCodeUpdateApi = (action:any) => {
 
     const errorCode:IErrorCode = action.payload;
-    const url:string = BASE_URL + "/api/ErrorCode/Update/" + errorCode.ErrCode;
+    const url:string = "/api/ErrorCode/Update/";
 
-    console.log("errorCodeUpdateApi: " + url);
     return axios.put(url, errorCode);
 };
 
@@ -117,14 +118,12 @@ function* errorCodeDeleteRequest(action:any) {
     }
 }
 
-
 export const errorCodeDeleteApi = (action:any) => {
 
     const errorCode:IErrorCode = action.payload;
-    const url:string = BASE_URL + "/api/ErrorCode/Delete/" + errorCode.ErrCode;
+    const url:string = "/api/ErrorCode/Delete/";
     
-    console.log("errorCodeDeleteApi: " + url);
-    return axios.delete(url);
+    return axios.delete(url, {data: errorCode});
 };
 
 export default function* rootSaga() {

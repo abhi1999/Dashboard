@@ -8,3 +8,8 @@ export class CTempAsnToHold implements ITempAsnToHold {
 }
 export const ITempAsnToHold_machinename_length = 80;
 export const ITempAsnToHold_username_length = 80;
+
+export const kTempAsnToHold_machinename="machinename";
+export const kTempAsnToHold_username="username";
+export const kTempAsnToHold_LogDate="LogDate";
+export const kTempAsnToHold_ASN_ID="ASN_ID";

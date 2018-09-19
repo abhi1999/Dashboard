@@ -80,7 +80,7 @@ body {font-family: SegoeUI,Helvetica Neue,Helvetica,Arial,sans-serif;background-
 .sidebar .nav-link, .sidebar .nav-link .nav-icon {color:#a2a2a2;font-size:.9rem;font-weight:700;}
 .sidebar .nav-link:hover {background-color:#474747;}
 .sidebar .nav-link.active {background-color:#818181;}
-.main .container-fluid {padding:52px 20px 0 0;}
+.main .container-fluid {padding:48px 1rem 0 1rem;}
 .card {box-shadow:none;border:solid 1px #c1c1c1;border-radius:0;}
 .card-header {color:#000;font-size:1.2rem;font-weight:200;}
 .card-body {padding-bottom:0rem;}
@@ -166,4 +166,49 @@ ul li.nav-item ul.nav-dropdown-items li a {padding-left:40px;font-size:0.8rem;}
 }
 .carrier-view .header-actions >i {
     
+}
+
+.table-container{
+    background: white;
+}
+.rt-td.action-menu{
+    overflow: visible;
+}
+.action-menu .btn-toggle{
+    border: none;
+    font-size: 1.6rem;
+    color: #307bb5;
+    padding-top: 0;
+    padding-bottom: 0;
+    /* margin: 0; */
+    line-height: 1rem;
+    height: 25px;
+}
+.btn-toggle:hover, .btn-toggle:focus{
+    background-color: transparent;
+    outline-color: -webkit-focus-ring-color;
+    outline-style: auto;
+    outline-width: 5px;
+    outline: 5px auto -webkit-focus-ring-color;
+}
+.paging-panel{
+    background: #ffffff;
+    padding: 1rem 0;
+    text-align: center;
+}
+.header-icons{
+    position: fixed;
+    right: 1rem;
+    top: 4rem;
+    z-index: 1000;
+    color: #fff;
+}
+.header-icons .fa {
+    margin-left: 0.75rem;
+    font-size: 1.1rem;
+    display: inline-block;
+    cursor: pointer;
+}
+.content-panel{
+    margin-top: 1rem;
 }

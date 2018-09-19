@@ -19,3 +19,14 @@ export const IEDIRptFilterPOAck_DocType_length = 10;
 export const IEDIRptFilterPOAck_DocRef_length = 50;
 export const IEDIRptFilterPOAck_EmailTo_length = 4000;
 export const IEDIRptFilterPOAck_ReportName_length = 24;
+
+export const kEDIRptFilterPOAck_VPID="VPID";
+export const kEDIRptFilterPOAck_Misc_ID="Misc_ID";
+export const kEDIRptFilterPOAck_DGID="DGID";
+export const kEDIRptFilterPOAck_TP_PartID="TP_PartID";
+export const kEDIRptFilterPOAck_TP_Name="TP_Name";
+export const kEDIRptFilterPOAck_DocType="DocType";
+export const kEDIRptFilterPOAck_DateRecv="DateRecv";
+export const kEDIRptFilterPOAck_DocRef="DocRef";
+export const kEDIRptFilterPOAck_EmailTo="EmailTo";
+export const kEDIRptFilterPOAck_ReportName="ReportName";

@@ -9,3 +9,8 @@ export class CAppUser implements IAppUser {
 export const IAppUser_login_name_length = 50;
 export const IAppUser_login_password_length = 50;
 export const IAppUser_eLogin_Password_length = 100;
+
+export const kAppUser_login_name="login_name";
+export const kAppUser_login_password="login_password";
+export const kAppUser_eLogin_Password="eLogin_Password";
+export const kAppUser_id="id";

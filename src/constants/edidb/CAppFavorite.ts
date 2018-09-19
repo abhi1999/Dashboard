@@ -11,3 +11,11 @@ export class CAppFavorite implements IAppFavorite {
 }
 export const IAppFavorite_FavUser_length = 50;
 export const IAppFavorite_FavOverrideCaption_length = 100;
+
+export const kAppFavorite_FavID="FavID";
+export const kAppFavorite_FavUser="FavUser";
+export const kAppFavorite_FavControlID="FavControlID";
+export const kAppFavorite_FavOrder="FavOrder";
+export const kAppFavorite_FavGroupID="FavGroupID";
+export const kAppFavorite_FavOverrideCaption="FavOverrideCaption";
+export const kAppFavorite_CreatedDate="CreatedDate";

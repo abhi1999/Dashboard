@@ -21,3 +21,14 @@ export const IApiFABaseView_AK101_length = 2;
 export const IApiFABaseView_AK102_length = 9;
 export const IApiFABaseView_Exp_Flag_length = 1;
 export const IApiFABaseView_status_length = 500;
+
+export const kApiFABaseView_FA_ID="FA_ID";
+export const kApiFABaseView_TP_Name="TP_Name";
+export const kApiFABaseView_ISA08="ISA08";
+export const kApiFABaseView_ISA09="ISA09";
+export const kApiFABaseView_ISA13="ISA13";
+export const kApiFABaseView_Direction="Direction";
+export const kApiFABaseView_AK101="AK101";
+export const kApiFABaseView_AK102="AK102";
+export const kApiFABaseView_Exp_Flag="Exp_Flag";
+export const kApiFABaseView_status="status";

@@ -9,13 +9,15 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Divider from '@material-ui/core/Divider';
-import { FaCircle } from 'react-icons/fa';
+import { FaCircle, FaCircleNotch } from 'react-icons/fa';
 import { FaCheckCircle } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { databaseAdd, databaseUpdate, databaseDelete } from '../../actions/Scheduler/DatabaseAction';
-import { Form, Input, Select, Button } from 'antd';
 import Database from '../../constants/scheduler/database';
 import Network from "../../constants/scheduler/network";
+import { Form, Input, Select, Button } from 'antd';
+import { Collapse } from 'antd';
+const Panel = Collapse.Panel;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -27,6 +29,13 @@ const formItemLayout = {
       xs: { span: 24 },
       sm: { span: 16 },
     },
+  };
+  const customPanelStyle = {
+    background: '#f7f7f7',
+    borderRadius: 4,
+    marginBottom: 24,
+    border: 0,
+    overflow: 'hidden',
   };
 
 export interface IDatabaseViewProps
@@ -49,7 +58,7 @@ export interface IDatabaseViewProps
 
 export interface IDatabaseViewState
 {
-    isExpanded:boolean,
+    panelKey:string,
     Field_Active:boolean,
     Field_Name:string,
     Field_Name_Status:any,
@@ -75,6 +84,7 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleLinkageChange = this.handleLinkageChange.bind(this);
       this.handleNetworkChange = this.handleNetworkChange.bind(this);
+      this.handleExpansionChange = this.handleExpansionChange.bind(this);
     }
 
     public componentWillMount() {
@@ -83,7 +93,7 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
 
     public render() {
 
-        let activeIcon = <FaCircle size={36} color='Green' onClick={ () => { this.toggleActive(); }} />;
+        let activeIcon = <FaCircleNotch size={36} color='Green' onClick={ () => { this.toggleActive(); }} />;
         if (this.state.Field_Active)
         {
             activeIcon = <FaCheckCircle size={36} color='Green' onClick={ () => { this.toggleActive(); }} />;
@@ -151,105 +161,105 @@ class DatabaseView extends React.Component<IDatabaseViewProps, IDatabaseViewStat
         <tbody>
         <tr >
             <td style={{verticalAlign: 'top', paddingLeft: 9, paddingTop: 8, paddingRight:8}}>
-            <div>{activeIcon}</div>
-        </td>
-        <td style={{width: '100%'}}>
-            <ExpansionPanel expanded={this.state.isExpanded} onChange={this.expansionChange(null)} CollapseProps={{ unmountOnExit: true }}>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>} style={{width: '100%'}}>
-                    <div style={{width: '100%', fontWeight: 'bold', marginLeft:8, marginTop:8}}>{ this.state.Field_Name }</div>
-                </ExpansionPanelSummary>
-                <Divider/>
-                <ExpansionPanelActions>
+                <div>{activeIcon}</div>
+            </td>
+            <td style={{width: '100%'}}>
+                <Collapse bordered={false} activeKey={this.state.panelKey} onChange={this.handleExpansionChange}>
+                    <Panel header={this.state.Field_Name} key="1" style={customPanelStyle}>
+                    <div style={{width: '100%'}}>
                     {actionButtons}
-                </ExpansionPanelActions>
-                <Divider/>
-                <ExpansionPanelDetails >
-                <div style={{width: '100%'}}>
-                  <Form name="DetailForm" id="DetailForm">
-                    <FormItem
-                        style={{height:24}}
-                        {...formItemLayout}
-                        label="Name"
-                        validateStatus={this.state.Field_Name_Status}
-                        help={this.state.Field_Name_Help}
-                        >
-                        <Input
-                            name="Field_Name"
-                            value={StringChecker(this.state.Field_Name)}
-                            onChange={this.handleInputChange}
-                            />
-                    </FormItem>
-                    <FormItem
-                        style={{height:24}}
-                        {...formItemLayout}
-                        label="Connection"
-                        >
-                        <Input
-                            name="Field_Connection"
-                            value={StringChecker(this.state.Field_Connection)}
-                            onChange={this.handleInputChange}
-                            />
-                    </FormItem>
-                    <FormItem
-                        style={{height:24}}
-                        {...formItemLayout}
-                        label="Database"
-                        >
-                        <Input
-                            placeholder="Database"
-                            name="Field_Database"
-                            value={StringChecker(this.state.Field_Database)}
-                            onChange={this.handleInputChange}
-                            />
-                    </FormItem>
-                    <FormItem
-                        style={{height:24}}
-                        {...formItemLayout}
-                        label="Linkage"
-                        >
-                        <Select
-                            style={{ width: 120 }} 
-                            value={StringChecker(this.state.Field_Linkage)}
-                            onChange={this.handleLinkageChange}
+                    <Form name="DetailForm" id="DetailForm">
+                        <FormItem
+                            style={{height:24}}
+                            {...formItemLayout}
+                            label="Name"
+                            validateStatus={this.state.Field_Name_Status}
+                            help={this.state.Field_Name_Help}
                             >
-                            <Option key={'VB6'} value={'VB6'}>VB6</Option>
-                            <Option key={'VBNet'} value={'VBNet'}>VBNet</Option>
-                        </Select>
-                    </FormItem>
-                    <FormItem
-                        style={{height:24}}
-                        {...formItemLayout}
-                        label="Network"
-                        >
-                        <Select
-                            placeholder="Network"  
-                            style={{ width: 120 }} 
-                            value={StringChecker(this.state.Field_Network)}
-                            onChange={this.handleNetworkChange}
+                            <Input
+                                name="Field_Name"
+                                value={StringChecker(this.state.Field_Name)}
+                                onChange={this.handleInputChange}
+                                />
+                        </FormItem>
+                        <FormItem
+                            style={{height:24}}
+                            {...formItemLayout}
+                            label="Connection"
                             >
-                            {
-                            this.props.network.networkList.map((network:Network) => {
-                                return (
-                                <Option key={network.Id} value={network.Name}>{network.Name}</Option>
-                                );
-                            })
-                            }
-                        </Select>
-                    </FormItem>
-                  </Form>
-                </div>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
+                            <Input
+                                name="Field_Connection"
+                                value={StringChecker(this.state.Field_Connection)}
+                                onChange={this.handleInputChange}
+                                />
+                        </FormItem>
+                        <FormItem
+                            style={{height:24}}
+                            {...formItemLayout}
+                            label="Database"
+                            >
+                            <Input
+                                placeholder="Database"
+                                name="Field_Database"
+                                value={StringChecker(this.state.Field_Database)}
+                                onChange={this.handleInputChange}
+                                />
+                        </FormItem>
+                        <FormItem
+                            style={{height:24}}
+                            {...formItemLayout}
+                            label="Linkage"
+                            >
+                            <Select
+                                style={{ width: 120 }} 
+                                value={StringChecker(this.state.Field_Linkage)}
+                                onChange={this.handleLinkageChange}
+                                >
+                                <Option key={'VB6'} value={'VB6'}>VB6</Option>
+                                <Option key={'VBNet'} value={'VBNet'}>VBNet</Option>
+                            </Select>
+                        </FormItem>
+                        <FormItem
+                            style={{height:24}}
+                            {...formItemLayout}
+                            label="Network"
+                            >
+                            <Select
+                                placeholder="Network"  
+                                style={{ width: 120 }} 
+                                value={StringChecker(this.state.Field_Network)}
+                                onChange={this.handleNetworkChange}
+                                >
+                                {
+                                this.props.network.networkList.map((network:Network) => {
+                                    return (
+                                    <Option key={network.Id} value={network.Name}>{network.Name}</Option>
+                                    );
+                                })
+                                }
+                            </Select>
+                        </FormItem>
+                    </Form>
+                    </div>
+                </Panel>
+                </Collapse>
             </td>
         </tr>
         </tbody>
       </table>
     )};
 
+    private handleExpansionChange(panelKey)
+    {
+        this.setState({
+            panelKey
+        });
+    }
+
     private initState()
     {
         this.setState({
-          isExpanded: this.props.isNew,
+          panelKey:"",
           Field_Active: this.props.item.Active,
           Field_Name: this.props.item.Name,
           Field_Name_Status: undefined,

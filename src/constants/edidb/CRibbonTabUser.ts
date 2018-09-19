@@ -7,3 +7,8 @@ export class CRibbonTabUser implements IRibbonTabUser {
     public UserVisible:boolean;
     public constructor(init?:Partial<CRibbonTabUser>) { Object.assign(this, init); }
 }
+export const kRibbonTabUser_ID="ID";
+export const kRibbonTabUser_TabID="TabID";
+export const kRibbonTabUser_managedID="managedID";
+export const kRibbonTabUser_UserEnabled="UserEnabled";
+export const kRibbonTabUser_UserVisible="UserVisible";

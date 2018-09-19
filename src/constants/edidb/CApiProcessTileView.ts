@@ -23,3 +23,17 @@ export const IApiProcessTileView_func_code_length = 3;
 export const IApiProcessTileView_MethodParams_length = 1000;
 export const IApiProcessTileView_Type_length = 50;
 export const IApiProcessTileView_GroupColor_length = 50;
+
+export const kApiProcessTileView_ShortCutID="ShortCutID";
+export const kApiProcessTileView_Title="Title";
+export const kApiProcessTileView_GroupName="GroupName";
+export const kApiProcessTileView_ControlID="ControlID";
+export const kApiProcessTileView_ControlName="ControlName";
+export const kApiProcessTileView_MethodCall="MethodCall";
+export const kApiProcessTileView_func_code="func_code";
+export const kApiProcessTileView_MethodParams="MethodParams";
+export const kApiProcessTileView_Type="Type";
+export const kApiProcessTileView_BeginGroup="BeginGroup";
+export const kApiProcessTileView_GroupColor="GroupColor";
+export const kApiProcessTileView_GroupOrder="GroupOrder";
+export const kApiProcessTileView_ControlOrder="ControlOrder";

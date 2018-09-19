@@ -6,3 +6,6 @@ export class CAckCode implements IAckCode {
 }
 export const IAckCode_AckID_length = 1;
 export const IAckCode_AckDesc_length = 10;
+
+export const kAckCode_AckID="AckID";
+export const kAckCode_AckDesc="AckDesc";

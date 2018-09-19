@@ -1,0 +1,7 @@
+window.env = {
+    VP4API_URL : 'http://192.168.104.125:5001',
+    WSAPI_URL : 'http://192.168.104.125:5000',
+    TLEAPI_URL : 'http://192.168.104.125:5002',
+    API_TIMEOUT_MINUTES : 5,
+    DEFAULT_TEST_COMPANY : 4
+  }

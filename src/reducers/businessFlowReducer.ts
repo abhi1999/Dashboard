@@ -49,7 +49,42 @@ const initialState = {
                 icon: 'fa fa-list',
                 name: 'Trading Partners',
                 url: '/trades',
-            }
+            },
+            {
+                icon: 'fa fa-list',
+                name: 'Networks',
+                url: '/vpNetworks',
+            },
+            {
+                icon: 'fa fa-list',
+                name: 'Notification History',
+                url: '/notifications',
+            },
+            {  
+                icon: 'fa fa-list',
+                name: 'Ship To Locations',
+                url: '/shipTos',
+            },
+            {  
+                icon: 'fa fa-list',
+                name: 'Document Explorer',
+                url: '/documents',
+            },
+            {
+                icon: 'fa fa-list',
+                name: 'Company Settings',
+                url: '/companysettings'
+            },
+            {
+                icon: 'fa fa-list',
+                name: 'Items',
+                url: '/items'
+            },
+            // {
+            //     icon: 'fa fa-list',
+            //     name: 'Locations',
+            //     url: '/locations'
+            // }
         ]
         },
         {

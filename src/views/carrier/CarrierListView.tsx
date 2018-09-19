@@ -2,24 +2,44 @@ import * as  React from 'react';
 import { connect } from 'react-redux'
 import _ from 'lodash';
 import ReactTable from "react-table";
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { Card } from 'reactstrap';
+import { Button as RSButton, ButtonDropdown, Card, CardTitle, CardHeader, CardBody, Col as ColRS, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row } from 'reactstrap';
 import FlexView from 'react-flexview';
 import { FaSyncAlt, FaPlusCircle, FaTimesCircle, FaEdit, FaClone, FaSort, FaSortUp, FaSortDown, FaTable, FaList } from 'react-icons/fa';
 import { carrierGetAll, carrierDelete } from '../../actions/CarrierAction';
 import { toastError } from '../../actions/Scheduler/ServiceAction';
 import CarrierView from './CarrierView';
 import { Pagination } from 'antd';
-import { Input, Select, Col, Checkbox } from 'antd';
-import { ICON_SIZE, ICON_COLOR } from '../../constants/Attributes';
+import { Form, Input, Select, Button } from 'antd';
+import { ICON_SIZE, ICON_SMALL, ICON_COLOR } from '../../constants/Attributes';
 import uuid from 'uuid-v4';
 import ODataParams from '../../constants/params/oDataParams';
 import SortDescriptor from '../../constants/params/sortDescriptor';
 import FilterDescriptor from '../../constants/params/filterDescriptor';
+import KeyValueLabel from '../../constants/params/keyValueLabel';
 import ShipViaModel from '../../constants/implementations/ShipViaModel';
 import { ToString } from '../../utils/Conversion';
+import { CarrierListCardItem } from "./CarrierListCardItem";
+import Media from "react-media";
+import * as XShipVia from "../../constants/edidb/CShipVia";
+import { filterAdd, filterIncludes, filterGetValue, selectGetValue } from '../../utils/Comparison';
 const InputGroup = Input.Group;
 const Option = Select.Option;
+const FormItem = Form.Item;
+const formItemLayout = {
+    labelCol: { span: 18 },
+    wrapperCol: { span: 20 },
+};
+const selectType:KeyValueLabel[] = [
+    new KeyValueLabel({ key: "", value: "", label: "All" }),
+    new KeyValueLabel({ key: "LT", value: "LT", label: "LT" }),
+    new KeyValueLabel({ key: "M", value: "M", label: "M" }),
+    new KeyValueLabel({ key: "U", value: "U", label: "U" }),
+];
+const selectTest:KeyValueLabel[] = [
+    new KeyValueLabel({ key: "", value: "", label: "All" }),
+    new KeyValueLabel({ key: "true", value: "true", label: "True" }),
+    new KeyValueLabel({ key: "false", value: "false", label: "False" }),
+];
 
 export interface ICarrierListViewProps {
     // redux
@@ -42,13 +62,8 @@ export interface ICarrierListViewState {
     loading: boolean,
     sorted: SortDescriptor[],
     filtered: FilterDescriptor[],
-    // Filter fields
-    Ship_Via_ID: string,
-    Ship_Via_Name: string,
-    SCAC: string,
-    Ship_Via_Type: string,
-    Test: string,
-    [propName: string]: any, // This is so we can set by name dynamically
+    actionMenuState:string
+    collapse:boolean
 }
 
 class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierListViewState> {
@@ -66,16 +81,13 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
             carrierList: [],
             carrierListCount: 0,
             loading: true,
-            sorted: [new SortDescriptor({ desc: false, id: "Ship_Via_Name" })],
+            sorted: [new SortDescriptor({ desc: false, id: XShipVia.kShipVia_Ship_Via_Name })],
             filtered: [],
-            Ship_Via_ID: "",
-            Ship_Via_Name: "",
-            SCAC: "",
-            Ship_Via_Type: "All",
-            Test: "All"
+            actionMenuState:'',
+            collapse:false
         };
 
-        this.handleInputChange = this.handleInputChange.bind(this);
+        this.updateFilter = this.updateFilter.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.carrierAdd = this.carrierAdd.bind(this);
         this.carrierEdit = this.carrierEdit.bind(this);
@@ -93,6 +105,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         this.getSortButton = this.getSortButton.bind(this);
         this.handleTypeFilterChange = this.handleTypeFilterChange.bind(this);
         this.handleTestFilterChange = this.handleTestFilterChange.bind(this);
+        this.toggleActionMenu = this.toggleActionMenu.bind(this);
     }
 
     public componentWillMount() {
@@ -106,14 +119,22 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
             carrierListCount: newProps.carrier.carrierListCount
         });
     }
-
+    
     public render() {
-        const { loading, pageSize, sorted, filtered } = this.state;
+        const { loading, pageSize, sorted, filtered, modal } = this.state;
         let { carrierList } = this.state;
 
+        if(modal)
+        {
+            return (
+                <CarrierView itemId={this.state.carrierEdit.Id} item={this.state.carrierEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
+            );
+        }
+
+        // Filter and sort client-side
         if (filtered.length > 0) {   // Filter on each column with a value
             filtered.map((column) => {
-                carrierList = carrierList.filter(item => _.includes(ToString(item[column.id]).toLowerCase(), ToString(column.value).toLowerCase()));
+                carrierList = carrierList.filter(item => _.includes(String(item[column.id]).toLowerCase(), String(column.value).toLowerCase()));
             });
         }
 
@@ -121,207 +142,208 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
             carrierList = _.orderBy(carrierList, sorted.map((column) => column.id), sorted.map((column) => column.desc ? "desc" : "asc"));
         }
 
-        let toggleButton;
-        let cardHeader;
-        let detailSection;
         const tablePageSize = Math.min(carrierList.length, pageSize); // Only show rows with data in the table
 
-        if (this.state.viewMode === 'cards') {   // Conditional display elements for either cards or table view
-            toggleButton = <FaTable onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
+        return (
+            <Container>
+                <div className="header-icons">
+                    <RSButton className="fa fa-plus" onClick={() => this.carrierAdd()}/>
+                    <RSButton className="fa fa-refresh" onClick={() => this.requery(this.state.pageSize)} />
+                </div>
+                <Media query={{ maxWidth: 768 }}>
+                    {matches => // Mobile version first
+                        matches ? (
+                            <div>
+                                <Card body={true} outline={true} style={{ width: '100%' }}>
+                                    <Form layout="inline" style={{marginTop:-10, marginBottom:10}}>
+                                        <FormItem 
+                                            {...formItemLayout}
+                                            colon={false}
+                                            label="ID"
+                                        >
+                                            <Input
+                                                name={XShipVia.kShipVia_Ship_Via_ID}
+                                                prefix={this.getSortButton(XShipVia.kShipVia_Ship_Via_ID)}
+                                                value={filterGetValue(this.state.filtered, XShipVia.kShipVia_Ship_Via_ID)}
+                                                onChange={this.handleFilterChange}
+                                            />
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            colon={false}
+                                            label="Name"
+                                        >
+                                            <Input
+                                                name={XShipVia.kShipVia_Ship_Via_Name}
+                                                prefix={this.getSortButton(XShipVia.kShipVia_Ship_Via_Name)}
+                                                value={filterGetValue(this.state.filtered, XShipVia.kShipVia_Ship_Via_Name)}
+                                                onChange={this.handleFilterChange}
+                                            />
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            colon={false}
+                                            label="SCAC"
+                                        >
+                                            <Input
+                                                name={XShipVia.kShipVia_SCAC}
+                                                prefix={this.getSortButton(XShipVia.kShipVia_SCAC)}
+                                                value={filterGetValue(this.state.filtered, XShipVia.kShipVia_SCAC)}
+                                                onChange={this.handleFilterChange}
+                                            />
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            colon={false}
+                                            label="Type"
+                                        >
+                                            <Select style={{ width: '100%' }}
+                                                value={filterGetValue(this.state.filtered, XShipVia.kShipVia_Ship_Via_Type)}
+                                                onChange={this.handleTypeFilterChange}
+                                            >
+                                            {selectType.map((option)=><Option key={option.key} value={option.value}>{option.label}</Option>)}
+                                            </Select>
+                                        </FormItem>
+                                        <FormItem
+                                            {...formItemLayout}
+                                            colon={false}
+                                            label="Boolean"
+                                        >
+                                            <Select style={{ width: '100%' }}
+                                                value={filterGetValue(this.state.filtered, "Test")}
+                                                onChange={this.handleTestFilterChange}
+                                            >
+                                            {selectTest.map((option)=><Option key={option.key} value={option.value}>{option.label}</Option>)}
+                                            </Select>
+                                        </FormItem>
+                                    </Form>
+                                </Card>
+                                <Row>
+                                    {carrierList.map((item) =>
+                                        <ColRS xl={4} lg={4} md={4} sm={6} xs={12} key={item.Id}>
+                                            <Card outline={false}>
+                                                <CardHeader>
+                                                    {item.Ship_Via_Name}
+                                                    <div className="card-header-actions">
+                                                        <Button type="primary" shape="circle" size="small" style={{marginLeft:2}} icon="form"  onClick={() => this.carrierEdit(item)} />
+                                                        <Button type="primary" shape="circle" size="small" style={{marginLeft:2}} icon="delete" onClick={() => this.carrierDelete(item)} />
+                                                        <Button type="primary" shape="circle" size="small" style={{marginLeft:2}} icon="copy" onClick={() => this.carrierClone(item)} />
+                                                    </div> 
+                                                </CardHeader>
+                                                <CardBody>
+                                                <Form layout="inline">
+                                                    <FormItem 
+                                                        {...formItemLayout}
+                                                        label="ID"
+                                                        >
+                                                        {item.Ship_Via_ID}
+                                                    </FormItem>
+                                                    <FormItem 
+                                                        {...formItemLayout}
+                                                        label="SCAC"
+                                                        >
+                                                        {item.SCAC}
+                                                    </FormItem>
+                                                    <FormItem 
+                                                        {...formItemLayout}
+                                                        label="Type"
+                                                        >
+                                                        {item.Ship_Via_Type}
+                                                    </FormItem>
+                                                </Form>
+                                                </CardBody>
+                                            </Card>
+                                        </ColRS>)}
+                                </Row>
+                            </div>
 
-            cardHeader =
-                <FlexView width='100%' wrap={true} >
-                    <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                        <span />
-                    </FlexView>
-                    <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                        <Input
-                            placeholder="ID"
-                            name="Ship_Via_ID"
-                            prefix={this.getSortButton("Ship_Via_ID")}
-                            value={this.state.Ship_Via_ID}
-                            onChange={this.handleFilterChange}
-                        />
-                    </FlexView>
-                    <FlexView hAlignContent="left" vAlignContent="center" basis="200" wrap={true}>
-                        <Input
-                            placeholder="Name"
-                            name="Ship_Via_Name"
-                            prefix={this.getSortButton("Ship_Via_Name")}
-                            value={this.state.Ship_Via_Name}
-                            onChange={this.handleFilterChange}
-                        />
-                    </FlexView>
-                    <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                        <Input
-                            placeholder="SCAC"
-                            name="SCAC"
-                            prefix={this.getSortButton("SCAC")}
-                            value={this.state.SCAC}
-                            onChange={this.handleFilterChange}
-                        />
-                    </FlexView>
-                    <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                        <Select style={{ width: '100%' }} 
-                                value={this.state.Ship_Via_Type}
-                                onChange={this.handleTypeFilterChange}
-                                >
-                                <Option key="all" value="all">All</Option>
-                                <Option key="LT" value="LT">LT</Option>
-                                <Option key="M" value="M">M</Option>
-                                <Option key="U" value="U">U</Option>
-                            </Select>
-                    </FlexView>
-                    <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                        <Select style={{ width: '100%' }} 
-                                value={this.state.Test}
-                                onChange={this.handleTestFilterChange}
-                                >
-                                <Option key="all" value="all">All</Option>
-                                <Option key="true" value="true">True</Option>
-                                <Option key="false" value="false">False</Option>
-                        </Select>
-                    </FlexView>
-                    <FlexView hAlignContent="right" vAlignContent="center" grow={true} wrap={true}>
-                        <span />
-                    </FlexView>
-                </FlexView>
-                ;
-
-            detailSection = carrierList.map((item) =>
-                <Card key={item.Id} body={true} outline={true} style={{ width: '100%', marginBottom: '1px' }}>
-                    <FlexView width='100%' wrap={true}>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                            <FaEdit onClick={() => this.carrierEdit(item)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                            <FaTimesCircle onClick={() => this.carrierDelete(item)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                            <FaClone onClick={() => this.carrierClone(item)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                        </FlexView>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                            {item.Ship_Via_ID}
-                        </FlexView>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="200" wrap={true}>
-                            {item.Ship_Via_Name}
-                        </FlexView>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                            {item.SCAC}
-                        </FlexView>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                            {item.Ship_Via_Type}
-                        </FlexView>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="120" wrap={true}>
-                            {ToString(item.Test)}
-                        </FlexView>
-                        <FlexView hAlignContent="left" vAlignContent="center" grow={true} wrap={true}>
-                            <span />
-                        </FlexView>
-                    </FlexView>
-                </Card>
-            );
-        }
-        else // Table Display
-        {
-            toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
-
-            cardHeader = <span />; // This part is blank for the table view
-
-            detailSection =
-                <ReactTable
-                    columns={[
-                        {
-                            sortable: false,
-                            filterable: false,
-                            width: 120,
-                            Cell: row => (
+                        ) : ( // Desktop version
                                 <div>
-                                    <FaEdit onClick={() => this.carrierEdit(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                                    <FaTimesCircle onClick={() => this.carrierDelete(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                                    <FaClone onClick={() => this.carrierClone(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
+                                    <ReactTable
+                                        columns={[
+                                            {
+                                                sortable: false,
+                                                filterable: false,
+                                                width: 50,
+                                                resizable:false,
+                                                className:'action-menu',
+                                                Cell: row => (
+                                                    <div>
+                                                        <ButtonDropdown direction="right"  isOpen={this.state.actionMenuState === row.original.Id } toggle={()=>{this.toggleActionMenu(row.original)}}>
+                                                            <DropdownToggle caret={false} className="fa fa-ellipsis-v btn-toggle"/>
+                                                            <DropdownMenu>
+                                                                <DropdownItem onClick={() => this.carrierEdit(row.original)}>Edit</DropdownItem>
+                                                                <DropdownItem onClick={() => this.carrierClone(row.original)}>Clone</DropdownItem>
+                                                                <DropdownItem onClick={() => this.carrierDelete(row.original)}>Delete</DropdownItem>
+                                                            </DropdownMenu>
+                                                        </ButtonDropdown>
+                                                    </div>
+                                                )
+                                            },
+                                            {
+                                                Header: "ID",
+                                                accessor: XShipVia.kShipVia_Ship_Via_ID
+                                            },
+                                            {
+                                                Header: "Carrier Name",
+                                                accessor: XShipVia.kShipVia_Ship_Via_Name,
+                                                minWidth: 250
+                                            },
+                                            {
+                                                Header: "SCAC",
+                                                accessor:  XShipVia.kShipVia_SCAC
+                                            },
+                                            {
+                                                Header: "Type",
+                                                accessor: XShipVia.kShipVia_Ship_Via_Type,
+                                                sortable: true,
+                                                filterable: true,
+                                                Cell: ({ row }) => selectGetValue(selectType, row.Ship_Via_Type),
+                                                Filter: ({ filter, onChange }) =>
+                                                    <Select
+                                                        style={{ width: "100%" }}
+                                                        value={filterGetValue(this.state.filtered, XShipVia.kShipVia_Ship_Via_Type)}
+                                                        onChange={this.handleTypeFilterChange}
+                                                    >
+                                                    {selectType.map((option)=><Option key={option.key} value={option.value}>{option.label}</Option>)}
+                                                    </Select>
+                                            },
+                                            {
+                                                Header: "Test",
+                                                accessor: "Test",
+                                                sortable: true,
+                                                filterable: true,
+                                                Cell: ({ row }) => selectGetValue(selectTest, row.Test),
+                                                Filter: ({ filter, onChange }) =>
+                                                    <Select
+                                                        style={{ width: "100%" }}
+                                                        value={filterGetValue(this.state.filtered, "Test")}
+                                                        onChange={this.handleTestFilterChange}
+                                                    >
+                                                    {selectTest.map((option)=><Option key={option.key} value={option.value}>{option.label}</Option>)}
+                                                    </Select>
+                                            },
+                                        ]}
+                                        manual={false}
+                                        data={carrierList}
+                                        loading={loading}
+                                        sortable={true}
+                                        sorted={sorted}
+                                        onSortedChange={this.onSortedChange}
+                                        filterable={true}
+                                        filtered={filtered}
+                                        onFilteredChange={this.onFilteredChange}
+                                        defaultFilterMethod={(filter, row) => filterIncludes(filter, row)}
+                                        showPagination={false}
+                                        pageSize={tablePageSize}
+                                        className="-highlight table-container"
+                                    />
                                 </div>
                             )
-                        },
-                        {
-                            Header: "ID",
-                            accessor: "Ship_Via_ID"
-                        },
-                        {
-                            Header: "Carrier Name",
-                            accessor: "Ship_Via_Name",
-                            minWidth: 250
-                        },
-                        {
-                            Header: "SCAC",
-                            accessor: "SCAC"
-                        },
-                        {
-                            Header: "Type",
-                            accessor: "Ship_Via_Type",
-                            sortable: true,
-                            filterable: true,
-                            Cell: ({ row }) => {
-                                // This is where we could cause it to display in the table as something else
-                                return (
-                                    row.Ship_Via_Type
-                                )
-                            },
-                            Filter: ({ filter, onChange }) =>
-                                <Select
-                                    style={{ width: "100%" }}
-                                    value={this.state.Ship_Via_Type}
-                                    onChange={this.handleTypeFilterChange}
-                                >
-                                    <Option key="all" value="all">All</Option>
-                                    <Option key="LT" value="LT">LT</Option>
-                                    <Option key="M" value="M">M</Option>
-                                    <Option key="U" value="U">U</Option>
-                                </Select>
-                        },
-                        {
-                            Header: "Test",
-                            accessor: "Test",
-                            sortable: true,
-                            filterable: true,
-                            Cell: ({ row }) => {
-                                // This is where we could cause it to display in the table as something else
-                                return (
-                                    ToString(row.Test)
-                                )
-                            },
-                            Filter: ({ filter, onChange }) =>
-                                <Select
-                                    style={{ width: "100%" }}
-                                    value={this.state.Test}
-                                    onChange={this.handleTestFilterChange}
-                                >
-                                    <Option key="all" value="all">All</Option>
-                                    <Option key="true" value="true">True</Option>
-                                    <Option key="false" value="false">False</Option>
-                                </Select>
-                        },
-                    ]}
-                    manual={false}
-                    data={carrierList}
-                    loading={loading}
-                    sortable={true}
-                    sorted={sorted}
-                    onSortedChange={this.onSortedChange}
-                    filterable={true}
-                    filtered={filtered}
-                    onFilteredChange={this.onFilteredChange}
-                    defaultFilterMethod={(filter, row) => String(row[filter.id]).includes(filter.value)}
-                    showPagination={false}
-                    pageSize={tablePageSize}
-                    className="-striped -highlight"
-                />
-        }
-
-        return (
-            <div>
-                <Card body={true} outline={true} style={{ width: '100%' }}>
-                    <FlexView width='100%' wrap={true} style={{ marginBottom: 12 }}>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="40" wrap={true}>
-                            <FaSyncAlt onClick={() => this.requery(this.state.pageSize)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                        </FlexView>
-                        <FlexView hAlignContent="center" vAlignContent="center" grow={true} wrap={true}>
+                    }
+                </Media>
+            
+                <div className="paging-panel">
                             <Pagination
                                 showSizeChanger={true}
                                 onChange={this.onChangePage}
@@ -331,24 +353,8 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                                 onShowSizeChange={this.onShowSizeChange}
                                 total={this.state.carrierListCount}
                             />
-                        </FlexView>
-                        <FlexView hAlignContent="right" vAlignContent="center" basis="120" wrap={true}>
-                            <FaPlusCircle onClick={() => this.carrierAdd()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />
-                            {toggleButton}
-                        </FlexView>
-                    </FlexView>
-                    {cardHeader}
-                </Card>
-
-                <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>Carrier</ModalHeader>
-                    <ModalBody>
-                        <CarrierView itemId={this.state.carrierEdit.Id} item={this.state.carrierEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
-                    </ModalBody>
-                </Modal>
-
-                {detailSection}
-            </div>
+                </div>
+            </Container>
         );
     }
 
@@ -357,37 +363,30 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
             modal: !this.state.modal
         });
     }
-
+    private toggleActionMenu(data){
+        this.setState({actionMenuState:this.state.actionMenuState=== data.Id? "": data.Id});
+        console.log('hello', data)
+    }
     private handleTypeFilterChange(value: string) {
+        this.updateFilter(XShipVia.kShipVia_Ship_Via_Type, value);
+    }
 
-        let { filtered } = this.state;
-        // Remove the current filter for this column if there is one
-        filtered = filtered.filter((column:FilterDescriptor) => column.id !== "Ship_Via_Type")
+    private handleTestFilterChange(value: string) {
+        this.updateFilter("Test", value);
+    }
 
-        // If they selected a value (not "all" or blank), then add the filter back in
-        if (value!=="all" && value.length > 0)
-        {
-            filtered = filtered.concat(new FilterDescriptor({id:"Ship_Via_Type", value }));
-        }
+    private handleFilterChange(event: any) {
+        const target: any = event.target;
+        const id: string = target.name;
+        const value: string = target.type === 'checkbox' ? String(target.checked) : target.value;
 
-        // Update the state value for the field, as well as the filtered array
-        this.setState({ Ship_Via_Type: value, filtered });
+        this.updateFilter(id, value);
     }
     
-    private handleTestFilterChange(value: string) {
-
+    private updateFilter(id: string, value: string) {
         let { filtered } = this.state;
-        // Remove the current filter for this column if there is one
-        filtered = filtered.filter((column:FilterDescriptor) => column.id !== "Test")
-
-        // If they selected a value (not "all" or blank), then add the filter back in
-        if (value!=="all" && value.length > 0)
-        {
-            filtered = filtered.concat(new FilterDescriptor({id:"Test", value }));
-        }
-
-        // Update the state value for the field, as well as the filtered array
-        this.setState({ Test: value, filtered });
+        filtered = filterAdd(filtered, id, value);
+        this.setState({ filtered });
     }
 
     private toggleViewMode() {
@@ -412,11 +411,11 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
     }
 
     private carrierAdd() {
+        const newCarrier = new ShipViaModel();
+        newCarrier.Ship_Via_ID = uuid().toString().substring(0, 8);
+        newCarrier.Ship_Via_Name = "New Carrier";
         this.setState({
-            carrierEdit: new ShipViaModel({
-                "Ship_Via_ID": uuid(),
-                "Ship_Via_Name": "New Carrier"
-            }),
+            carrierEdit: newCarrier,
             modal: true,
             isNew: true
         });
@@ -431,13 +430,16 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
     }
 
     private carrierDelete(carrier: ShipViaModel) {
-        this.props.carrierDelete(carrier);
+        const check = confirm('Are you sure you want to delete this Carrier?')
+        if (check) {
+            this.props.carrierDelete(carrier);
+        }
     }
 
     private carrierClone(carrier) {
         const clone = JSON.parse(JSON.stringify(carrier));
         clone.Id = uuid();
-        clone.Ship_Via_ID += "#";
+        clone.Ship_Via_ID += "2";
         this.setState({
             carrierEdit: clone,
             modal: true,
@@ -505,55 +507,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
     }
 
     private onFilteredChange(filtered: FilterDescriptor[]) {
-        if (filtered.length > 0) {
-            filtered.map((column) => {
-                this.setState({ [column.id]: column.value });
-            });
-        }
-
         this.setState({ filtered });
-    }
-
-    private handleInputChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-
-        if (this !== undefined) {
-            this.setState({
-                [name]: value
-            });
-        }
-    }
-
-    private handleFilterChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const columnId = target.name;
-
-        if (this !== undefined) {
-            this.setState({
-                [columnId]: value
-            });
-        }
-
-        let filterUpdated: FilterDescriptor[] = [];
-
-        // Get the relevant column from the filtered array
-        const filteredColumn = this.state.filtered.filter((column) => column.id === columnId);
-
-        if (filteredColumn.length > 0) {
-            // Update the value that it is filtering on
-            filterUpdated = this.state.filtered.filter((column) => column.id !== columnId).concat({ "id": columnId, "value": value });
-        }
-        else {
-            // Add it to the array as new
-            filterUpdated = this.state.filtered.concat({ "id": columnId, "value": value });
-        }
-
-        this.setState({
-            filtered: filterUpdated
-        });
     }
 }
 

@@ -1,12 +1,11 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "axios";
+import axios from "../configs/axios";
 import { 
     FREIGHT_CODE_GET_ALL,
     FREIGHT_CODE_ADD,
     FREIGHT_CODE_UPDATE,
     FREIGHT_CODE_DELETE
 } from './../constants/ActionTypes';
-import { BASE_URL } from "../configs";
 import { freightCodeGetAllSuccess, freightCodeGetAllFailure } from '../actions/FreightCode';
 import { freightCodeAddSuccess, freightCodeAddFailure } from '../actions/FreightCode';
 import { freightCodeUpdateSuccess, freightCodeUpdateFailure } from '../actions/FreightCode';
@@ -21,14 +20,14 @@ function* freightCodeGetAllRequest(action:any) {
         const freightCodeList:any = yield call(freightCodeGetAllApi, action);
         yield put(freightCodeGetAllSuccess(freightCodeList));
     } catch (error) {
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(freightCodeGetAllFailure(error));
     }
 }
 
 export const freightCodeGetAllApi = (action:any) => {
 
-    const endpoint:string = BASE_URL + "/odata/FreightCodeSet";
+    const endpoint:string = "/odata/FreightCodeSet";
     const count:boolean = true;
     const top:string = action.payload.top;
     const skip:string = action.payload.skip;
@@ -59,7 +58,6 @@ export const freightCodeGetAllApi = (action:any) => {
 
     const url:string = endpoint + oDataParams; 
 
-    console.log("freightCodeGetAllApi: " + url);
     return axios.get(url);
 };
 
@@ -70,7 +68,7 @@ function* freightCodeAddRequest(action:any) {
         yield put(freightCodeAddSuccess(action.payload));
     } catch (error) {
         console.error(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(freightCodeAddFailure(error));
     }
 }
@@ -78,8 +76,7 @@ function* freightCodeAddRequest(action:any) {
 export const freightCodeAddApi = (action) => {
 
     const freightCode:FreightCode = action.payload;
-    const url:string = BASE_URL +  "/api/FreightCode/Add/";
-    console.log("freightCodeAddApi: " + url);
+    const url:string = "/api/FreightCode/Add/";
 
     return axios.post(url, freightCode);
 };
@@ -90,7 +87,7 @@ function* freightCodeUpdateRequest(action:any) {
         yield put(freightCodeUpdateSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(freightCodeUpdateFailure(error));
     }
   }
@@ -98,8 +95,7 @@ function* freightCodeUpdateRequest(action:any) {
 export const freightCodeUpdateApi = (action:any) => {
 
     const freightCode:FreightCode = action.payload;
-    const url:string = BASE_URL +  "/api/FreightCode/Update/";
-    console.log("freightCodeUpdateApi: " + url);
+    const url:string =  "/api/FreightCode/Update/";
 
     return axios.post(url, freightCode);
 };
@@ -110,7 +106,7 @@ function* freightCodeDeleteRequest(action:any) {
         yield put(freightCodeDeleteSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(freightCodeDeleteFailure(error));
     }
   }
@@ -119,8 +115,7 @@ function* freightCodeDeleteRequest(action:any) {
 export const freightCodeDeleteApi = (action:any) => {
 
     const freightCode:FreightCode = action.payload;
-    const url:string = BASE_URL +  "/api/FreightCode/Delete/" ;
-    console.log("freightCodeDeleteApi: " + url);
+    const url:string = "/api/FreightCode/Delete/" ;
 
     return axios.delete(url, {data:freightCode});
 };

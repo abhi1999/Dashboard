@@ -20,3 +20,14 @@ export const ITLELink_ChildDataKey_length = 50;
 export const ITLELink_ChildDirection_length = 1;
 export const ITLELink_ParentID_length = 105;
 export const ITLELink_ChildID_length = 105;
+
+export const kTLELink_TLELID="TLELID";
+export const kTLELink_ParDataType="ParDataType";
+export const kTLELink_ParDataKey="ParDataKey";
+export const kTLELink_ParDirection="ParDirection";
+export const kTLELink_ChildDataType="ChildDataType";
+export const kTLELink_ChildDataKey="ChildDataKey";
+export const kTLELink_ChildDirection="ChildDirection";
+export const kTLELink_CreatedDate="CreatedDate";
+export const kTLELink_ParentID="ParentID";
+export const kTLELink_ChildID="ChildID";

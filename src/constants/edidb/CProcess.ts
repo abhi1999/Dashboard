@@ -6,3 +6,6 @@ export class CProcess implements IProcess {
 }
 export const IProcess_procid_length = 20;
 export const IProcess_procname_length = 50;
+
+export const kProcess_procid="procid";
+export const kProcess_procname="procname";

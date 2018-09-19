@@ -8,3 +8,9 @@ export class CTLEFlow implements ITLEFlow {
     public constructor(init?:Partial<CTLEFlow>) { Object.assign(this, init); }
 }
 export const ITLEFlow_FlowDesc_length = 100;
+
+export const kTLEFlow_TLEFID="TLEFID";
+export const kTLEFlow_FlowDesc="FlowDesc";
+export const kTLEFlow_FlowOrder="FlowOrder";
+export const kTLEFlow_Active="Active";
+export const kTLEFlow_Restricted="Restricted";

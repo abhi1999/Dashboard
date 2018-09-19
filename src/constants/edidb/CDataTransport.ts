@@ -21,3 +21,15 @@ export const IDataTransport_DTServer_length = 256;
 export const IDataTransport_DTDomain_length = 80;
 export const IDataTransport_DTUser_length = 80;
 export const IDataTransport_DTPass_length = 80;
+
+export const kDataTransport_TransID="TransID";
+export const kDataTransport_TP_PartID="TP_PartID";
+export const kDataTransport_DTMethod="DTMethod";
+export const kDataTransport_DTIn="DTIn";
+export const kDataTransport_DTOut="DTOut";
+export const kDataTransport_DTServer="DTServer";
+export const kDataTransport_DTDomain="DTDomain";
+export const kDataTransport_DTUser="DTUser";
+export const kDataTransport_DTPass="DTPass";
+export const kDataTransport_DTCID="DTCID";
+export const kDataTransport_DTWeb_ERP_Flag="DTWeb_ERP_Flag";

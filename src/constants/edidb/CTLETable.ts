@@ -5,3 +5,6 @@ export class CTLETable implements ITLETable {
     public constructor(init?:Partial<CTLETable>) { Object.assign(this, init); }
 }
 export const ITLETable_Name_length = 30;
+
+export const kTLETable_DTID="DTID";
+export const kTLETable_Name="Name";

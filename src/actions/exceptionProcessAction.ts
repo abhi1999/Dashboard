@@ -1,5 +1,5 @@
 import Notifications from 'react-notification-system-redux';
-import { BASE_URL, SERVICES } from "./../configs/";
+import { SERVICES } from "./../configs/";
 import axios from "./../configs/axios";
 import {  
     ErroNotificationOptions,
@@ -9,7 +9,7 @@ import {loadDataError, loadDataState} from "./mainAction"
 
 export const loadExceptionByProcessLogs = () => (dispatch, getState)=> {
     dispatch(loadDataState(LOAD_EXCEPTION_BY_PROCESS_LOGS));
-    const url = BASE_URL + SERVICES.endpoints.errorLog;
+    const url = SERVICES.endpoints.errorLog;
     return axios.get(url)
                 .then((response:any)=>{
                     dispatch(loadExceptionByProcessLogsSuccess(response.data.value));

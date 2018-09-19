@@ -1,5 +1,5 @@
 import Notifications from 'react-notification-system-redux';
-import { BASE_URL, SERVICES } from "./../configs/";
+import { SERVICES } from "./../configs/";
 import axios from "./../configs/axios";
 import {  
     DATA_LOAD_ERROR,

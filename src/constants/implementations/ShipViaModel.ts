@@ -17,4 +17,5 @@ export default class ShipViaModel implements IShipVia {
     public constructor(init?: Partial<ShipViaModel>) {
         Object.assign(this, init);
     }
+
 }

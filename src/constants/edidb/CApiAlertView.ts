@@ -14,3 +14,11 @@ export const IApiAlertView_GroupName_length = 100;
 export const IApiAlertView_GroupDirection_length = 100;
 export const IApiAlertView_Caption_length = 100;
 export const IApiAlertView_AlertMessage_length = 80;
+
+export const kApiAlertView_Quantity="Quantity";
+export const kApiAlertView_AlertID="AlertID";
+export const kApiAlertView_GroupName="GroupName";
+export const kApiAlertView_GroupDirection="GroupDirection";
+export const kApiAlertView_Caption="Caption";
+export const kApiAlertView_AlertMessage="AlertMessage";
+export const kApiAlertView_GroupTile="GroupTile";

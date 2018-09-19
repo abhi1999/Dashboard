@@ -13,3 +13,13 @@ export class CEDIDocDataField implements IEDIDocDataField {
 }
 export const IEDIDocDataField_Group_ID_length = 50;
 export const IEDIDocDataField_Seg_ID_length = 50;
+
+export const kEDIDocDataField_UDID="UDID";
+export const kEDIDocDataField_Group_ID="Group_ID";
+export const kEDIDocDataField_Group_Count="Group_Count";
+export const kEDIDocDataField_Seg_ID="Seg_ID";
+export const kEDIDocDataField_Seg_Count="Seg_Count";
+export const kEDIDocDataField_Elem_No="Elem_No";
+export const kEDIDocDataField_Line_No="Line_No";
+export const kEDIDocDataField_UEDID="UEDID";
+export const kEDIDocDataField_PUEDID="PUEDID";

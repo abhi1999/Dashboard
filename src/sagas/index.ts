@@ -9,10 +9,22 @@ import variableSagas from "./Scheduler/VariableSaga";
 import settingSagas from "./Setting";
 import serviceSagas from "./Scheduler/ServiceSaga";
 import carrierSagas from "./CarrierSaga";
+import documentSagas from "./DocumentSaga";
 import errorCodeSagas from "./ErrorCode";
+import vpNetworkSagas from "./vpNetworkSaga";
 import freightCodeSagas from "./FreightCode";
 import tradeSagas from "./Trade";
-import kitTypeSagas from "./KitType"
+import kitTypeSagas from "./KitType";
+import shipToSagas from "./ShipTo";
+import packageSagas from "./Package";
+import itemSagas from './ItemSaga';
+import partnerDocGroupSagas from './PartnerDocGroupSaga';
+import pseudoTradeSagas from './PseudoTradeSaga'
+import packageLabelSagas from './PackageLabel'
+import apiTransObjectSagas from './ApiTransObjectSaga'
+import ediDocGroupSagas from './EdiDocGroupSaga'
+import companySettingSagas from './CompanySettingSaga'
+import acctPackageSagas from './AcctPackageSaga'
 
 export default function* rootSaga(getState:any) {
     yield all([
@@ -26,9 +38,21 @@ export default function* rootSaga(getState:any) {
         settingSagas(),
         serviceSagas(),
         carrierSagas(),
+        documentSagas(),
         errorCodeSagas(),
         freightCodeSagas(),
+        vpNetworkSagas(),
         tradeSagas(),
-        kitTypeSagas()
+        kitTypeSagas(),
+        shipToSagas(),
+        packageSagas(),
+        itemSagas(),
+        partnerDocGroupSagas(),
+        pseudoTradeSagas(),
+        packageLabelSagas(),
+        apiTransObjectSagas(),
+        ediDocGroupSagas(),
+        companySettingSagas(),
+        acctPackageSagas(),
     ]);
 }

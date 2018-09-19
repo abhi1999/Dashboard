@@ -2,12 +2,20 @@ import * as React from "react";
 import ReactTable from "react-table";
 import { FaTimesCircle, FaEdit, FaClone } from 'react-icons/fa';
 import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
-import { Input, Select } from 'antd';
-import { kitTypeGetAll } from "../../actions/KitTypeAction";
+import { Select } from 'antd';
+import { ToString } from '../../utils/Conversion';
+
+import {ButtonDropdown, Container, DropdownItem, DropdownMenu, DropdownToggle} from 'reactstrap';
+
 const Option = Select.Option;
 
 function TradeTableView(props) {
-    
+
+//                                <FaEdit onClick={() => props.tradeEdit(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
+  //                              <FaTimesCircle onClick={() => props.tradeDelete(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
+    //                            <FaClone onClick={() => props.tradeClone(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
+
+
     return (
         <div>
             <ReactTable
@@ -15,12 +23,19 @@ function TradeTableView(props) {
                     {
                         sortable: false,
                         filterable: false,
-                        width: 120,
+                        width: 50,
+                        resizable:false,
+                        className:'action-menu',
                         Cell: row => (
                             <div>
-                                <FaEdit onClick={() => props.tradeEdit(row.original)}  size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft: 12}}/>
-                                <FaTimesCircle onClick={() => props.tradeDelete(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft: 12}}/>
-                                <FaClone onClick={() => props.tradeClone(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft:12}}/>    
+                                <ButtonDropdown direction="right"  isOpen={props.actionMenuOpenFor_TP_PartID === row.original.TP_PartID } toggle={()=>{props.toggleActionMenu(row.original)}}>
+                                    <DropdownToggle caret={false} className="fa fa-ellipsis-v btn-toggle"/>
+                                    <DropdownMenu>
+                                        <DropdownItem onClick={() => props.tradeEdit(row.original)}>Edit</DropdownItem>
+                                        <DropdownItem onClick={() => props.tradeClone(row.original)}>Clone</DropdownItem>
+                                        <DropdownItem onClick={() => props.tradeDelete(row.original)}>Delete</DropdownItem>
+                                    </DropdownMenu>
+                                </ButtonDropdown>
                             </div>
                         )
                     },
@@ -47,48 +62,55 @@ function TradeTableView(props) {
                     {
                         Header: "Partner Type",
                         accessor: "KitTypeID",
-                        Cell:({row})=>{
-                            return(
-                                <div>{(props.partnerList.find(partner => partner.KitTypeID === row.KitTypeID) === undefined ? " " 
-                                : props.partnerList.find(partner => partner.KitTypeID === row.KitTypeID)!.KitTypeDesc)}</div>
+                        sortable: true,
+                        filterable: true,
+                        Cell: ({ row }) => {
+                            return (
+                                <div>{(props.partnerList.find(partner => partner.KitTypeID === row.KitTypeID) === undefined ? " "
+                                    : props.partnerList.find(partner => partner.KitTypeID === row.KitTypeID)!.KitTypeDesc)}</div>
                             )
                         },
                         Filter: ({ filter, onChange }) =>
-                            <Select 
+                            <Select
                                 style={{ width: "100%" }}
-                                value={filter ? filter.value : "all"}
+                                value={props.kitTypeID}
                                 onChange={props.handleKitTypeIDFilterChange}
-                                >
+                            >
                                 <Option key="all" value="all">All</Option>
-                                <Option key="0" value="0">Customer</Option>
-                                <Option key="1" value="1">Vendor</Option>
-                                <Option key="2" value="2">Warehouse</Option>
-                                <Option key="3" value="3">A/R Factor</Option>
-                                <Option key="4" value="4">Carrier</Option>
-                                {
-                                    /*
-                                props.kitType.kitTypeList.map((item:any) => {
+                                {props.partnerList.map((item) => {
                                     return (
-                                    <Option key={item.KitTypeID} value={item.KitTypeID}>{item.KitTypeDesc}</Option>
-                                    );
-                                })
-                                */
+                                        <Option key={item.KitTypeID} value={ToString(item.KitTypeID)}>{item.KitTypeDesc}</Option>
+                                    )})
                                 }
                             </Select>
                     },
                     {
                         Header: "Status",
-                        accessor:"TP_Status",
-                        Cell:({row})=>{
-                            return(
-                                <div>{(props.statusList.find(item => item.id === row.TP_Status) === undefined ? " " : 
-                                      props.statusList.find(item => item.id === row.TP_Status)!.status)}</div>
+                        accessor: "TP_Status",
+                        Cell: ({ row }) => {
+                            return (
+                                <div>{(props.statusList.find(item => item.id === row.TP_Status) === undefined ? " " :
+                                    props.statusList.find(item => item.id === row.TP_Status)!.status)}</div>
                             )
-                        }
+                        },
+                        Filter: ({ filter, onChange }) =>
+                            <Select
+                                style={{ width: "100%" }}
+                                value={props.tpStatus}
+                                onChange={props.handleStatusFilterChange}
+                            >
+                                <Option key="all" value="all">All</Option>
+                                {props.statusList.map((item) => {
+                                    return (
+                                        <Option key={item.id} value={item.id}>{item.status}</Option>
+                                    )
+                                })
+                                }
+                            </Select>
                     }
 
                 ]}
-                manual={false} 
+                manual={false}
                 data={props.list}
                 loading={props.loading}
                 sortable={true}
@@ -97,11 +119,11 @@ function TradeTableView(props) {
                 filterable={true}
                 filtered={props.filtered}
                 onFilteredChange={props.onFilteredChange}
-                defaultFilterMethod={(filter, row) => String(row[filter.id]).toLowerCase().includes(filter.value.toLowerCase())}
+                defaultFilterMethod={(filter, row) => ToString(row[filter.id]).toLowerCase().includes(ToString(filter.value).toLowerCase())}
                 showPagination={false}
                 pageSize={props.pageSize}
-                className="-striped -highlight"
-           />
+                className="-highlight table-container"
+            />
         </div>
     )
 }

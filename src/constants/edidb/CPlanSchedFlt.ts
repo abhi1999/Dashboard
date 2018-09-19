@@ -10,3 +10,10 @@ export class CPlanSchedFlt implements IPlanSchedFlt {
 }
 export const IPlanSchedFlt_userid_length = 50;
 export const IPlanSchedFlt_machineid_length = 50;
+
+export const kPlanSchedFlt_PSFID="PSFID";
+export const kPlanSchedFlt_PSIID="PSIID";
+export const kPlanSchedFlt_dtstamp="dtstamp";
+export const kPlanSchedFlt_userid="userid";
+export const kPlanSchedFlt_machineid="machineid";
+export const kPlanSchedFlt_PID="PID";

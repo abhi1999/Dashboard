@@ -23,3 +23,15 @@ export const ITradeKit_TP_In850_length = 1;
 export const ITradeKit_TP_Out850_length = 1;
 export const ITradeKit_TP_Asn_length = 1;
 export const ITradeKit_description_length = 500;
+
+export const kTradeKit_TP_Name="TP_Name";
+export const kTradeKit_TP_PartQ="TP_PartQ";
+export const kTradeKit_TP_PartID="TP_PartID";
+export const kTradeKit_TP_GroupID="TP_GroupID";
+export const kTradeKit_TP_ID="TP_ID";
+export const kTradeKit_KitTypeID="KitTypeID";
+export const kTradeKit_KitTypeDesc="KitTypeDesc";
+export const kTradeKit_TP_In850="TP_In850";
+export const kTradeKit_TP_Out850="TP_Out850";
+export const kTradeKit_TP_Asn="TP_Asn";
+export const kTradeKit_description="description";

@@ -8,3 +8,7 @@ export class CCode implements ICode {
 export const ICode_functional_length = 100;
 export const ICode_code1_length = 100;
 export const ICode_description_length = 500;
+
+export const kCode_functional="functional";
+export const kCode_code1="code1";
+export const kCode_description="description";

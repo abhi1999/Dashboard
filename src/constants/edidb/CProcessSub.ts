@@ -8,3 +8,7 @@ export class CProcessSub implements IProcessSub {
 export const IProcessSub_procid_length = 20;
 export const IProcessSub_subprocid_length = 20;
 export const IProcessSub_subprocname_length = 50;
+
+export const kProcessSub_procid="procid";
+export const kProcessSub_subprocid="subprocid";
+export const kProcessSub_subprocname="subprocname";

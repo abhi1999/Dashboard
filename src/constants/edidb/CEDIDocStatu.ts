@@ -7,3 +7,7 @@ export class CEDIDocStatu implements IEDIDocStatu {
 }
 export const IEDIDocStatu_Direction_length = 1;
 export const IEDIDocStatu_Status_length = 1;
+
+export const kEDIDocStatu_UDID="UDID";
+export const kEDIDocStatu_Direction="Direction";
+export const kEDIDocStatu_Status="Status";

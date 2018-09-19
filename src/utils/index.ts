@@ -64,3 +64,7 @@ const getNextColor=(originalCounter:number)=>{
     counter ++;
     return {color, counter};
 }
+
+export function ShowHelp(key : string) {
+    window.open("http://edidocumentation.com/docs/vp4/Vantage_Point_4_User_Manual.htm" + key);
+}

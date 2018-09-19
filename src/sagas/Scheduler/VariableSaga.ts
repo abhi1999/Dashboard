@@ -1,12 +1,11 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "axios";
+import { axiosSched } from '../../configs/axios'
 import { 
     VARIABLE_GET_ALL,
     VARIABLE_ADD,
     VARIABLE_UPDATE,
     VARIABLE_DELETE
 } from '../../constants/ActionTypes';
-import { SCHEDULER_URL } from "../../configs";
 import { variableGetAllSuccess, variableGetAllFailure } from '../../actions/Scheduler/VariableAction';
 import { variableAddSuccess, variableAddFailure } from '../../actions/Scheduler/VariableAction';
 import { variableUpdateSuccess, variableUpdateFailure } from '../../actions/Scheduler/VariableAction';
@@ -21,18 +20,17 @@ function* variableGetAllRequest() {
         yield put(variableGetAllSuccess(variableList));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(variableGetAllFailure(error));
     }
 }
 
 export const variableGetAllApi = () => {
 
-    const endpoint:string = SCHEDULER_URL + "/api/workflow/config/variables";
+    const endpoint:string = "/api/workflow/config/variables";
     const url:string = endpoint;
-    console.log("variableGetAllApi: " + url);
 
-    return axios.get(url);
+    return axiosSched.get(url);
 };
 
 function* variableAddRequest(action) {
@@ -41,7 +39,7 @@ function* variableAddRequest(action) {
         yield put(variableAddSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(variableAddFailure(error));
     }
 }
@@ -49,10 +47,9 @@ function* variableAddRequest(action) {
 export const variableAddApi = (action) => {
 
     const variable:Variable = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/variables";
-    console.log("variableAddApi: " + url);
+    const url:string =  "/api/workflow/config/variables";
 
-    return axios.post(url, variable);
+    return axiosSched.post(url, variable);
 };
 
 function* variableUpdateRequest(action) {
@@ -61,7 +58,7 @@ function* variableUpdateRequest(action) {
         yield put(variableUpdateSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(variableUpdateFailure(error));
     }
   }
@@ -69,10 +66,9 @@ function* variableUpdateRequest(action) {
 export const variableUpdateApi = (action) => {
 
     const variable:Variable = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/variables";
-    console.log("variableUpdateApi: " + url);
+    const url:string = "/api/workflow/config/variables";
 
-    return axios.put(url, variable);
+    return axiosSched.put(url, variable);
 };
 
 function* variableDeleteRequest(action) {
@@ -81,7 +77,7 @@ function* variableDeleteRequest(action) {
         yield put(variableDeleteSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(variableDeleteFailure(error));
     }
   }
@@ -89,10 +85,9 @@ function* variableDeleteRequest(action) {
 export const variableDeleteApi = (action) => {
 
     const variable:Variable = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/variables/" + variable.Id + "/" + variable.ClientId + "/" + variable.LastModified;
-    console.log("variableDeleteApi: " + url);
+    const url:string = "/api/workflow/config/variables/" + variable.Id + "/" + variable.ClientId + "/" + variable.LastModified;
 
-    return axios.delete(url);
+    return axiosSched.delete(url);
 };
 
 export default function* rootSaga() {

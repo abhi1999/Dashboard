@@ -5,3 +5,6 @@ export class CApiTopErrorLog implements IApiTopErrorLog {
     public constructor(init?:Partial<CApiTopErrorLog>) { Object.assign(this, init); }
 }
 export const IApiTopErrorLog_LogProcess_length = 50;
+
+export const kApiTopErrorLog_LogProcess="LogProcess";
+export const kApiTopErrorLog_Count="Count";

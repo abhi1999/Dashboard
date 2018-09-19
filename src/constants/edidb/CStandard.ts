@@ -18,3 +18,12 @@ export const IStandard_Std_Pos25_length = 3;
 export const IStandard_Std_Pos26_length = 3;
 export const IStandard_Std_Pos305_length = 12;
 export const IStandard_Std_Pos303_length = 1;
+
+export const kStandard_Std_ID="Std_ID";
+export const kStandard_Std_Pos10="Std_Pos10";
+export const kStandard_Std_Pos19="Std_Pos19";
+export const kStandard_Std_Pos24="Std_Pos24";
+export const kStandard_Std_Pos25="Std_Pos25";
+export const kStandard_Std_Pos26="Std_Pos26";
+export const kStandard_Std_Pos305="Std_Pos305";
+export const kStandard_Std_Pos303="Std_Pos303";

@@ -18,3 +18,12 @@ export const IPartner_GroupID_length = 30;
 export const IPartner_Van_ID_length = 10;
 export const IPartner_TestProdInd_length = 1;
 export const IPartner_CipherKey_length = 80;
+
+export const kPartner_TP_PartID="TP_PartID";
+export const kPartner_DGID="DGID";
+export const kPartner_PartnerQual="PartnerQual";
+export const kPartner_PartnerID="PartnerID";
+export const kPartner_GroupID="GroupID";
+export const kPartner_Van_ID="Van_ID";
+export const kPartner_TestProdInd="TestProdInd";
+export const kPartner_CipherKey="CipherKey";

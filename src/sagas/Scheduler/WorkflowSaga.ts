@@ -1,12 +1,12 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "axios";
+import { axiosSched } from '../../configs/axios'
 import { 
     WORKFLOW_GET_ALL,
     WORKFLOW_ADD,
     WORKFLOW_UPDATE,
     WORKFLOW_DELETE
 } from '../../constants/ActionTypes';
-import { SCHEDULER_URL } from "../../configs";
+
 import { taskGetAllApi } from './TaskSaga';
 import { taskGetAllSuccess } from '../../actions/Scheduler/TaskAction';
 import { workflowGetAllSuccess, workflowGetAllFailure } from '../../actions/Scheduler/WorkflowAction';
@@ -26,18 +26,17 @@ function* workflowGetAllRequest() {
         yield put(workflowGetAllSuccess(workflowList));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(workflowGetAllFailure(error));
     }
 }
 
 export const workflowGetAllApi = () => {
 
-    const endpoint:string = SCHEDULER_URL + "/api/workflow/config/workflows";
+    const endpoint:string = "/api/workflow/config/workflows";
     const url:string = endpoint;
-    console.log("workflowGetAllApi: " + url);
 
-    return axios.get(url);
+    return axiosSched.get(url);
 };
 
 function* workflowAddRequest(action) {
@@ -46,7 +45,7 @@ function* workflowAddRequest(action) {
         yield put(workflowAddSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(workflowAddFailure(error));
     }
 }
@@ -54,10 +53,9 @@ function* workflowAddRequest(action) {
 export const workflowAddApi = (action) => {
 
     const workflow:Workflow = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/workflows";
-    console.log("workflowAddApi: " + url);
+    const url:string = "/api/workflow/config/workflows";
 
-    return axios.post(url, workflow);
+    return axiosSched.post(url, workflow);
 };
 
 function* workflowUpdateRequest(action) {
@@ -66,7 +64,7 @@ function* workflowUpdateRequest(action) {
         yield put(workflowUpdateSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(workflowUpdateFailure(error));
     }
   }
@@ -74,10 +72,9 @@ function* workflowUpdateRequest(action) {
 export const workflowUpdateApi = (action) => {
 
     const workflow:Workflow = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/workflows";
-    console.log("workflowUpdateApi: " + url);
+    const url:string = "/api/workflow/config/workflows";
 
-    return axios.put(url, workflow);
+    return axiosSched.put(url, workflow);
 };
 
 function* workflowDeleteRequest(action) {
@@ -86,7 +83,7 @@ function* workflowDeleteRequest(action) {
         yield put(workflowDeleteSuccess(action.payload));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(workflowDeleteFailure(error));
     }
   }
@@ -94,10 +91,9 @@ function* workflowDeleteRequest(action) {
 export const workflowDeleteApi = (action) => {
 
     const workflow:Workflow = action.payload;
-    const url:string = SCHEDULER_URL +  "/api/workflow/config/workflows/" + workflow.Id + "/" + workflow.ClientId + "/" + workflow.LastModified;
-    console.log("workflowDeleteApi: " + url);
+    const url:string = "/api/workflow/config/workflows/" + workflow.Id + "/" + workflow.ClientId + "/" + workflow.LastModified;
 
-    return axios.delete(url);
+    return axiosSched.delete(url);
 };
 
 export default function* rootSaga() {

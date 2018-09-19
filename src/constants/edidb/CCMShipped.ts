@@ -22,3 +22,15 @@ export const ICMShipped_reason_length = 80;
 export const ICMShipped_reference_length = 60;
 export const ICMShipped_userid_length = 50;
 export const ICMShipped_machineid_length = 50;
+
+export const kCMShipped_cusno="cusno";
+export const kCMShipped_shiptoid="shiptoid";
+export const kCMShipped_itemid="itemid";
+export const kCMShipped_purchaseorderno="purchaseorderno";
+export const kCMShipped_shipdate="shipdate";
+export const kCMShipped_reason="reason";
+export const kCMShipped_reference="reference";
+export const kCMShipped_userid="userid";
+export const kCMShipped_machineid="machineid";
+export const kCMShipped_qty="qty";
+export const kCMShipped_vpid="vpid";

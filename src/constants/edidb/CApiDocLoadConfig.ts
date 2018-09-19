@@ -16,3 +16,12 @@ export const IApiDocLoadConfig_TP_PartID_length = 30;
 export const IApiDocLoadConfig_Doc_Group_length = 50;
 export const IApiDocLoadConfig_Doc_Name_length = 10;
 export const IApiDocLoadConfig_TP_Name_length = 30;
+
+export const kApiDocLoadConfig_DLID="DLID";
+export const kApiDocLoadConfig_DGID="DGID";
+export const kApiDocLoadConfig_DocType="DocType";
+export const kApiDocLoadConfig_TP_PartID="TP_PartID";
+export const kApiDocLoadConfig_Doc_Group="Doc_Group";
+export const kApiDocLoadConfig_Doc_Name="Doc_Name";
+export const kApiDocLoadConfig_TP_Name="TP_Name";
+export const kApiDocLoadConfig_ProcessFlag="ProcessFlag";

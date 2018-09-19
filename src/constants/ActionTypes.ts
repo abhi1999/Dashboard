@@ -66,6 +66,32 @@ export const NETWORK_DELETE = 'network_delete';
 export const NETWORK_DELETE_SUCCESS = 'network_delete_success';
 export const NETWORK_DELETE_FAILURE = 'network_delete_failure';
 
+export const COMPANYSETTINGS_GET_ALL = 'companysettings_get_all';
+export const COMPANYSETTINGS_GET_ALL_SUCCESS = 'companysettings_get_all_success';
+export const COMPANYSETTINGS_GET_ALL_FAILURE = 'companysettings_get_all_failure';
+export const COMPANYSETTINGS_ADD = 'companysettings_add';
+export const COMPANYSETTINGS_ADD_SUCCESS = 'companysettings_add_success';
+export const COMPANYSETTINGS_ADD_FAILURE = 'companysettings_add_failure';
+export const COMPANYSETTINGS_UPDATE = 'companysettings_update';
+export const COMPANYSETTINGS_UPDATE_SUCCESS = 'companysettings_update_success';
+export const COMPANYSETTINGS_UPDATE_FAILURE = 'companysettings_update_failure';
+export const COMPANYSETTINGS_DELETE = 'companysettings_delete';
+export const COMPANYSETTINGS_DELETE_SUCCESS = 'companysettings_delete_success';
+export const COMPANYSETTINGS_DELETE_FAILURE = 'companysettings_delete_failure';
+
+export const VPNETWORK_GET_ALL = 'vpnetwork_get_all';
+export const VPNETWORK_GET_ALL_SUCCESS = 'vpnetwork_get_all_success';
+export const VPNETWORK_GET_ALL_FAILURE = 'vpnetwork_get_all_failure';
+export const VPNETWORK_ADD = 'vpnetwork_add';
+export const VPNETWORK_ADD_SUCCESS = 'vpnetwork_add_success';
+export const VPNETWORK_ADD_FAILURE = 'vpnetwork_add_failure';
+export const VPNETWORK_UPDATE = 'vpnetwork_update';
+export const VPNETWORK_UPDATE_SUCCESS = 'vpnetwork_update_success';
+export const VPNETWORK_UPDATE_FAILURE = 'vpnetwork_update_failure';
+export const VPNETWORK_DELETE = 'vpnetwork_delete';
+export const VPNETWORK_DELETE_SUCCESS = 'vpnetwork_delete_success';
+export const VPNETWORK_DELETE_FAILURE = 'vpnetwork_delete_failure';
+
 export const DATABASE_GET_ALL = 'database_get_all';
 export const DATABASE_GET_ALL_SUCCESS = 'database_get_all_success';
 export const DATABASE_GET_ALL_FAILURE = 'database_get_all_failure';
@@ -164,6 +190,19 @@ export const CARRIER_DELETE = 'carrier_delete';
 export const CARRIER_DELETE_SUCCESS = 'carrier_delete_success';
 export const CARRIER_DELETE_FAILURE = 'carrier_delete_failure';
 
+export const DOCUMENT_GET_ALL = 'document_get_all';
+export const DOCUMENT_GET_ALL_SUCCESS = 'document_get_all_success';
+export const DOCUMENT_GET_ALL_FAILURE = 'document_get_all_failure';
+export const DOCUMENT_ADD = 'document_add';
+export const DOCUMENT_ADD_SUCCESS = 'document_add_success';
+export const DOCUMENT_ADD_FAILURE = 'document_add_failure';
+export const DOCUMENT_UPDATE = 'document_update';
+export const DOCUMENT_UPDATE_SUCCESS = 'document_update_success';
+export const DOCUMENT_UPDATE_FAILURE = 'document_update_failure';
+export const DOCUMENT_DELETE = 'document_delete';
+export const DOCUMENT_DELETE_SUCCESS = 'document_delete_success';
+export const DOCUMENT_DELETE_FAILURE = 'document_delete_failure';
+
 export const ERRORCODE_GET_ALL = 'errorcode_get_all';
 export const ERRORCODE_GET_ALL_SUCCESS = 'errorcode_get_all_success';
 export const ERRORCODE_GET_ALL_FAILURE = 'errorcode_get_all_failure';
@@ -190,16 +229,89 @@ export const FREIGHT_CODE_DELETE = 'freight_code_delete';
 export const FREIGHT_CODE_DELETE_SUCCESS = 'freight_code_delete_success';
 export const FREIGHT_CODE_DELETE_FAILURE = 'freight_code_delete_failure';
 
+export const ITEM_GET_ALL = 'item_get_all';
+export const ITEM_GET_ALL_SUCCESS = 'item_get_all_success';
+export const ITEM_GET_ALL_FAILURE = 'item_get_all_failure';
+export const ITEM_ADD = 'item_add';
+export const ITEM_ADD_SUCCESS = 'item_add_success';
+export const ITEM_ADD_FAILURE = 'item_add_failure';
+export const ITEM_UPDATE = 'item_update';
+export const ITEM_UPDATE_SUCCESS = 'item_update_success';
+export const ITEM_UPDATE_FAILURE = 'item_update_failure';
+export const ITEM_DELETE = 'item_delete';
+export const ITEM_DELETE_SUCCESS = 'item_delete_success';
+export const ITEM_DELETE_FAILURE = 'item_delete_failure';
+
 export const TRADE_GET_ALL  = 'trade_get_all';
 export const TRADE_GET_ALL_SUCCESS = 'trade_get_all_success';
 export const TRADE_GET_ALL_FAILURE = 'trade_get_all_failure';
+export const TRADE_ADD = 'trade_add';
+export const TRADE_ADD_SUCCESS = 'trade_add_success';
+export const TRADE_ADD_FAILURE = 'trade_add_failure';
 export const TRADE_UPDATE = 'trade_update';
 export const TRADE_UPDATE_SUCCESS = 'trade_update_success';
 export const TRADE_UPDATE_FAILURE = 'trade_update_failure';
 export const TRADE_DELETE = 'trade_delete';
 export const TRADE_DELETE_SUCCESS = 'trade_delete_success';
 export const TRADE_DELETE_FAILURE = 'trade_delete_failure';
+export const TRADE_UPDATE_MAPS = 'trade_update_maps';
+export const TRADE_UPDATE_MAPS_SUCCESS = 'trade_update_maps_success';
+export const TRADE_UPDATE_MAPS_FAILURE = 'trade_update_maps_failure';
 
 export const KIT_TYPE_GET_ALL  = 'kit_type_get_all';
 export const KIT_TYPE_GET_ALL_SUCCESS = 'kit_type_get_all_success';
 export const KIT_TYPE_GET_ALL_FAILURE = 'kit_type_get_all_failure';
+
+export const PACKAGE_GET_ALL  = 'package_get_all';
+export const PACKAGE_GET_ALL_SUCCESS = 'package_get_all_success';
+export const PACKAGE_GET_ALL_FAILURE = 'package_get_all_failure';
+
+export const PACKAGE_LABEL_GET_ALL = "package_label_get_all"
+export const PACKAGE_LABEL_GET_ALL_SUCCESS = 'package_label_get_all_success'
+export const PACKAGE_LABEL_GET_ALL_FAILURE = 'package_label_get_all_failure'
+
+export const PSEUDO_TRADE_GET_ALL = "pseudo_trade_get_all"
+export const PSEUDO_TRADE_GET_ALL_SUCCESS = "pseudo_trade_get_all_success"
+export const PSEUDO_TRADE_GET_ALL_FAILURE = "pseudo_trade_get_all_failure"
+
+export const PARTNER_DOC_GROUP_GET_ALL = "partner_doc_group_get_all"
+export const PARTNER_DOC_GROUP_GET_ALL_SUCCESS = "partner_doc_group_get_all_success"
+export const PARTNER_DOC_GROUP_GET_ALL_FAILURE = "partner_doc_group_get_all_failure"
+export const PARTNER_DOC_GROUP_ADD = 'partner_doc_group_add';
+export const PARTNER_DOC_GROUP_ADD_SUCCESS = 'partner_doc_group_add_success';
+export const PARTNER_DOC_GROUP_ADD_FAILURE = 'partner_doc_group_add_failure';
+export const PARTNER_DOC_GROUP_UPDATE = 'partner_doc_group_update';
+export const PARTNER_DOC_GROUP_UPDATE_SUCCESS = 'partner_doc_group_update_sucess';
+export const PARTNER_DOC_GROUP_UPDATE_FAILURE = 'partner_doc_group_update_failure';
+export const PARTNER_DOC_GROUP_DELETE = 'partner_doc_group_delete';
+export const PARTNER_DOC_GROUP_DELETE_SUCCESS = 'partner_doc_group_delete_success';
+export const PARTNER_DOC_GROUP_DELETE_FAILURE = 'partner_doc_group_delete_failure';
+
+export const API_TRANS_OBJECT_GET_ALL = "api_trans_object_get_all"
+export const API_TRANS_OBJECT_GET_ALL_SUCCESS = "api_trans_object_get_all_success"
+export const API_TRANS_OBJECT_GET_ALL_FAILURE = "api_trans_object_get_all_failure"
+
+export const TRADE_NETWORK_GET_ALL = "trade_network_get_all"
+export const TRADE_NETWORK_GET_ALL_SUCCESS = "trade_network_get_all_success"
+export const TRADE_NETWORK_GET_ALL_FAILURE = "trade_network_get_all_failure"
+
+export const SHIPTO_GET_ALL  = 'shipto_get_all';
+export const SHIPTO_GET_ALL_SUCCESS = 'shipto_get_all_success';
+export const SHIPTO_GET_ALL_FAILURE = 'shipto_get_all_failure';
+export const SHIPTO_ADD = "shipto_add";
+export const SHIPTO_ADD_SUCCESS = "shipto_add_success";
+export const SHIPTO_ADD_FAILURE = "shipto_add_failure";
+export const SHIPTO_UPDATE = 'shipto_update';
+export const SHIPTO_UPDATE_SUCCESS = 'shipto_update_success';
+export const SHIPTO_UPDATE_FAILURE = 'shipto_update_failure';
+export const SHIPTO_DELETE = 'shipto_delete';
+export const SHIPTO_DELETE_SUCCESS = 'shipto_delete_success';
+export const SHIPTO_DELETE_FAILURE = 'shipto_delete_failure';
+
+export const EDI_DOC_GROUP_GET_ALL  = 'edi_doc_group_get_all';
+export const EDI_DOC_GROUP_GET_ALL_SUCCESS = 'edi_doc_group_get_all_success';
+export const EDI_DOC_GROUP_GET_ALL_FAILURE = 'edi_doc_group_get_all_failure';
+
+export const ACCT_PACKAGE_GET_ALL = "acct_package_get_all" 
+export const ACCT_PACKAGE_GET_ALL_SUCCESS = "acct_package_get_all_success" 
+export const ACCT_PACKAGE_GET_ALL_FAILURE = "acct_package_get_all_failure" 

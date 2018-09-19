@@ -18,3 +18,14 @@ export const IEDIDocId_GCN_length = 50;
 export const IEDIDocId_TCN_length = 50;
 export const IEDIDocId_Doc_ID_length = 50;
 export const IEDIDocId_Seperator_length = 10;
+
+export const kEDIDocId_TPID="TPID";
+export const kEDIDocId_ICN="ICN";
+export const kEDIDocId_GCN="GCN";
+export const kEDIDocId_TCN="TCN";
+export const kEDIDocId_Doc_ID="Doc_ID";
+export const kEDIDocId_Doc_Count="Doc_Count";
+export const kEDIDocId_UDID="UDID";
+export const kEDIDocId_ImportDate="ImportDate";
+export const kEDIDocId_Seperator="Seperator";
+export const kEDIDocId_SDID="SDID";

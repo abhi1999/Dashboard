@@ -2,27 +2,36 @@ import * as React from "react";
 import { connect } from 'react-redux'
 import _ from 'lodash';
 import { toastError } from '../../actions/Scheduler/ServiceAction';
-import { Card } from 'reactstrap';
+import { Card, Container } from 'reactstrap';
 import FlexView from 'react-flexview';
-import uuid from 'uuid-v4';
 import { FaSyncAlt, FaPlusCircle, FaTable, FaList } from 'react-icons/fa';
 import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
-import { Pagination, Input } from 'antd';
+import { Pagination, Modal, Input } from 'antd';
 import { tradeGetAll, tradeDelete } from './../../actions/Trade';
-import { ITrade } from "../../constants/edidb";
+import Media from "react-media";
+// import { ITrade } from "../../constants/edidb";
+import { CTrade } from "../../constants/edidb/CTrade";
 import ODataParams from '../../constants/params/oDataParams';
 import SortDescriptor from '../../constants/params/sortDescriptor';
 import FilterDescriptor from '../../constants/params/filterDescriptor';
+import { ToString } from '../../utils/Conversion';
 import TradeCardView from "./TradeCardView"
 import TradeTableView from "./TradeTableView"
-// import FreightCodeDetailView from "./FreightCodeDetailView"
+import TradeDetailView from "./TradeDetailView"
+import TradeCloneView from "./TradeCloneView"
 
-const statusList = [ { id:"I", status:"Inactive"}, { id:"P", status:"Production"}, {id:"T", status:"Test"}]
+
+// import TradeDetailViewReact from "./TradeDetailViewReact"
+// import Trade from "../../constants/implementations/Trade";
+
+const statusList = [{ id: "I", status: "Inactive" }, { id: "P", status: "Production" }, { id: "T", status: "Test" }]
 
 export interface ITradeViewProps {
     // redux
     trade: any,
     kitType: any,
+    ediDocGroupSet:any,
+    tradeNetworkSet:any,
     tradeGetAll: any,
     tradeDelete: any,
     toastError: any,
@@ -33,10 +42,13 @@ export interface ITradeViewState {
     pageSize: number,
     page: number,
     modal: boolean,
-    tradeEdit: {},
+    clone: boolean,
+    tradeEdit: CTrade,
+    tradeClone: CTrade,
     isNew: boolean,
     collapseAddNew: boolean,
-    tradeList: ITrade[],
+    // tradeList: ITrade[],
+    tradeList: CTrade[],
     tradeListCount: number,
     loading: boolean,
     sorted: SortDescriptor[],
@@ -47,9 +59,10 @@ export interface ITradeViewState {
     TP_ID: string,
     TP_Name: string,
     TP_GroupID: string,
-    KitTypeID: number,
-    TP_Status:string
-    kitTypeIDFilter:string,
+    // KitTypeID: number,
+    KitTypeID: string,
+    TP_Status: string
+    // kitTypeIDFilter: string,
     [propName: string]: any, // This is so we can set by name dynamically
 }
 
@@ -58,10 +71,13 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
         super(props)
         this.state = {
             viewMode: 'cards',
+            actionMenuOpenFor_TP_PartID:'',
             pageSize: 10,
             page: 1,
             modal: false,
-            tradeEdit:{},
+            clone: false,
+            tradeEdit: new CTrade(),
+            tradeClone: new CTrade(),
             isNew: false,
             collapseAddNew: false,
             tradeList: [],
@@ -75,9 +91,10 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
             TP_ID: "",
             TP_Name: "",
             TP_GroupID: "",
-            KitTypeID: 0,
-            TP_Status:"",
-            kitTypeIDFilter:""
+            // KitTypeID: 0,
+            KitTypeID: "All",
+            TP_Status: "All",
+            // kitTypeIDFilter: ""
         }
         this.query = this.query.bind(this);
         this.requery = this.requery.bind(this);
@@ -87,7 +104,10 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
         this.onFilteredChange = this.onFilteredChange.bind(this);
         this.toggleSortMode = this.toggleSortMode.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.handleStatusFilterChange = this.handleStatusFilterChange.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
+        this.toggleClone = this.toggleClone.bind(this);
+        this.toggleViewMode = this.toggleViewMode.bind(this);
         this.tradeEdit = this.tradeEdit.bind(this);
         this.tradeDelete = this.tradeDelete.bind(this);
         this.tradeClone = this.tradeClone.bind(this);
@@ -106,7 +126,7 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
         else if (prevState.pageSize !== this.state.pageSize) {
             this.query()
         }
-        else if (prevState.page !== this.state.page){
+        else if (prevState.page !== this.state.page) {
             this.query()
         }
     }
@@ -120,61 +140,149 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
     }
 
     public render() {
-        const { loading, pageSize, sorted, filtered, kitTypeIDFilter } = this.state;
+        const { loading, pageSize, sorted, filtered, modal } = this.state;
         const partnerList = this.props.kitType.kitTypeList;
-
+        
         let { tradeList } = this.state;
+        // let viewComponent;
+
+        if (modal) {
+
+            const networkList = this.props.tradeNetworkSet.tradeNetworkList
+            const ediDocGroupList = this.props.ediDocGroupSet.ediDocGroupList;
+
+            return (
+                <TradeDetailView itemId={this.state.tradeEdit.TP_PartID}
+                    item={this.state.tradeEdit}
+                    isNew={this.state.isNew}
+                    toggleViewMode={this.toggleModal}
+                    statusList={statusList}
+                    partnerList={partnerList}
+                    networkList={networkList}
+                    ediDocGroupList={ediDocGroupList}
+                />
+            )
+        }
 
         if (filtered.length > 0) {   // Filter on each column with a value
-             filtered.map((column) => {
-                 if(column.id==="KitTypeID")
-                 {
-                    tradeList = tradeList.filter(item => item[column.id]===column.value);
-                 
-                 }
-                 else
-                 {
-                    tradeList = tradeList.filter(item => _.includes(item[column.id].toLowerCase(), column.value.toLowerCase()));
-                 }
+            filtered.map((column) => {
+                tradeList = tradeList.filter(item => _.includes(ToString(item[column.id]).toLowerCase(), ToString(column.value).toLowerCase()));
             });
-         }
-
-        // tradeList = tradeList.map( trade => (
-        //                             {...trade, 
-        //                              TP_Status: (statusList.find(item => item.id === trade.TP_Status) === undefined ? " " : 
-        //                                          statusList.find(item => item.id === trade.TP_Status)!.status),
-        //                              KitTypeID: (partnerList.find(partner => partner.KitTypeID === trade.KitTypeID) === undefined ? " " :
-        //                                          partnerList.find(partner => partner.KitTypeID === trade.KitTypeID)!.KitTypeDesc)
-        //                             }))
-
-        // tradeList = tradeList.map( trade => ({...trade, 
-        //                                       TP_Status: (statusList.filter(item => item.id === trade.TP_Status)[0] === undefined ? " "  : 
-        //                                                   statusList.filter(item => item.id === trade.TP_Status)[0].status),
-        //                                       KitTypeID: (partnerList.filter(partner => partner.KitTypeID === trade.KitTypeID)[0] === undefined ? " " : 
-        //                                                   partnerList.filter(partner => partner.KitTypeID === trade.KitTypeID)[0].KitTypeDesc)
-        //                                     }))
+        }
 
         if (sorted.length > 0) {   // Implement the multi-sort with lodash
             tradeList = _.orderBy(tradeList, sorted.map((column) => column.id), sorted.map((column) => column.desc ? "desc" : "asc"));
         }
 
-        let toggleButton;
+        // let toggleButton;
         const tablePageSize = Math.min(tradeList.length, pageSize); // Only show rows with data in the table;
 
-        if (this.state.viewMode === 'cards') {
-            toggleButton = <FaTable onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
-        }
-        else {
-            toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
-        }
+        // if (this.state.viewMode === 'cards') {
+        //     toggleButton = <FaTable onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
+        //     viewComponent = <TradeCardView list={tradeList}
+        //         tradeListCount={this.state.tradeListCount}
+        //         sorted={sorted}
+        //         toggleSortMode={this.toggleSortMode}
+        //         handleFilterChange={this.handleFilterChange}
+        //         tradeEdit={this.tradeEdit}
+        //         tradeDelete={this.tradeDelete}
+        //         tradeClone={this.tradeClone}
+        //         kitTypeID={this.state.KitTypeID}
+        //         partnerList={partnerList}
+        //         handleKitTypeIDFilterChange={this.handleKitTypeIDFilterChange}
+        //         tpStatus={this.state.TP_Status}
+        //         statusList={statusList}
+        //         handleStatusFilterChange={this.handleStatusFilterChange}
+        //     />
+        // }
+        // else if (this.state.viewMode === 'table') {
+        //     toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
+        //     viewComponent = <TradeTableView list={tradeList}
+        //         loading={loading}
+        //         sorted={sorted}
+        //         filtered={filtered}
+        //         pageSize={tablePageSize}
+        //         onSortChange={this.onSortedChange}
+        //         onFilteredChange={this.onFilteredChange}
+        //         tradeEdit={this.tradeEdit}
+        //         tradeDelete={this.tradeDelete}
+        //         tradeClone={this.tradeClone}
+        //         kitTypeID={this.state.KitTypeID}
+        //         partnerList={partnerList}
+        //         handleKitTypeIDFilterChange={this.handleKitTypeIDFilterChange}
+        //         tpStatus={this.state.TP_Status}
+        //         statusList={statusList}
+        //         handleStatusFilterChange={this.handleStatusFilterChange}
+        //     />
+        // }
+        // else if (this.state.viewMode === 'detail') {
+        //     toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
+        //     viewComponent = <TradeDetailView itemId={this.state.tradeEdit.TP_PartID}
+        //         item={this.state.tradeEdit}
+        //         isNew={this.state.isNew}
+        //         toggleViewMode={this.toggleViewMode}
+        //         statusList={statusList}
+        //         partnerList={partnerList}
+        //     />;
+        // }
+        // else {
+        //     toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
+        //     viewComponent = <TradeDetailViewReact itemId={this.state.tradeEdit.TP_PartID}
+        //         item={this.state.tradeEdit}
+        //         isNew={this.state.isNew}
+        //         toggleViewMode={this.toggleViewMode} />;
+        // }
         return (
-            <div>
-                <Card body={true} outline={true} style={{ width: '100%' }}>
-                    <FlexView width='100%' wrap={true} style={{ marginBottom: 12 }}>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="40" wrap={true}>
-                            <FaSyncAlt onClick={() => this.requery()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                        </FlexView>
-                        <FlexView hAlignContent="center" vAlignContent="center" grow={true} wrap={true}>
+            <Container>
+                <div className="header-icons">
+                    <span onClick={()=>this.requery()} className="fa fa-refresh"/>
+                    <span className="fa fa-gear"/>
+                </div>
+                <Media query={{ maxWidth: 768 }}>
+                    {matches =>
+                        matches ?
+                            <TradeCardView list={tradeList}
+                                tradeListCount={this.state.tradeListCount}
+                                sorted={sorted}
+                                toggleSortMode={this.toggleSortMode}
+                                handleFilterChange={this.handleFilterChange}
+                                tradeEdit={this.tradeEdit}
+                                tradeDelete={this.tradeDelete}
+                                tradeClone={this.tradeClone}
+                                kitTypeID={this.state.KitTypeID}
+                                partnerList={partnerList}
+                                handleKitTypeIDFilterChange={this.handleKitTypeIDFilterChange}
+                                tpStatus={this.state.TP_Status}
+                                statusList={statusList}
+                                handleStatusFilterChange={this.handleStatusFilterChange}
+                            />
+                            :
+                            <TradeTableView list={tradeList}
+                                actionMenuOpen={true}
+                                actionMenuOpenFor_TP_PartID={this.state.actionMenuOpenFor_TP_PartID}
+                                toggleActionMenu={(data)=>{
+                                    this.setState({actionMenuOpenFor_TP_PartID:this.state.actionMenuOpenFor_TP_PartID=== data.TP_PartID? "": data.TP_PartID});
+                                    console.log('hello', data)}
+                                }
+                                loading={loading}
+                                sorted={sorted}
+                                filtered={filtered}
+                                pageSize={tablePageSize}
+                                onSortChange={this.onSortedChange}
+                                onFilteredChange={this.onFilteredChange}
+                                tradeEdit={this.tradeEdit}
+                                tradeDelete={this.tradeDelete}
+                                tradeClone={this.tradeClone}
+                                kitTypeID={this.state.KitTypeID}
+                                partnerList={partnerList}
+                                handleKitTypeIDFilterChange={this.handleKitTypeIDFilterChange}
+                                tpStatus={this.state.TP_Status}
+                                statusList={statusList}
+                                handleStatusFilterChange={this.handleStatusFilterChange}
+                            />
+                    }
+                </Media>
+                <div className="paging-panel">
                             <Pagination
                                 showSizeChanger={true}
                                 onChange={this.onChangePage}
@@ -184,51 +292,24 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
                                 onShowSizeChange={this.onShowSizeChange}
                                 total={this.state.tradeListCount}
                             />
-                        </FlexView>
-                        <FlexView hAlignContent="right" vAlignContent="center" basis="120" wrap={true}>
-                            {toggleButton}
-                        </FlexView>
-                    </FlexView>
-                </Card>
-                {this.state.viewMode === 'cards' ?
-                    <TradeCardView list={tradeList}
-                        tradeListCount={this.state.tradeListCount}
-                        sorted={sorted}
-                        toggleSortMode={this.toggleSortMode}
-                        handleFilterChange={this.handleFilterChange}
-                        tradeEdit={this.tradeEdit}
-                        tradeDelete={this.tradeDelete}
-                        tradeClone={this.tradeClone}
-                        statusList={statusList}
-                        partnerList={partnerList}
-                        kitTypeIDFilter={kitTypeIDFilter}
-                        handleKitTypeIDFilterChange={this.handleKitTypeIDFilterChange}
-                    />
-                    :
-                    <TradeTableView list={tradeList}
-                        loading={loading}
-                        sorted={sorted}
-                        filtered={filtered}
-                        pageSize={tablePageSize}
-                        onSortChange={this.onSortedChange}
-                        onFilteredChange={this.onFilteredChange}
-                        tradeEdit={this.tradeEdit}
-                        tradeDelete={this.tradeDelete}
-                        tradeClone={this.tradeClone}
-                        statusList={statusList}
-                        partnerList={partnerList}
-                        kitTypeIDFilter={kitTypeIDFilter}
-                        handleKitTypeIDFilterChange={this.handleKitTypeIDFilterChange}
-                    />
-                }
-                {/* <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>Freight Code</ModalHeader>
-                    <ModalBody>
-                        <FreightCodeDetailView itemId={this.state.freightCodeEdit.Id} item={this.state.freightCodeEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
-                    </ModalBody>
-                </Modal> */}
+                </div>
+                
+                {/* {viewComponent} */}
+                <Modal visible={(this.state.clone)} 
+                       title="Clone Trading Partner"
+                       footer={null}
+                       closable={false}
+                       destroyOnClose={true}
+                       >
+                        <TradeCloneView
+                            toggleClone={this.toggleClone} 
+                            isNew={this.state.isNew}
+                            item={this.state.tradeClone} 
+                         />
+                    
+                </Modal>
 
-            </div>
+            </Container>
         )
 
     }
@@ -238,8 +319,19 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
         });
     }
 
-    private handleKitTypeIDFilterChange(value:string) {
-        this.setState({ kitTypeIDFilter: value })
+    protected toggleViewMode() {
+        if (this.state.viewMode === 'cards') {
+            this.setState({ viewMode: 'table' });
+        }
+        else if (this.state.viewMode === 'table') {
+            this.setState({ viewMode: 'detail' });
+        }
+        else if (this.state.viewMode === 'detail') {
+            this.setState({ viewMode: 'detailReact' })
+        }
+        else {
+            this.setState({ viewMode: 'cards' });
+        }
     }
 
     private query() {
@@ -259,15 +351,6 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
 
     private onShowSizeChange = (current, pageSize) => {
         this.setState({ pageSize });
-    }
-
-    private toggleViewMode() {
-        if (this.state.viewMode === 'cards') {
-            this.setState({ viewMode: 'table' });
-        }
-        else {
-            this.setState({ viewMode: 'cards' });
-        }
     }
 
     private toggleSortMode(columnId) {
@@ -342,36 +425,68 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
         });
 
     }
+    private handleStatusFilterChange(value: string) {
 
+        let { filtered } = this.state;
+        // Remove the current filter for this column if there is one
+        filtered = filtered.filter((column: FilterDescriptor) => column.id !== "TP_Status")
 
-    private tradeEdit(trade: ITrade) {
+        // If they selected a value (not "all" or blank), then add the filter back in
+        if (value !== "all" && value.length > 0) {
+            filtered = filtered.concat(new FilterDescriptor({ id: "TP_Status", value }));
+        }
+
+        // Update the state value for the field, as well as the filtered array
+        this.setState({ TP_Status: value, filtered });
+    }
+
+    private handleKitTypeIDFilterChange(value: string) {
+
+        let { filtered } = this.state;
+        // Remove the current filter for this column if there is one
+        filtered = filtered.filter((column: FilterDescriptor) => column.id !== "KitTypeID")
+
+        // If they selected a value (not "all" or blank), then add the filter back in
+        if (value !== "all" && value.length > 0) {
+            filtered = filtered.concat(new FilterDescriptor({ id: "KitTypeID", value }));
+        }
+
+        // Update the state value for the field, as well as the filtered array
+        this.setState({ KitTypeID: value, filtered });
+    }
+
+    // private tradeEdit(trade: ITrade) {
+    private tradeEdit(trade: CTrade) {
         this.setState({
             tradeEdit: trade,
+            viewMode: "detail",
             modal: true,
             isNew: false
         });
     }
 
-    private tradeDelete(trade: ITrade) {
+    // private tradeDelete(trade: ITrade) {
+    private tradeDelete(trade: CTrade) {
         this.props.tradeDelete(trade);
     }
 
-    private tradeClone(trade: ITrade) {
-        const clone = JSON.parse(JSON.stringify(trade));
-        clone.Id = uuid();
-        clone.Frt_Code += "#";
+    // private tradeClone(trade: ITrade) {
+    private tradeClone(trade: CTrade) {
         this.setState({
-            tradeEdit: clone,
-            modal: true,
-            isNew: true
-        });
+            tradeClone: trade,
+            clone: true
+        })
     }
 
-
+    private toggleClone() {
+        this.setState({
+            clone: !this.state.clone
+        });
+    }
 }
 
-const mapStateToProps = ({ trade, kitType }) => {
-    return { trade, kitType }
+const mapStateToProps = ({ trade, kitType, ediDocGroupSet, tradeNetworkSet }) => {
+    return { trade, kitType, ediDocGroupSet,  tradeNetworkSet }
 };
 
 const mapActionsToProps = {

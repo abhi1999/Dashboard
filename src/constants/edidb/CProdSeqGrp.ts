@@ -14,3 +14,13 @@ export class CProdSeqGrp implements IProdSeqGrp {
 export const IProdSeqGrp_psgtype_length = 1;
 export const IProdSeqGrp_psgqual_length = 10;
 export const IProdSeqGrp_psgtext_length = 80;
+
+export const kProdSeqGrp_PSGID="PSGID";
+export const kProdSeqGrp_PSIID="PSIID";
+export const kProdSeqGrp_PSHID="PSHID";
+export const kProdSeqGrp_psglevel="psglevel";
+export const kProdSeqGrp_psgtype="psgtype";
+export const kProdSeqGrp_psgdocline="psgdocline";
+export const kProdSeqGrp_pardocline="pardocline";
+export const kProdSeqGrp_psgqual="psgqual";
+export const kProdSeqGrp_psgtext="psgtext";

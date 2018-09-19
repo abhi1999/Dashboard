@@ -10,3 +10,9 @@ export class CC303v850b implements IC303v850b {
 export const IC303v850b_PO1_LineNo_length = 11;
 export const IC303v850b_POB_01_length = 2;
 export const IC303v850b_POB_02_length = 30;
+
+export const kC303v850b_PO_ID="PO_ID";
+export const kC303v850b_PO1_LineNo="PO1_LineNo";
+export const kC303v850b_POB_LineNo="POB_LineNo";
+export const kC303v850b_POB_01="POB_01";
+export const kC303v850b_POB_02="POB_02";

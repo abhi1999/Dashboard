@@ -10,3 +10,9 @@ export class CStdPosition implements IStdPosition {
 export const IStdPosition_Std_ID_length = 10;
 export const IStdPosition_Doc_ID_length = 10;
 export const IStdPosition_Seg_ID_length = 10;
+
+export const kStdPosition_Std_ID="Std_ID";
+export const kStdPosition_Doc_ID="Doc_ID";
+export const kStdPosition_Seg_ID="Seg_ID";
+export const kStdPosition_Ele_No="Ele_No";
+export const kStdPosition_Ele_Pos="Ele_Pos";

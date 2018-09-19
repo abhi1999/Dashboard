@@ -20,3 +20,13 @@ export const IPartnerDocGroup_GroupID_length = 30;
 export const IPartnerDocGroup_Van_ID_length = 10;
 export const IPartnerDocGroup_TestProdInd_length = 1;
 export const IPartnerDocGroup_CipherKey_length = 80;
+
+export const kPartnerDocGroup_Doc_Group="Doc_Group";
+export const kPartnerDocGroup_TP_PartID="TP_PartID";
+export const kPartnerDocGroup_DGID="DGID";
+export const kPartnerDocGroup_PartnerQual="PartnerQual";
+export const kPartnerDocGroup_PartnerID="PartnerID";
+export const kPartnerDocGroup_GroupID="GroupID";
+export const kPartnerDocGroup_Van_ID="Van_ID";
+export const kPartnerDocGroup_TestProdInd="TestProdInd";
+export const kPartnerDocGroup_CipherKey="CipherKey";

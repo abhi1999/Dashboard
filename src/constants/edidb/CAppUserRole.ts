@@ -8,3 +8,8 @@ export class CAppUserRole implements IAppUserRole {
 }
 export const IAppUserRole_login_name_length = 50;
 export const IAppUserRole_roleName_length = 50;
+
+export const kAppUserRole_login_name="login_name";
+export const kAppUserRole_id="id";
+export const kAppUserRole_roleID="roleID";
+export const kAppUserRole_roleName="roleName";

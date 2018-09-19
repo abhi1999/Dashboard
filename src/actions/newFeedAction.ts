@@ -1,6 +1,7 @@
-import axios from "axios";
+import axios from "../configs/axios";
 import Notifications from 'react-notification-system-redux';
-import { RSS_FEED_URL, RSS_PARSER } from "./../configs/"
+import { RSS_PARSER } from "./../configs/"
+import { SERVICES } from "../configs"
 import {  
     ErroNotificationOptions,
     LOAD_NEWS_FEED_SUCCESS,
@@ -10,8 +11,7 @@ import {loadDataError, loadDataState} from "./mainAction"
 export const loadNewsFeed = () => (dispatch, getState)=> {
 
     dispatch(loadDataState(LOAD_NEWS_FEED_SUCCESS));
-    const url = RSS_FEED_URL;
-    return axios.get(url)
+    return axios.get(SERVICES.endpoints.newsFeed)
                 .then((response)=>{
                     RSS_PARSER.parseString(response.data).then((data)=>{
                         dispatch(loadNewsFeedSuccess(data));
@@ -21,7 +21,7 @@ export const loadNewsFeed = () => (dispatch, getState)=> {
                     dispatch(loadDataError(error, LOAD_NEWS_FEED_SUCCESS));
                     dispatch(Notifications.error({
                         ...ErroNotificationOptions,
-                        message: url +" :: " + error.message
+                        message: error.message
                     }));
                 });
 };

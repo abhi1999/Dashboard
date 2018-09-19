@@ -1,10 +1,9 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "axios";
+import { axiosSched } from "../configs/axios"
 import { 
     GET_VERSION_INFO,
     GET_ERROR_INFO
 } from './../constants/ActionTypes';
-import { SCHEDULER_URL } from "./../configs/";
 import { getVersionInfoSuccess, getVersionInfoFailure } from './../actions/Setting';
 import { getErrorInfoSuccess, getErrorInfoFailure } from './../actions/Setting';
 import Notifications from 'react-notification-system-redux';
@@ -36,11 +35,11 @@ function* getVersionInfoRequest() {
 
 export const getVersionInfoApi = () => {
 
-    const endpoint:string = SCHEDULER_URL + "/api/workflow/version";
+    const endpoint:string = "/api/workflow/version";
     const url:string = endpoint;
     console.log("getVersionInfoApi: " + url);
 
-    return axios.get(url);
+    return axiosSched.get(url);
 };
 
 function* getErrorInfoRequest() {
@@ -56,11 +55,11 @@ function* getErrorInfoRequest() {
 
 export const getErrorInfoApi = () => {
 
-    const endpoint:string = SCHEDULER_URL + "/api/workflow/service/events";
+    const endpoint:string = "/api/workflow/service/events";
     const url:string = endpoint;
     console.log("getErrorInfoApi: " + url);
 
-    return axios.get(url);
+    return axiosSched.get(url);
 };
 
 

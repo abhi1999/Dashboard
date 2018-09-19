@@ -22,3 +22,15 @@ export const IOrderPIn_UPC_length = 20;
 export const IOrderPIn_TrackingNo_length = 30;
 export const IOrderPIn_Stat_Flag_length = 1;
 export const IOrderPIn_LotExp_length = 8;
+
+export const kOrderPIn_Order_No="Order_No";
+export const kOrderPIn_Box_ID="Box_ID";
+export const kOrderPIn_PO1_LineNo="PO1_LineNo";
+export const kOrderPIn_Lot="Lot";
+export const kOrderPIn_Int_Item_No="Int_Item_No";
+export const kOrderPIn_UPC="UPC";
+export const kOrderPIn_PackQty="PackQty";
+export const kOrderPIn_Asn_ID="Asn_ID";
+export const kOrderPIn_TrackingNo="TrackingNo";
+export const kOrderPIn_Stat_Flag="Stat_Flag";
+export const kOrderPIn_LotExp="LotExp";

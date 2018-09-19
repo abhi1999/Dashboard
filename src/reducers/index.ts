@@ -19,10 +19,23 @@ import Folder from './Scheduler/FolderReducer';
 import Variable from './Scheduler/VariableReducer';
 import Service from './Scheduler/ServiceReducer';
 import Carrier from './CarrierReducer';
+import Document from './DocumentReducer';
 import ErrorCode from './ErrorCode';
+import VPNetworks from './vpNetworksReducer';
 import FreightCode from './FreightCode';
 import Trade from './Trade';
+import ShipTo from './ShipTo';
 import KitType from './KitTypeReducer'
+import PackageSet from './PackageReducer'
+import PackageLabelSet from './PackageLabelReducer'
+import PseudoTradeSet from './PseudoTradeReducer'
+import PartnerDocGroupSet from './PartnerDocGroupReducer'
+import ApiTransObjectSet from './ApiTransObjectReducer'
+import TradeNetworkSet from './TradeNetworkReducer'
+import ItemSet from './ItemReducer';
+import EdiDocGroupSet from './EdiDocGroupReducer'
+import CompanySetting from './CompanyReducer'
+import AcctPackageSet from './AcctPackageReducer'
 
 const appReducer = combineReducers({
     alertsReducer,
@@ -44,9 +57,22 @@ const appReducer = combineReducers({
     service: Service,
     carrier: Carrier,
     errorCode: ErrorCode,
+    vpnetworksReducer: VPNetworks,
     freightCode: FreightCode,
     trade:Trade,
-    kitType:KitType
+    kitType:KitType,
+    shipTo:ShipTo,
+    packageSet:PackageSet,
+    document:Document,
+    packageLabelSet:PackageLabelSet,
+    pseudoTradeSet:PseudoTradeSet,
+    partnerDocGroupSet:PartnerDocGroupSet,
+    apiTransObjectSet:ApiTransObjectSet,
+    tradeNetworkSet:TradeNetworkSet,
+    itemsetReducer : ItemSet,
+    ediDocGroupSet:EdiDocGroupSet,
+    companySetting:CompanySetting,
+    acctPackageSet:AcctPackageSet
 })
 
 export default appReducer;

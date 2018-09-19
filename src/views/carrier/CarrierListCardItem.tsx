@@ -20,12 +20,14 @@ export class CarrierListCardItem extends React.Component<any, any> {
     }
     public componentDidMount() {
         // to allow for inner scrolling
+        /*
         const obj:any = ReactDOM.findDOMNode(this);
         if(obj !== undefined && obj !== null){
             obj.addEventListener('mousewheel', (event) => {
                 event.stopPropagation();
             }, false);
         }
+        */
     }
     public render() {
         const {data} = this.props;

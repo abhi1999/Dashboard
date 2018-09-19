@@ -24,3 +24,17 @@ export const IApiDocsReceivedView_GCN_length = 20;
 export const IApiDocsReceivedView_ErrorID_length = 50;
 export const IApiDocsReceivedView_TP_Name_length = 30;
 export const IApiDocsReceivedView_TCN_length = 20;
+
+export const kApiDocsReceivedView_rownum="rownum";
+export const kApiDocsReceivedView_Misc_ID="Misc_ID";
+export const kApiDocsReceivedView_TP_PartID="TP_PartID";
+export const kApiDocsReceivedView_DocType="DocType";
+export const kApiDocsReceivedView_DocRef="DocRef";
+export const kApiDocsReceivedView_DateRecv="DateRecv";
+export const kApiDocsReceivedView_DocStatus="DocStatus";
+export const kApiDocsReceivedView_ICN="ICN";
+export const kApiDocsReceivedView_GCN="GCN";
+export const kApiDocsReceivedView_ErrorID="ErrorID";
+export const kApiDocsReceivedView_TP_Name="TP_Name";
+export const kApiDocsReceivedView_TCN="TCN";
+export const kApiDocsReceivedView_Emailed="Emailed";

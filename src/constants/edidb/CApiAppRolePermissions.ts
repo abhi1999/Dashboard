@@ -8,3 +8,8 @@ export class CApiAppRolePermissions implements IApiAppRolePermissions {
 }
 export const IApiAppRolePermissions_func_code_length = 3;
 export const IApiAppRolePermissions_func_name_length = 100;
+
+export const kApiAppRolePermissions_func_code="func_code";
+export const kApiAppRolePermissions_func_name="func_name";
+export const kApiAppRolePermissions_assigned="assigned";
+export const kApiAppRolePermissions_GVis="GVis";

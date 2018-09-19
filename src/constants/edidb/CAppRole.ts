@@ -6,3 +6,7 @@ export class CAppRole implements IAppRole {
     public constructor(init?:Partial<CAppRole>) { Object.assign(this, init); }
 }
 export const IAppRole_roleName_length = 50;
+
+export const kAppRole_id="id";
+export const kAppRole_roleName="roleName";
+export const kAppRole_roleCreated="roleCreated";

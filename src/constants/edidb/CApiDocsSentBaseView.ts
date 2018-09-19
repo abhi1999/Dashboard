@@ -21,3 +21,15 @@ export const IApiDocsSentBaseView_ICN_length = 20;
 export const IApiDocsSentBaseView_GCN_length = 20;
 export const IApiDocsSentBaseView_TP_Name_length = 30;
 export const IApiDocsSentBaseView_TCN_length = 20;
+
+export const kApiDocsSentBaseView_Sent_ID="Sent_ID";
+export const kApiDocsSentBaseView_TP_PartID="TP_PartID";
+export const kApiDocsSentBaseView_DocType="DocType";
+export const kApiDocsSentBaseView_DocRef="DocRef";
+export const kApiDocsSentBaseView_DateSent="DateSent";
+export const kApiDocsSentBaseView_DocStatus="DocStatus";
+export const kApiDocsSentBaseView_ICN="ICN";
+export const kApiDocsSentBaseView_GCN="GCN";
+export const kApiDocsSentBaseView_ErrorID="ErrorID";
+export const kApiDocsSentBaseView_TP_Name="TP_Name";
+export const kApiDocsSentBaseView_TCN="TCN";

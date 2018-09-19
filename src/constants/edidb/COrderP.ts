@@ -20,3 +20,17 @@ export const IOrderP_TrackingNo_length = 50;
 export const IOrderP_SSCC_length = 30;
 export const IOrderP_PKG_ID_length = 10;
 export const IOrderP_RFID_length = 50;
+
+export const kOrderP_Order_No="Order_No";
+export const kOrderP_Line_No="Line_No";
+export const kOrderP_Pack_ID="Pack_ID";
+export const kOrderP_Pack_Level="Pack_Level";
+export const kOrderP_PackQty="PackQty";
+export const kOrderP_Asn_ID="Asn_ID";
+export const kOrderP_Box_ID="Box_ID";
+export const kOrderP_Pack_Wt="Pack_Wt";
+export const kOrderP_Mixed="Mixed";
+export const kOrderP_TrackingNo="TrackingNo";
+export const kOrderP_SSCC="SSCC";
+export const kOrderP_PKG_ID="PKG_ID";
+export const kOrderP_RFID="RFID";

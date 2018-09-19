@@ -21,3 +21,15 @@ export const IEDIRptFilterASN_DocRef_length = 50;
 export const IEDIRptFilterASN_PO_NO_length = 4000;
 export const IEDIRptFilterASN_EmailTo_length = 4000;
 export const IEDIRptFilterASN_ReportName_length = 18;
+
+export const kEDIRptFilterASN_VPID="VPID";
+export const kEDIRptFilterASN_Misc_ID="Misc_ID";
+export const kEDIRptFilterASN_DGID="DGID";
+export const kEDIRptFilterASN_TP_PartID="TP_PartID";
+export const kEDIRptFilterASN_TP_Name="TP_Name";
+export const kEDIRptFilterASN_DocType="DocType";
+export const kEDIRptFilterASN_DateRecv="DateRecv";
+export const kEDIRptFilterASN_DocRef="DocRef";
+export const kEDIRptFilterASN_PO_NO="PO_NO";
+export const kEDIRptFilterASN_EmailTo="EmailTo";
+export const kEDIRptFilterASN_ReportName="ReportName";

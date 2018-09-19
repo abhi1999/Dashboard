@@ -335,6 +335,9 @@ class CarrierListViewAlt extends React.Component<ICarrierListViewProps, ICarrier
     }
 
     public toggleModal() {
+        if(this.state.modal){
+            this.requery(this.state.pageSize)
+        }
         this.setState({
             modal: !this.state.modal
         });

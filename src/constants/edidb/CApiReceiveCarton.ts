@@ -22,3 +22,15 @@ export const IApiReceiveCarton_TrackingNo_length = 30;
 export const IApiReceiveCarton_Lot_length = 30;
 export const IApiReceiveCarton_LotExp_length = 8;
 export const IApiReceiveCarton_PO1_LineNo_length = 11;
+
+export const kApiReceiveCarton_Order_No="Order_No";
+export const kApiReceiveCarton_TP_Name="TP_Name";
+export const kApiReceiveCarton_Box_ID="Box_ID";
+export const kApiReceiveCarton_Int_Item_No="Int_Item_No";
+export const kApiReceiveCarton_PackQty="PackQty";
+export const kApiReceiveCarton_Stat_Flag="Stat_Flag";
+export const kApiReceiveCarton_Asn_ID="Asn_ID";
+export const kApiReceiveCarton_TrackingNo="TrackingNo";
+export const kApiReceiveCarton_Lot="Lot";
+export const kApiReceiveCarton_LotExp="LotExp";
+export const kApiReceiveCarton_PO1_LineNo="PO1_LineNo";

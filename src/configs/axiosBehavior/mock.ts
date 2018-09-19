@@ -1,8 +1,10 @@
 import mockAPIReponse from "./../../__mocks__/mockUrlResponse";
+console.log('******', mockAPIReponse)
 declare const window:any
 
+window.mockAPIReponse = mockAPIReponse
 export const applyMock = (axios)=>{
-    if(process.env.REACT_APP_MOCK_ALL_SERVICE_CALLS === "true"){
+    if(process.env.REACT_APP_MOCK_ALL_SERVICE_CALLS === "true" || true){
         axios.interceptors.request.use( (config)=> {
             const mock = mockAPIReponse.find(r=> {
                 const mockParams = r.params === undefined ? "":r.params;
@@ -15,6 +17,7 @@ export const applyMock = (axios)=>{
                 return Promise.reject({message:"MockResponse", data:mock.data, config})
             }
             else {
+                console.log('no mockresponse')
                 if(window.req === undefined) {window.req=[];}
                 window.req.push({url:config.url, params:config.paramsSerializer? config.paramsSerializer(config.params):JSON.stringify(config.params), config})
             }

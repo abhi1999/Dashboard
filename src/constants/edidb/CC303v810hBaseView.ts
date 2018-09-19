@@ -23,3 +23,17 @@ export const IC303v810hBaseView_Exp_Flag_length = 1;
 export const IC303v810hBaseView_status_length = 500;
 export const IC303v810hBaseView_AckDesc_length = 10;
 export const IC303v810hBaseView_Acct_CusNo_length = 50;
+
+export const kC303v810hBaseView_ORD_ID="ORD_ID";
+export const kC303v810hBaseView_TP_PartID="TP_PartID";
+export const kC303v810hBaseView_TP_Name="TP_Name";
+export const kC303v810hBaseView_BIG_02="BIG_02";
+export const kC303v810hBaseView_BIG_04="BIG_04";
+export const kC303v810hBaseView_Exp_Flag="Exp_Flag";
+export const kC303v810hBaseView_status="status";
+export const kC303v810hBaseView_ImportDate="ImportDate";
+export const kC303v810hBaseView_ExportDate="ExportDate";
+export const kC303v810hBaseView_GCN="GCN";
+export const kC303v810hBaseView_TCN="TCN";
+export const kC303v810hBaseView_AckDesc="AckDesc";
+export const kC303v810hBaseView_Acct_CusNo="Acct_CusNo";

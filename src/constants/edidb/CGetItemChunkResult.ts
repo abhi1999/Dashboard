@@ -36,3 +36,37 @@ export class CGetItemChunkResult implements IGetItemChunkResult {
     public EAN:string = '';
     public constructor(init?:Partial<CGetItemChunkResult>) { Object.assign(this, init); }
 }
+export const kGetItemChunkResult_LOCATION_IN_RECORD_SET="LOCATION_IN_RECORD_SET";
+export const kGetItemChunkResult_PAGE_NUMBER="PAGE_NUMBER";
+export const kGetItemChunkResult_Int_Item_No="Int_Item_No";
+export const kGetItemChunkResult_Item_Desc="Item_Desc";
+export const kGetItemChunkResult_UPC="UPC";
+export const kGetItemChunkResult_Def_Pack_Qty="Def_Pack_Qty";
+export const kGetItemChunkResult_Item_Wt="Item_Wt";
+export const kGetItemChunkResult_Item_Um="Item_Um";
+export const kGetItemChunkResult_Item_UOM="Item_UOM";
+export const kGetItemChunkResult_EDI_UOM="EDI_UOM";
+export const kGetItemChunkResult_RetailPrice="RetailPrice";
+export const kGetItemChunkResult_SellingPrice="SellingPrice";
+export const kGetItemChunkResult_SAC_Flag="SAC_Flag";
+export const kGetItemChunkResult_SAC_Qual="SAC_Qual";
+export const kGetItemChunkResult_Cube_Length="Cube_Length";
+export const kGetItemChunkResult_Cube_Width="Cube_Width";
+export const kGetItemChunkResult_Cube_Height="Cube_Height";
+export const kGetItemChunkResult_Cube_Qty="Cube_Qty";
+export const kGetItemChunkResult_Cube_UOM="Cube_UOM";
+export const kGetItemChunkResult_User1="User1";
+export const kGetItemChunkResult_User2="User2";
+export const kGetItemChunkResult_User3="User3";
+export const kGetItemChunkResult_User4="User4";
+export const kGetItemChunkResult_User5="User5";
+export const kGetItemChunkResult_Item_rfid="Item_rfid";
+export const kGetItemChunkResult_locid="locid";
+export const kGetItemChunkResult_PackingClass="PackingClass";
+export const kGetItemChunkResult_Item_Alt_No="Item_Alt_No";
+export const kGetItemChunkResult_Item_Config="Item_Config";
+export const kGetItemChunkResult_Item_Size="Item_Size";
+export const kGetItemChunkResult_Item_Color="Item_Color";
+export const kGetItemChunkResult_Frt_Code="Frt_Code";
+export const kGetItemChunkResult_GTIN="GTIN";
+export const kGetItemChunkResult_EAN="EAN";

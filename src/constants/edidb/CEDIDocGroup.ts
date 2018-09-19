@@ -8,3 +8,7 @@ export class CEDIDocGroup implements IEDIDocGroup {
 export const IEDIDocGroup_DGID_length = 5;
 export const IEDIDocGroup_Doc_Group_length = 50;
 export const IEDIDocGroup_Doc_Desc_length = 50;
+
+export const kEDIDocGroup_DGID="DGID";
+export const kEDIDocGroup_Doc_Group="Doc_Group";
+export const kEDIDocGroup_Doc_Desc="Doc_Desc";

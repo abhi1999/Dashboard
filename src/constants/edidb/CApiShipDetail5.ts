@@ -20,3 +20,13 @@ export const IApiShipDetail5_State_length = 2;
 export const IApiShipDetail5_Zip_length = 15;
 export const IApiShipDetail5_Country_length = 30;
 export const IApiShipDetail5_Source_length = 15;
+
+export const kApiShipDetail5_ID="ID";
+export const kApiShipDetail5_Name="Name";
+export const kApiShipDetail5_Address1="Address1";
+export const kApiShipDetail5_Address2="Address2";
+export const kApiShipDetail5_City="City";
+export const kApiShipDetail5_State="State";
+export const kApiShipDetail5_Zip="Zip";
+export const kApiShipDetail5_Country="Country";
+export const kApiShipDetail5_Source="Source";

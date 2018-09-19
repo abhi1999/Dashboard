@@ -9,7 +9,7 @@ import {
     SERVICE_STATE_UNKNOWN 
 } from '../../constants/ServiceParameters';
 
-import axios from "axios";
+import { axiosSched } from '../../configs/axios'
 import { 
     TASK_STATUS_LIST_GET_ALL,
     SERVICE_GET_STATE,
@@ -17,7 +17,6 @@ import {
     TASK_COMMAND,
     TOAST_ERROR
 } from '../../constants/ActionTypes';
-import { SCHEDULER_URL } from "../../configs";
 import { taskStatusListGetAllSuccess, taskStatusListGetAllFailure } from '../../actions/Scheduler/ServiceAction';
 import { serviceGetStateSuccess, serviceGetStateFailure } from '../../actions/Scheduler/ServiceAction';
 import { serviceCommandSuccess, serviceCommandFailure } from '../../actions/Scheduler/ServiceAction';
@@ -49,18 +48,16 @@ function* taskStatusListGetAllRequest() {
         yield put(taskStatusListGetAllSuccess(taskStatusList));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(taskStatusListGetAllFailure(error));
     }
 }
 
 export const taskStatusListGetAllApi = () => {
 
-    const endpoint:string = SCHEDULER_URL + "/api/workflow/service/tasks";
-    const url:string = endpoint;
-    console.log("taskStatusListGetAllApi: " + url);
+    const url:string = "/api/workflow/service/tasks";
 
-    return axios.get(url);
+    return axiosSched.get(url);
 };
 
 const wait = ms => (
@@ -157,7 +154,7 @@ function* serviceGetStateRequest() {
             yield put(serviceGetStateSuccess(serviceState));
         } catch (error) {
             console.log(error);
-            yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+            yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
             yield put(serviceGetStateFailure(error));
         }
     }
@@ -165,11 +162,9 @@ function* serviceGetStateRequest() {
 
 export const serviceGetStateApi = () => {
 
-    const endpoint:string = SCHEDULER_URL + "/api/workflow/service";
-    const url:string = endpoint;
-    console.log("serviceGetStateApi: " + url);
+    const url:string = "/api/workflow/service";
 
-    return axios.get(url);
+    return axiosSched.get(url);
 };
 
 function* serviceCommandRequest(action) {
@@ -183,17 +178,16 @@ function* serviceCommandRequest(action) {
         yield put(serviceCommandSuccess(serviceState));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.message }));
         yield put(serviceCommandFailure(error));
     }
 }
 
 export const serviceCommandApi = (controlCommand) => {
 
-    const url:string = SCHEDULER_URL +  "/api/workflow/service";
-    console.log("serviceCommandApi: " + url);
+    const url:string = "/api/workflow/service";
 
-    return axios.put(url, controlCommand);
+    return axiosSched.put(url, controlCommand);
 };
 
 function* taskCommandRequest(action) {
@@ -206,17 +200,16 @@ function* taskCommandRequest(action) {
         yield put(taskCommandSuccess(taskState));
     } catch (error) {
         console.log(error);
-        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.config.url }));
+        yield put(Notifications.error({ ...ERROR_OPTIONS, message: error.me }));
         yield put(taskCommandFailure(error));
     }
 }
 
 export const taskCommandApi = (taskCommand) => {
 
-    const url:string = SCHEDULER_URL +  "/api/workflow/service/task";
-    console.log("taskCommandApi: " + url);
+    const url:string = "/api/workflow/service/task";
 
-    return axios.put(url, taskCommand);
+    return axiosSched.put(url, taskCommand);
 };
 
 export default function* rootSaga() {

@@ -24,3 +24,17 @@ export const ISent_DocStatus_length = 1;
 export const ISent_DocRef_length = 50;
 export const ISent_GCNUnpadded_length = 20;
 export const ISent_TCNUnpadded_length = 20;
+
+export const kSent_Sent_ID="Sent_ID";
+export const kSent_Seg_ID="Seg_ID";
+export const kSent_TP_PartID="TP_PartID";
+export const kSent_ICN="ICN";
+export const kSent_GCN="GCN";
+export const kSent_TCN="TCN";
+export const kSent_DocType="DocType";
+export const kSent_Segment="Segment";
+export const kSent_DateSent="DateSent";
+export const kSent_DocStatus="DocStatus";
+export const kSent_DocRef="DocRef";
+export const kSent_GCNUnpadded="GCNUnpadded";
+export const kSent_TCNUnpadded="TCNUnpadded";

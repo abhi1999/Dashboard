@@ -17,7 +17,7 @@ declare let module:any;
 const configureStore =(preloadedState?:any)=>{
     const middleware:any[] = [promise(), ReduxThunk, sagaMiddleware];
     if(process.env.NODE_ENV !== 'production') {
-        middleware.push(createLogger());
+        // middleware.push(createLogger());
     }
     const store = createStore(
         rootReducer, 

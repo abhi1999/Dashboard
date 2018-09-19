@@ -18,3 +18,15 @@ export const IProdActivity_N102_length = 80;
 export const IProdActivity_N104_length = 30;
 export const IProdActivity_ItemID_length = 500;
 export const IProdActivity_ItemQual_length = 2;
+
+export const kProdActivity_PA_ID="PA_ID";
+export const kProdActivity_TP_PartID="TP_PartID";
+export const kProdActivity_N102="N102";
+export const kProdActivity_N104="N104";
+export const kProdActivity_ItemID="ItemID";
+export const kProdActivity_sDate="sDate";
+export const kProdActivity_eDate="eDate";
+export const kProdActivity_ItemQual="ItemQual";
+export const kProdActivity_CreateDate="CreateDate";
+export const kProdActivity_VPID="VPID";
+export const kProdActivity_Misc_ID="Misc_ID";

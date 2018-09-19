@@ -1,7 +1,11 @@
 import * as React from "react";
 import ReactTable from "react-table";
 import { FaTimesCircle, FaEdit, FaClone } from 'react-icons/fa';
+import { Select, Checkbox } from 'antd';
 import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
+import { ToString } from '../../utils/Conversion';
+
+const Option = Select.Option;
 
 function FreightCodeTableView(props) {
 
@@ -39,9 +43,34 @@ function FreightCodeTableView(props) {
                         accessor: "Class"
                     },
                     {
+                        // Header: "HazMat",
+                        // id: "HazMat",
+                        // accessor: h => (h.HazMat ? "True" : "False")
+
                         Header: "HazMat",
-                        id: "HazMat",
-                        accessor: h => (h.HazMat ? "True" : "False")
+                        accessor: "HazMat",
+                        sortable: true,
+                        filterable: true,
+                        Cell: ({ row }) => {
+                            // This is where we could cause it to display in the table as something else
+                            return (
+                                // (row.HazMat ? "True" : "False")
+                                // ToString(row.HazMat)
+                                <Checkbox
+                                    checked={row.HazMat}
+                                />
+                            )
+                        },
+                        Filter: ({ filter, onChange }) =>
+                            <Select
+                                style={{ width: "100%" }}
+                                value={props.HazMat}
+                                onChange={props.handleHazMatFilterChange}
+                            >
+                                <Option key="all" value="all">All</Option>
+                                <Option key="true" value="true">True</Option>
+                                <Option key="false" value="false">False</Option>
+                            </Select>
                     },
                     {
                         Header: "Sub",
@@ -57,7 +86,7 @@ function FreightCodeTableView(props) {
                 filterable={true}
                 filtered={props.filtered}
                 onFilteredChange={props.onFilteredChange}
-                defaultFilterMethod={(filter, row) => String(row[filter.id]).toLowerCase().includes(filter.value.toLowerCase())}
+                defaultFilterMethod={(filter, row) => ToString(row[filter.id]).toLowerCase().includes(ToString(filter.value).toLowerCase())}
                 showPagination={false}
                 pageSize={props.pageSize}
                 className="-striped -highlight"

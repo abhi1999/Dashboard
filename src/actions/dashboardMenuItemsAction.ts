@@ -1,5 +1,5 @@
 import Notifications from 'react-notification-system-redux';
-import { BASE_URL, SERVICES } from "./../configs/";
+import { SERVICES } from "./../configs/";
 import axios from "./../configs/axios";
 import {  
     ErroNotificationOptions,
@@ -12,7 +12,7 @@ import {loadDataError, loadDataState} from "./mainAction"
 export const loadDashboardMenuList = () => (dispatch, getState)=> {
     dispatch(loadDataState(LOAD_DASHBOARD_MENU_LIST));
     const orderBy = ["ShortcutOrder"]    
-    const url = BASE_URL + SERVICES.endpoints.shortcutMenuItems;
+    const url = SERVICES.endpoints.shortcutMenuItems;
     return axios.get(url, {params:{orderBy}})
                 .then((response:any)=>{
                     dispatch(loadDashboardMenuItemListSuccess(response.data.value));
@@ -26,7 +26,7 @@ export const loadDashboardMenuList = () => (dispatch, getState)=> {
                     dispatch(loadDataError(error, LOAD_DASHBOARD_MENU_LIST));
                     dispatch(Notifications.error({
                         ...ErroNotificationOptions,
-                        message: url +" :: " + error.message
+                        message:  error.message
                     }));
                 })
     
@@ -34,7 +34,7 @@ export const loadDashboardMenuList = () => (dispatch, getState)=> {
 export const loadDashboardMenuItemDetails = (ShortCutID) => (dispatch, getState)=> {
     dispatch(loadDataState(LOAD_DASHBOARD_MENU_ITEM_DETAILS));
     const filter = [{ShortCutID}]
-    const url = BASE_URL + SERVICES.endpoints.shortcutMenuItemDetails;
+    const url = SERVICES.endpoints.shortcutMenuItemDetails;
     return axios.get(url,{params:{filter}})
                 .then((response:any)=>{
                     dispatch(loadDashboardMenuItemDetailsSuccess(response.data.value, ShortCutID));
@@ -43,7 +43,7 @@ export const loadDashboardMenuItemDetails = (ShortCutID) => (dispatch, getState)
                     dispatch(loadDataError(error,LOAD_DASHBOARD_MENU_ITEM_DETAILS));
                     dispatch(Notifications.error({
                         ...ErroNotificationOptions,
-                        message: url +" :: " + error.message
+                        message: error.message
                     }));
                 })
     

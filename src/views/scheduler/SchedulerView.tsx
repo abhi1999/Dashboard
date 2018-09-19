@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import { FaCircle } from 'react-icons/fa'; import { FaCheckCircle } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css'; // no need to add antd.css, appropraite styles will be included during build time
 import { schedulerAdd, schedulerUpdate, schedulerDelete } from '../../actions/Scheduler/SchedulerAction';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';

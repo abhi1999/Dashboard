@@ -23,7 +23,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import { FaCircle } from 'react-icons/fa'; import { FaCheckCircle } from 'react-icons/fa';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';  // no need to add antd.css, appropraite styles will be included during build time
 import FlexView from 'react-flexview';
 import { workflowAdd, workflowUpdate, workflowDelete } from '../../actions/Scheduler/WorkflowAction';
 import {toastError} from '../../actions/Scheduler/ServiceAction';

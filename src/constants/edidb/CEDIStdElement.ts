@@ -19,3 +19,13 @@ export const IEDIStdElement_Elem_Desc_length = 65;
 export const IEDIStdElement_Elem_ID_length = 5;
 export const IEDIStdElement_Elem_Type_length = 2;
 export const IEDIStdElement_Group_ID_length = 5;
+
+export const kEDIStdElement_Std_ID="Std_ID";
+export const kEDIStdElement_Rel_No="Rel_No";
+export const kEDIStdElement_Seg_ID="Seg_ID";
+export const kEDIStdElement_Elem_No="Elem_No";
+export const kEDIStdElement_Elem_Desc="Elem_Desc";
+export const kEDIStdElement_Elem_ID="Elem_ID";
+export const kEDIStdElement_Elem_Type="Elem_Type";
+export const kEDIStdElement_Group_ID="Group_ID";
+export const kEDIStdElement_SEID="SEID";

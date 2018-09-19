@@ -24,3 +24,16 @@ export const IPlanSchedExt_ext7_length = 80;
 export const IPlanSchedExt_ext8_length = 80;
 export const IPlanSchedExt_ext9_length = 80;
 export const IPlanSchedExt_ext10_length = 80;
+
+export const kPlanSchedExt_PSEID="PSEID";
+export const kPlanSchedExt_PSGID="PSGID";
+export const kPlanSchedExt_ext1="ext1";
+export const kPlanSchedExt_ext2="ext2";
+export const kPlanSchedExt_ext3="ext3";
+export const kPlanSchedExt_ext4="ext4";
+export const kPlanSchedExt_ext5="ext5";
+export const kPlanSchedExt_ext6="ext6";
+export const kPlanSchedExt_ext7="ext7";
+export const kPlanSchedExt_ext8="ext8";
+export const kPlanSchedExt_ext9="ext9";
+export const kPlanSchedExt_ext10="ext10";

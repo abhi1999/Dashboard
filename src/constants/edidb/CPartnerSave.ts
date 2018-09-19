@@ -24,3 +24,15 @@ export const IPartnerSave_MapOut_length = 30;
 export const IPartnerSave_TestProdInd_length = 1;
 export const IPartnerSave_CipherKey_length = 80;
 export const IPartnerSave_FilenameLayout_length = 200;
+
+export const kPartnerSave_TP_PartID="TP_PartID";
+export const kPartnerSave_DGID="DGID";
+export const kPartnerSave_PartnerQual="PartnerQual";
+export const kPartnerSave_PartnerID="PartnerID";
+export const kPartnerSave_GroupID="GroupID";
+export const kPartnerSave_Van_ID="Van_ID";
+export const kPartnerSave_MapIn="MapIn";
+export const kPartnerSave_MapOut="MapOut";
+export const kPartnerSave_TestProdInd="TestProdInd";
+export const kPartnerSave_CipherKey="CipherKey";
+export const kPartnerSave_FilenameLayout="FilenameLayout";

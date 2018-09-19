@@ -11,3 +11,11 @@ export class CRibbonShortcut implements IRibbonShortcut {
 }
 export const IRibbonShortcut_Caption_length = 200;
 export const IRibbonShortcut_ImageFile_length = 500;
+
+export const kRibbonShortcut_ShortCutID="ShortCutID";
+export const kRibbonShortcut_TabID="TabID";
+export const kRibbonShortcut_ShortcutOrder="ShortcutOrder";
+export const kRibbonShortcut_Caption="Caption";
+export const kRibbonShortcut_ImageFile="ImageFile";
+export const kRibbonShortcut_Visible="Visible";
+export const kRibbonShortcut_Enabled="Enabled";

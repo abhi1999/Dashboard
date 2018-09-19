@@ -4,16 +4,13 @@ import {
     put,
     takeLatest
 } from 'redux-saga/effects';
-import axios from "axios";
+import axios from "../configs/axios";
 import {
     CARRIER_GET_ALL,
     CARRIER_ADD,
     CARRIER_UPDATE,
     CARRIER_DELETE
 } from '../constants/ActionTypes';
-import {
-    BASE_URL
-} from "../configs";
 import {
     carrierGetAllSuccess,
     carrierGetAllFailure
@@ -37,14 +34,13 @@ import {
 import buildQuery from "odata-query";
 import ShipViaModel from "../constants/implementations/ShipViaModel";
 
-
 function* carrierGetAllRequest(action:any) {
     try {
         const carrierList:any= yield call(carrierGetAllApi, action);
         yield put(carrierGetAllSuccess(carrierList));
     } catch (error) {
         yield put(Notifications.error({ ...ERROR_OPTIONS,
-            message: error.config.url
+            message: error.message
         }));
         yield put(carrierGetAllFailure(error));
     }
@@ -52,7 +48,7 @@ function* carrierGetAllRequest(action:any) {
 
 export const carrierGetAllApi = (action:any) => {
 
-    const endpoint:string = BASE_URL + "/odata/ShipViaSet";
+    const endpoint:string = "/odata/ShipViaSet";
     const count:boolean = true;
     const top:string = action.payload.top;
     const skip:string = action.payload.skip;
@@ -83,7 +79,6 @@ export const carrierGetAllApi = (action:any) => {
 
     const url:string = endpoint + oDataParams; 
 
-    console.log("carrierGetAllApi: " + url);
     return axios.get(url);
 };
 
@@ -94,7 +89,7 @@ function* carrierAddRequest(action:any) {
     } catch (error) {
         console.error(error);
         yield put(Notifications.error({ ...ERROR_OPTIONS,
-            message: error.config.url
+            message: error.message
         }));
         yield put(carrierAddFailure(error));
     }
@@ -103,9 +98,8 @@ function* carrierAddRequest(action:any) {
 export const carrierAddApi = (action:any) => {
 
     const carrier:ShipViaModel = action.payload;
-    const url:string = BASE_URL + "/api/ShipVia/Add/";
+    const url:string = "/api/ShipVia/Add/";
 
-    console.log("carrierAddApi: " + url);
     return axios.post(url, carrier);
 };
 
@@ -116,7 +110,7 @@ function* carrierUpdateRequest(action:any) {
     } catch (error) {
         console.error(error);
         yield put(Notifications.error({ ...ERROR_OPTIONS,
-            message: error.config.url
+            message: error.message
         }));
         yield put(carrierUpdateFailure(error));
     }
@@ -125,9 +119,8 @@ function* carrierUpdateRequest(action:any) {
 export const carrierUpdateApi = (action:any) => {
 
     const carrier:ShipViaModel = action.payload;
-    const url:string = BASE_URL + "/api/ShipVia/Update/" + carrier.Ship_Via_ID;
+    const url:string = "/api/ShipVia/Update/" + carrier.Ship_Via_ID;
 
-    console.log("carrierUpdateApi: " + url);
     return axios.put(url, carrier);
 };
 
@@ -138,7 +131,7 @@ function* carrierDeleteRequest(action:any) {
     } catch (error) {
         console.error(error);
         yield put(Notifications.error({ ...ERROR_OPTIONS,
-            message: error.config.url
+            message: error.message
         }));
         yield put(carrierDeleteFailure(error));
     }
@@ -148,9 +141,8 @@ function* carrierDeleteRequest(action:any) {
 export const carrierDeleteApi = (action:any) => {
 
     const carrier:ShipViaModel = action.payload;
-    const url:string = BASE_URL + "/api/ShipVia/Delete/" + carrier.Ship_Via_ID;
+    const url:string = "/api/ShipVia/Delete/" + carrier.Ship_Via_ID;
     
-    console.log("carrierDeleteApi: " + url);
     return axios.delete(url);
 };
 

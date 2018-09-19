@@ -26,13 +26,19 @@ import DatabaseListView from "../../views/scheduler/DatabaseListView";
 import FolderListView from "../../views/scheduler/FolderListView";
 import VariableListView from "../../views/scheduler/VariableListView";
 import CarrierListView from "../../views/carrier/CarrierListView";
-import ErrorCodeListView from "../../views/ErrorCode/ErrorCodeListView";
+import DocumentListView from "../../views/document/DocumentListView";
+import ErrorCodeView from "./../../views/ErrorCode/ErrorCodeView";
 import FreightCodeView from "./../../views/FreightCode/FreightCodeView";
 import TradeView from "./../../views/Trade/TradeView";
+// import ShipToTradeView from "./../../views/ShipTo/ShipToTradeView";
+import VPNetworkListView from "./../../views/vpNetwork/NetworkListView";
+import LocalErrorLogView from "./../../views/LocalErrorLog/LocalErrorLogView";
 
 import CarrierList from  "../../views/carrier/CarrierList";
 import CarrierListViewAlt from  "../../views/carrier/CarrierListViewAlt";
+import ItemListView from '../../views/Item/ItemListView';
 
+import CompanySettingsView from "../../views/companySettings/CompanySettingsView";
 
 import JsonTreeComponent from "./../jsonEditView"
 
@@ -64,9 +70,15 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
       { path: '/carriers', name: 'Carriers', component: CarrierListView },
       { path: '/carriersaggrid', name: 'CarriersAG-Grid', component: CarrierList },
       { path: '/carriersalt', name: 'CarriersAlt', component: CarrierListViewAlt },
-      { path: '/errorCodes', name: 'ErrorCodes', component: ErrorCodeListView },
+      { path: '/errorCodes', name: 'ErrorCodes', component: ErrorCodeView },
       { path: '/freightCodes', name: 'Freight Codes', component: FreightCodeView },
       { path: '/trades', name: 'Trading Partners', component: TradeView },
+//      { path: '/shiptos', name: 'Ship To Locations', component: ShipToTradeView },
+      { path: '/documents', name: 'Document Explorer', component: DocumentListView },
+      { path: '/vpNetworks', name: 'VPNetworks', component: VPNetworkListView },
+      { path: '/companysettings', name: 'Company settings', component: CompanySettingsView},
+      { path: '/items', name: 'Items', component: ItemListView},
+      { path: '/notifications', name: 'Notifications history', component: LocalErrorLogView },
     ];
     return (
       <div className="app">
@@ -74,14 +86,14 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
           <Header {...this.props}/>
         </AppHeader>
         <div className="app-body">
-          <AppSidebar fixed={true} display="lg">
+          <AppSidebar fixed={false} display="lg">
             <AppSidebarHeader/>
             <AppSidebarNav navConfig={{items:this.props.navItems}} location={window.location}/>
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">
             <AppBreadcrumb appRoutes={routes}/> 
-            <Container fluid={true}>
+            <Container fluid={true} className="content-panel">
               <Switch>
                 {routes.map((route:any, idx) => {
                     return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (

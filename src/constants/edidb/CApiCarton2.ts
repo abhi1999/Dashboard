@@ -13,3 +13,11 @@ export const IApiCarton2_TrackingNo_length = 50;
 export const IApiCarton2_SSCC_length = 30;
 export const IApiCarton2_PKG_ID_length = 10;
 export const IApiCarton2_Pack_Wt_length = 8000;
+
+export const kApiCarton2_Asn_ID="Asn_ID";
+export const kApiCarton2_Box_ID="Box_ID";
+export const kApiCarton2_Pack_Level="Pack_Level";
+export const kApiCarton2_TrackingNo="TrackingNo";
+export const kApiCarton2_SSCC="SSCC";
+export const kApiCarton2_PKG_ID="PKG_ID";
+export const kApiCarton2_Pack_Wt="Pack_Wt";

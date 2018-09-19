@@ -4,7 +4,8 @@ import DatabaseView from './DatabaseView';
 import { databaseGetAll } from '../../actions/Scheduler/DatabaseAction';
 import { networkGetAll } from '../../actions/Scheduler/NetworkAction';
 import { FaPlusCircle } from 'react-icons/fa';
-import { FaCircle } from 'react-icons/fa'; import { FaCheckCircle } from 'react-icons/fa';
+import { FaCircleNotch } from 'react-icons/fa'; 
+import { FaCheckCircle } from 'react-icons/fa';
 import FlexView from 'react-flexview';
 import { Card } from 'reactstrap';
 import Search from '@material-ui/icons/Search';
@@ -53,7 +54,7 @@ class DatabaseListView extends React.Component <IDatabaseListViewProps,IDatabase
     public render() {
       const { database } = this.props;
 
-      let activeOnlyIcon = <FaCircle size={36} color='Green' onClick={ () => { this.toggleActiveOnly(); }} />;
+      let activeOnlyIcon = <FaCircleNotch size={36} color='Green' onClick={ () => { this.toggleActiveOnly(); }} />;
       if (this.state.activeOnly)
       {
         activeOnlyIcon = <FaCheckCircle size={36} color='Green' onClick={ () => { this.toggleActiveOnly(); }} />;

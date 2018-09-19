@@ -15,7 +15,7 @@ import {
   ERRORCODE_DELETE_SUCCESS,
   ERRORCODE_DELETE_FAILURE
 } from "./../constants/ActionTypes";
-import { IErrorCode } from "./../constants/edidb";
+import ErrorCode from "../constants/implementations/ErrorCode";
 
 const initialSettings = {
   errorCodeList: []
@@ -33,6 +33,7 @@ const config = (state = initialSettings, action) => {
         ...state,
         errorCodeList: action.payload.data.value.map(item => ({
           ...item,
+          Id: uuid(),
         })), // Give these a unique Id
         errorCodeListCount: action.payload.data["@odata.count"]
       };
@@ -48,7 +49,7 @@ const config = (state = initialSettings, action) => {
     case ERRORCODE_ADD_SUCCESS:
       return {
         ...state,
-        errorCodeList: state.errorCodeList.concat({ ...action.payload })
+        errorCodeList: state.errorCodeList.concat({ ...action.payload, Id: uuid() })
       };
     case ERRORCODE_ADD_FAILURE:
       return {
@@ -63,8 +64,8 @@ const config = (state = initialSettings, action) => {
       return {
         ...state,
         errorCodeList: state.errorCodeList.map(
-          (errorCode: IErrorCode) =>
-            errorCode.ErrCode === action.payload.ErrCode ? action.payload : errorCode
+          (errorCode: ErrorCode) =>
+            errorCode.Id === action.payload.Id ? action.payload : errorCode
         ) // Update the errorCodeList with the one that has changed
       };
     case ERRORCODE_UPDATE_FAILURE:
@@ -80,7 +81,7 @@ const config = (state = initialSettings, action) => {
       return {
         ...state,
         errorCodeList: state.errorCodeList.filter(
-          (errorCode: IErrorCode) => errorCode.ErrCode !== action.payload.ErrCode
+          (errorCode: ErrorCode) => errorCode.Id !== action.payload.Id
         )
         // Update the errorCodeList to remove the one that was deleted
       };

@@ -16,3 +16,12 @@ export const IVPMethodsToTask_Descr1_length = 50;
 export const IVPMethodsToTask_Descr2_length = 50;
 export const IVPMethodsToTask_Descr3_length = 50;
 export const IVPMethodsToTask_TaskName_length = 50;
+
+export const kVPMethodsToTask_ID="ID";
+export const kVPMethodsToTask_MethodCall="MethodCall";
+export const kVPMethodsToTask_MethodParams="MethodParams";
+export const kVPMethodsToTask_Descr1="Descr1";
+export const kVPMethodsToTask_Descr2="Descr2";
+export const kVPMethodsToTask_Descr3="Descr3";
+export const kVPMethodsToTask_TaskName="TaskName";
+export const kVPMethodsToTask_UseScheduler="UseScheduler";

@@ -1,9 +1,8 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "axios";
+import axios from "../configs/axios";
 import { 
     KIT_TYPE_GET_ALL
 } from './../constants/ActionTypes';
-import { BASE_URL } from "../configs";
 import { kitTypeGetAllSuccess, kitTypeGetAllFailure } from '../actions/KitTypeAction';
 import Notifications from 'react-notification-system-redux';
 import { ERROR_OPTIONS } from './../constants/ServiceParameters';
@@ -20,8 +19,7 @@ function* kitTypeGetAllRequest(action:any) {
 
 export const kitTypeGetAllApi = () => {
 
-    const endpoint:string = BASE_URL + "/odata/KitTypeSet";
-    const url:string = endpoint ; 
+    const url:string = "/odata/KitTypeSet";
 
     console.log("kitTypeGetAllApi: " + url);
     return axios.get(url);

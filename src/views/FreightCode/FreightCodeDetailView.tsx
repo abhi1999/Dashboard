@@ -1,56 +1,67 @@
 import * as React from "react";
 import { StringChecker } from '../../utils/Conversion';
-import { Form, Container, Row, Col } from 'reactstrap';
+// import { Form, Container, Row, Col } from 'reactstrap';
 import { connect } from "react-redux";
 import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
+// import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
+import { Form, Input, InputNumber, Button, Checkbox, Row, Col } from 'antd'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { freightCodeAdd, freightCodeUpdate, freightCodeDelete } from '../../actions/FreightCode';
 import FreightCode from "../../constants/implementations/FreightCode";
 
-export interface IFreightCodeDetailViewProps
-{
+const FormItem = Form.Item
+const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 4 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
+
+export interface IFreightCodeDetailViewProps {
     // Local
-    itemId:string,
-    item:FreightCode,
-    isNew:boolean,
-    toggleModal:any,
+    itemId: string,
+    item: FreightCode,
+    isNew: boolean,
+    toggleModal: any,
     // Redux
-    freightCode:any,
-    freightCodeAdd:any,
-    freightCodeUpdate:any,
-    freightCodeDelete:any
+    freightCode: any,
+    freightCodeAdd: any,
+    freightCodeUpdate: any,
+    freightCodeDelete: any
 }
 
-export interface IFreightCodeDetailViewState
-{
-    Field_Frt_Code:string,
-    Field_Frt_Code_Error:boolean,
-    Field_Frt_Code_Help:string,
-    Field_Description:string,
-    Field_NMFC:string,
-    Field_NMFC_Error:boolean,
-    Field_NMFC_Help:string,
-    Field_Class:string,
-    Field_HazMat:boolean,
-    Field_Sub:string,
+export interface IFreightCodeDetailViewState {
+    Field_Frt_Code: string,
+    Field_Frt_Code_Error: boolean,
+    Field_Frt_Code_Help: string,
+    Field_Description: string,
+    Field_NMFC: string,
+    Field_NMFC_Error: boolean,
+    Field_NMFC_Help: string,
+    Field_Class: string,
+    Field_HazMat: boolean,
+    Field_Sub: string,
     [propName: string]: any, // Lastly, this is so we can set by name dynamically
 }
 
-class FreightCodeDetailView extends React.Component<IFreightCodeDetailViewProps,IFreightCodeDetailViewState>  {
+class FreightCodeDetailView extends React.Component<IFreightCodeDetailViewProps, IFreightCodeDetailViewState>  {
 
-    constructor(props:any) {
-      super(props);
-      this.initState = this.initState.bind(this);
-      this.isValid = this.isValid.bind(this);
-      this.packFreightCode = this.packFreightCode.bind(this);
-      this.handleAdd = this.handleAdd.bind(this);
-      this.handleUpdate = this.handleUpdate.bind(this);
-      this.handleDelete = this.handleDelete.bind(this);
-      this.handleInputChange = this.handleInputChange.bind(this);
+    constructor(props: any) {
+        super(props);
+        this.initState = this.initState.bind(this);
+        this.isValid = this.isValid.bind(this);
+        this.packFreightCode = this.packFreightCode.bind(this);
+        this.handleAdd = this.handleAdd.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     public componentWillMount() {
@@ -60,142 +71,125 @@ class FreightCodeDetailView extends React.Component<IFreightCodeDetailViewProps,
     public render() {
 
         let actionButtons =
-        <div>
-            <Button size="medium" color="secondary"
-                    onClick={() =>
-                    {
+            <div>
+                <Button style={{ marginLeft: 8 }}
+                    onClick={() => {
                         this.initState();
                         this.props.toggleModal();
                     }}>
-                Cancel
+                    Cancel
             </Button>
-            <Button size="medium" color="secondary"
-                    onClick={() =>
-                    {
+                <Button style={{ marginLeft: 8 }}
+                    onClick={() => {
                         this.handleDelete();
                     }}>
-                Delete
+                    Delete
             </Button>
-            <Button size="medium" color="primary"
-                    onClick={() =>
-                    {
-                        if(this.isValid())
-                        {
+                <Button style={{ marginLeft: 8 }}
+                    type="primary"
+                    onClick={() => {
+                        if (this.isValid()) {
                             this.handleUpdate();
                         }
                     }}>
-                Update
+                    Update
             </Button>
-        </div>;
-    if(this.props.isNew)
-    {
-        actionButtons =
-        <div>
-            <Button size="medium" color="secondary"
-                    onClick={() =>
-                    {
-                        this.props.toggleModal();
-                    }}>
-                Cancel
-            </Button>
-            <Button size="medium" color="secondary"
-                    onClick={() =>
-                    {
-                        if(this.isValid())
-                        {
-                            this.handleAdd();
+            </div>;
+        if (this.props.isNew) {
+            actionButtons =
+                <div>
+                    <Button style={{ marginLeft: 8 }}
+                        onClick={() => {
                             this.props.toggleModal();
-                        }
-                    }}>
-                Add
+                        }}>
+                        Cancel
             </Button>
-        </div>
-    }
+                    <Button style={{ marginLeft: 8 }}
+                        type="primary"
+                        onClick={() => {
+                            if (this.isValid()) {
+                                this.handleAdd();
+                                this.props.toggleModal();
+                            }
+                        }}>
+                        Add
+            </Button>
+                </div>
+        }
 
         return (
-            <div style={{width: '100%', marginBottom: 20 }}>
+            <div style={{ width: '100%', marginBottom: 20 }}>
                 {actionButtons}
-                <Divider/>
+                <Divider />
                 <Form name="DetailForm" id="DetailForm" style={{ width: '100%' }}>
-                    <Container>
-                        <Row>
-                            <Col xs="4">
-                                <TextField
-                                    margin="normal"
-                                    fullWidth={true}
-                                    error={this.state.Field_Frt_Code_Error}
-                                    name="Field_Frt_Code"
-                                    value={StringChecker(this.state.Field_Frt_Code)}
-                                    onChange={this.handleInputChange}
-                                    helperText={this.state.Field_Frt_Code_Help}
-                                />
-                            </Col>
-                            <Col xs="auto">
-                                <TextField
-                                    margin="normal"
-                                    fullWidth={true}
-                                    name="Field_Description"
-                                    value={StringChecker(this.state.Field_Description)}
-                                    onChange={this.handleInputChange}
-                                    helperText="Description"
-                                />
-                            </Col>
-                            <Col xs="4">
-                                <TextField
-                                    margin="normal"
-                                    fullWidth={true}
-                                    error={this.state.Field_NMFC_Error}
-                                    name="Field_NMFC"
-                                    value={StringChecker(this.state.Field_NMFC)}
-                                    onChange={this.handleInputChange}
-                                    helperText={this.state.Field_NMFC_Help}
-                                />
-                            </Col>
-                            <Col xs="4">
-                                <TextField
-                                    margin="normal"
-                                    fullWidth={true}
-                                    name="Field_Class"
-                                    value={StringChecker(this.state.Field_Class)}
-                                    onChange={this.handleInputChange}
-                                    helperText="Class"
-                                />
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col xs="4">
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            name="Field_HazMat"
-                                            checked = {this.state.Field_HazMat}
-                                            onChange={this.handleInputChange}
-                                            color="primary"
-                                        />
-                                    }
-                                    label="HazMat"
-                                />
-                            </Col>
-                            <Col xs="4">
-                                <TextField
-                                    margin="normal"
-                                    fullWidth={true}
-                                    name="Field_Sub"
-                                    value={StringChecker(this.state.Field_Sub)}
-                                    onChange={this.handleInputChange}
-                                    helperText="Sub"
-                                />
-                            </Col>
-                        </Row>
-                    </Container>
+                    <FormItem label="Frt Code" 
+                        style={{height:24}} 
+                        {...formItemLayout} 
+                        >
+                        <Input
+                            name="Frt_Code"                           
+                            value={StringChecker(this.state.Field_Frt_Code)}
+                            onChange={this.handleInputChange}
+                        />
+                    </FormItem>
+                    <FormItem label="Description" 
+                        style={{height:24}}
+                        {...formItemLayout}
+                        >
+                        <Input
+                            name="Field_Description"
+                            value={StringChecker(this.state.Field_Description)}
+                            onChange={this.handleInputChange}
+                        />
+                    </FormItem>
+                    <FormItem label="NMFC" 
+                        style={{height:24}} 
+                        {...formItemLayout}
+                        >
+                        <Input
+                            name="Field_NMFC"
+                            value={StringChecker(this.state.Field_NMFC)}
+                            onChange={this.handleInputChange}
+                        />
+                    </FormItem>
+                    <FormItem label="Class" 
+                        style={{height:24}}
+                        {...formItemLayout}
+                        >
+                        <Input
+                            name="Field_Class"
+                            value={StringChecker(this.state.Field_Class)}
+                            onChange={this.handleInputChange}
+                        />
+                    </FormItem>
+                    <FormItem 
+                        label="HazMat"
+                        style={{height:24}}
+                        {...formItemLayout} 
+                        >
+                        <Checkbox
+                            name="Field_HazMat"
+                            checked={this.state.Field_HazMat}
+                            onChange={this.handleInputChange}
+                        />
+                    </FormItem>
+                    <FormItem label="Sub" 
+                        style={{height:24}} 
+                        {...formItemLayout}
+                        >
+                        <Input
+                            name="Field_Sub"
+                            value={StringChecker(this.state.Field_Sub)}
+                            onChange={this.handleInputChange}
+                        />
+                    </FormItem>
                 </Form>
             </div>
-    )};
+        )
+    };
 
-    private isValid()
-    {
-        if (this.state.Field_Frt_Code_Error===true || this.state.Field_NMFC_Error===true)
-        {
+    private isValid() {
+        if (this.state.Field_Frt_Code_Error === true || this.state.Field_NMFC_Error === true) {
             return false;
         }
 
@@ -234,15 +228,13 @@ class FreightCodeDetailView extends React.Component<IFreightCodeDetailViewProps,
         this.props.toggleModal();
     }
 
-    private packFreightCode()
-    {
+    private packFreightCode() {
         const { itemId } = this.props;
-        
-        let item:FreightCode = new FreightCode();
 
-        if (!this.props.isNew)
-        {
-            item= this.props.freightCode.freightCodeList.filter((selected) => selected.Id === itemId)[0];
+        let item: FreightCode = new FreightCode();
+
+        if (!this.props.isNew) {
+            item = this.props.freightCode.freightCodeList.filter((selected) => selected.Id === itemId)[0];
         }
 
         item.Frt_Code = StringChecker(this.state.Field_Frt_Code);
@@ -251,7 +243,7 @@ class FreightCodeDetailView extends React.Component<IFreightCodeDetailViewProps,
         item.Class = StringChecker(this.state.Field_Class);
         item.HazMat = this.state.Field_HazMat;
         item.Sub = StringChecker(this.state.Field_Sub);
-        
+
         return JSON.parse(JSON.stringify(item));
     }
 
@@ -261,7 +253,7 @@ class FreightCodeDetailView extends React.Component<IFreightCodeDetailViewProps,
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
-        if (this!==undefined) {
+        if (this !== undefined) {
             this.setState({
                 [name]: value
             });
@@ -298,8 +290,8 @@ class FreightCodeDetailView extends React.Component<IFreightCodeDetailViewProps,
     }
 }
 
-const mapStateToProps = ({freightCode}) => {
-    return {freightCode}
+const mapStateToProps = ({ freightCode }) => {
+    return { freightCode }
 };
 
 const mapActionsToProps = {

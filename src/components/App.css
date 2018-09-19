@@ -47,3 +47,11 @@ require("!style!css!react-table/react-table.css");
     margin-right:0;
 }
 
+.tableColumnRightAlign {
+    text-align: right;
+}
+
+.tableColumnCenterAlign {
+    text-align: center;
+    display : inline-block;
+}
