@@ -165,7 +165,7 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
             <div style={{ width: '100%', marginBottom: 20 }}>
                 {actionButtons}
                 <Divider />
-                <Form name="DetailForm" id="DetailForm" style={{ width: '100%' }}>
+                <Form name="DetailForm" id="DetailForm" style={{ width: '100%' }}>x
                     <Collapse accordion={true} defaultActiveKey={["General"]} >
                         <Panel header="General / Maps" key="General">
                             <TradeDetailGeneralPanelView

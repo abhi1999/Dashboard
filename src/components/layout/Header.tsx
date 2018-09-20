@@ -72,13 +72,15 @@ class Header extends React.Component<any, IHeaderState>{
                     <ul>{errorInfoList}</ul>
                 </ModalBody>
             </Modal>
-            <AppSidebarToggler className="d-lg-none" display="md" mobile={true}/>
-            <AppSidebarToggler className="d-md-down-none" display="lg"/>
-            
-            <AppNavbarBrand
-                full={{ src: "./assets/images/vantage-point-logo.png", alt: 'Vantage Point 5' }}
-                minimized={{ src: "./assets/images/favicon.ico", alt: 'Vantage Point 5' }}
-            />
+            <AppSidebarToggler className="d-lg-none" display="md" mobile={true}>
+                <span className="fa fa-bars"/>
+            </AppSidebarToggler>
+            <AppSidebarToggler className="d-md-down-none" display="lg">
+                <span className="fa fa-bars"/>
+            </AppSidebarToggler>
+            <AppNavbarBrand>
+                <span>Vantage Point EDI</span>
+            </AppNavbarBrand>
             
             <Nav className="d-md-down-none" navbar={true}>
                 <NavItem className="">

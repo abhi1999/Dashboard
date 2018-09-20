@@ -7,6 +7,8 @@ import FlexView from 'react-flexview';
 import { FaSyncAlt, FaPlusCircle, FaTable, FaList } from 'react-icons/fa';
 import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
 import { Pagination, Modal, Input } from 'antd';
+import PaginationControl from './../../components/widgets/PaginationControl';
+
 import { tradeGetAll, tradeDelete } from './../../actions/Trade';
 import Media from "react-media";
 // import { ITrade } from "../../constants/edidb";
@@ -233,7 +235,7 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
         //         toggleViewMode={this.toggleViewMode} />;
         // }
         return (
-            <Container>
+            <div>
                 <div className="header-icons">
                     <span onClick={()=>this.requery()} className="fa fa-refresh"/>
                     <span className="fa fa-gear"/>
@@ -283,17 +285,16 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
                     }
                 </Media>
                 <div className="paging-panel">
-                            <Pagination
-                                showSizeChanger={true}
-                                onChange={this.onChangePage}
-                                current={this.state.page}
-                                pageSize={this.state.pageSize}
-                                pageSizeOptions={['10', '50', '100']}
-                                onShowSizeChange={this.onShowSizeChange}
-                                total={this.state.tradeListCount}
-                            />
+                    <Pagination
+                        showSizeChanger={true}
+                        onChange={this.onChangePage}
+                        current={this.state.page}
+                        pageSize={this.state.pageSize}
+                        pageSizeOptions={['10', '50', '100']}
+                        onShowSizeChange={this.onShowSizeChange}
+                        total={this.state.tradeListCount}
+                    />
                 </div>
-                
                 {/* {viewComponent} */}
                 <Modal visible={(this.state.clone)} 
                        title="Clone Trading Partner"
@@ -309,7 +310,7 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
                     
                 </Modal>
 
-            </Container>
+            </div>
         )
 
     }

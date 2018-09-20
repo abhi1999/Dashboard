@@ -33,12 +33,12 @@ export class CarrierListCardItem extends React.Component<any, any> {
         const {data} = this.props;
         return (
             <Card outline={false}>
-                <CardTitle>
+                <CardHeader>
                 {data.Ship_Via_Name}
                     <div className="card-header-actions">
                         <CarrierGridEditControl {...this.props}/>
                </div> 
-                </CardTitle>
+                </CardHeader>
                 <CardBody>
                     SCAS: {data.SCAS}<br/>
                     ID: {data.Ship_Via_ID}<br/>

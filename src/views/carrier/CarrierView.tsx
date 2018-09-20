@@ -114,193 +114,66 @@ class CarrierView extends React.Component<ICarrierViewProps, ICarrierViewState> 
             <div style={{ width: '100%', marginBottom: 20 }}>
                 {actionButtons}
                 <Divider style={{ margin: 10 }} />
-   
-    <RSForm row={true}>
-    <RSRow>
-        <RSCol lg={3} md={6} sm={12}>
-            <RSFormGroup>
-                <RSLabel for={XShipVia.kShipVia_Ship_Via_Name}>Name</RSLabel>
-                <RSInput validateStatus={this.state.Field_Ship_Via_Name_Status} id={XShipVia.kShipVia_Ship_Via_Name} placeholder="Ship via Name" value={StringChecker(this.state.item.Ship_Via_Name)} onChange={this.handleInputChange} />
-            </RSFormGroup>
-        </RSCol>
-        <RSCol lg={3} md={6} sm={12}>
-        <RSFormGroup>
-          <RSLabel for={XShipVia.kShipVia_Ship_Via_ID}>ID</RSLabel>
-          <RSInput disabled={!this.props.isNew}
-                id={XShipVia.kShipVia_Ship_Via_ID}
-                name={XShipVia.kShipVia_Ship_Via_ID}
-                value={StringChecker(this.state.item.Ship_Via_ID)}
-                onChange={this.handleInputChange} />
-        </RSFormGroup>
-        </RSCol>
-        <RSCol lg={3} md={6} sm={12}>
-        <RSFormGroup>
-          <RSLabel for={XShipVia.kShipVia_SCAC}>SCAC</RSLabel>
-          <RSInput name={XShipVia.kShipVia_SCAC} id={XShipVia.kShipVia_SCAC}
-                            value={StringChecker(this.state.item.SCAC)}
-                            onChange={this.handleInputChange}/>
-        </RSFormGroup>
-        </RSCol>
-        <RSCol lg={3} md={6} sm={12}>
-        <RSFormGroup>
-          <RSLabel for={XShipVia.kShipVia_Ship_Via_Type}>Type</RSLabel>
-            <RSInput type="select" id={XShipVia.kShipVia_Ship_Via_Type}
-                            value={StringChecker(this.state.item.Ship_Via_Type)}
-                            onChange={(e)=>this.handleField_Ship_Via_TypeChange(e.target.value)}>
-                {selectType.map((option)=><option key={option.key} value={option.value}>{option.label}</option>)}
-            </RSInput>
-        </RSFormGroup>
-        </RSCol>
-        <RSCol lg={3} md={6} sm={12}>
-        <RSFormGroup>
-          <RSLabel for={XShipVia.kShipVia_User1}>Field 1</RSLabel>
-          <RSInput name={XShipVia.kShipVia_User1}
-                            value={StringChecker(this.state.item.User1)}
-                            onChange={this.handleInputChange} />
-        </RSFormGroup>
-        </RSCol>
-        <RSCol lg={3} md={6} sm={12}>
-        <RSFormGroup>
-          <RSLabel for={XShipVia.kShipVia_User2}>Field 2</RSLabel>
-          <RSInput name={XShipVia.kShipVia_User2}
-                            value={StringChecker(this.state.item.User2)}
-                            onChange={this.handleInputChange} />
-        </RSFormGroup>
-        </RSCol>
-        <RSCol lg={3} md={6} sm={12}>
-        <RSFormGroup>
-          <RSLabel for={XShipVia.kShipVia_User3}>Field 3</RSLabel>
-          <RSInput name={XShipVia.kShipVia_User3}
-                            value={StringChecker(this.state.item.User3)}
-                            onChange={this.handleInputChange} />
-        </RSFormGroup>
-        </RSCol>
-        <RSCol lg={3} md={6} sm={12}>
-        <RSFormGroup>
-          <RSLabel for={XShipVia.kShipVia_User4}>Field 4</RSLabel>
-          <RSInput name={XShipVia.kShipVia_User4}
-                            value={StringChecker(this.state.item.User4)}
-                            onChange={this.handleInputChange} />
-        </RSFormGroup>
-        </RSCol>
-        <RSCol lg={3} md={6} sm={12}>
-        <RSFormGroup>
-          <RSLabel for={XShipVia.kShipVia_User5}>Field 5</RSLabel>
-          <RSInput name={XShipVia.kShipVia_User5}
-                            value={StringChecker(this.state.item.User5)}
-                            onChange={this.handleInputChange} />
-        </RSFormGroup>
-        </RSCol>
-        </RSRow>
-</RSForm>
- <hr/>
-                <Form name="DetailForm" id="DetailForm" layout="vertical"   >
-                    
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Name"
-                        validateStatus={this.state.Field_Ship_Via_Name_Status}
-                        help={this.state.Field_Ship_Via_Name_Help}
-                    >
-                        <Input
-                            name={XShipVia.kShipVia_Ship_Via_Name}
-                            value={StringChecker(this.state.item.Ship_Via_Name)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="ID"
-                    >
-                        <Input
-                            disabled={!this.props.isNew}
-                            name={XShipVia.kShipVia_Ship_Via_ID}
-                            value={StringChecker(this.state.item.Ship_Via_ID)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="SCAC"
-                    >
-                        <Input
-                            name={XShipVia.kShipVia_SCAC}
-                            value={StringChecker(this.state.item.SCAC)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Type"
-                    >
-                        <Select
-                            id={XShipVia.kShipVia_Ship_Via_Type}
-                            value={StringChecker(this.state.item.Ship_Via_Type)}
-                            onChange={this.handleField_Ship_Via_TypeChange}
-                        >
-                        {selectType.map((option)=><Option key={option.key} value={option.value}>{option.label}</Option>)}
-                        </Select>
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Field 1"
-                    >
-                        <Input
-                            name={XShipVia.kShipVia_User1}
-                            value={StringChecker(this.state.item.User1)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Field 2"
-                    >
-                        <Input
-                            name={XShipVia.kShipVia_User2}
-                            value={StringChecker(this.state.item.User2)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Field 3"
-                    >
-                        <Input
-                            name={XShipVia.kShipVia_User3}
-                            value={StringChecker(this.state.item.User3)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Field 4"
-                    >
-                        <Input
-                            name={XShipVia.kShipVia_User4}
-                            value={StringChecker(this.state.item.User4)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Field 5"
-                    >
-                        <Input
-                            name={XShipVia.kShipVia_User5}
-                            value={StringChecker(this.state.item.User5)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                </Form>
+                <RSForm row={true}>
+                    <RSRow>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XShipVia.kShipVia_Ship_Via_Name}>Name</RSLabel>
+                                <RSInput validateStatus={this.state.Field_Ship_Via_Name_Status} id={XShipVia.kShipVia_Ship_Via_Name} placeholder="Ship via Name" value={StringChecker(this.state.item.Ship_Via_Name)} onChange={this.handleInputChange} />
+                            </RSFormGroup>
+                        </RSCol>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XShipVia.kShipVia_Ship_Via_ID}>ID</RSLabel>
+                                <RSInput disabled={!this.props.isNew} id={XShipVia.kShipVia_Ship_Via_ID} name={XShipVia.kShipVia_Ship_Via_ID} value={StringChecker(this.state.item.Ship_Via_ID)} onChange={this.handleInputChange} />
+                            </RSFormGroup>
+                        </RSCol>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XShipVia.kShipVia_SCAC}>SCAC</RSLabel>
+                                <RSInput name={XShipVia.kShipVia_SCAC} id={XShipVia.kShipVia_SCAC} value={StringChecker(this.state.item.SCAC)} onChange={this.handleInputChange}/>
+                            </RSFormGroup>
+                        </RSCol>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XShipVia.kShipVia_Ship_Via_Type}>Type</RSLabel>
+                                <RSInput type="select" id={XShipVia.kShipVia_Ship_Via_Type} value={StringChecker(this.state.item.Ship_Via_Type)} onChange={(e)=>this.handleField_Ship_Via_TypeChange(e.target.value)}>
+                                    {selectType.map((option)=><option key={option.key} value={option.value}>{option.label}</option>)}
+                                </RSInput>
+                            </RSFormGroup>
+                        </RSCol>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XShipVia.kShipVia_User1}>Field 1</RSLabel>
+                                <RSInput name={XShipVia.kShipVia_User1}value={StringChecker(this.state.item.User1)} onChange={this.handleInputChange} />
+                            </RSFormGroup>
+                        </RSCol>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XShipVia.kShipVia_User2}>Field 2</RSLabel>
+                                <RSInput name={XShipVia.kShipVia_User2} value={StringChecker(this.state.item.User2)} onChange={this.handleInputChange} />
+                            </RSFormGroup>
+                        </RSCol>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XShipVia.kShipVia_User3}>Field 3</RSLabel>
+                                <RSInput name={XShipVia.kShipVia_User3} value={StringChecker(this.state.item.User3)} onChange={this.handleInputChange} />
+                            </RSFormGroup>
+                        </RSCol>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XShipVia.kShipVia_User4}>Field 4</RSLabel>
+                                <RSInput name={XShipVia.kShipVia_User4} value={StringChecker(this.state.item.User4)} onChange={this.handleInputChange} />
+                            </RSFormGroup>
+                        </RSCol>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XShipVia.kShipVia_User5}>Field 5</RSLabel>
+                                <RSInput name={XShipVia.kShipVia_User5} value={StringChecker(this.state.item.User5)} onChange={this.handleInputChange} />
+                            </RSFormGroup>
+                        </RSCol>
+                        </RSRow>
+                </RSForm>
             </div>
         )
     };

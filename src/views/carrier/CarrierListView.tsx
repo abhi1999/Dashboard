@@ -1,14 +1,16 @@
 import * as  React from 'react';
 import { connect } from 'react-redux'
-import _ from 'lodash';
 import ReactTable from "react-table";
-import { Button as RSButton, ButtonDropdown, Card, CardTitle, CardHeader, CardBody, Col as ColRS, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row } from 'reactstrap';
+import { Badge, Button as RSButton, ButtonDropdown, Card, CardTitle, CardHeader, CardBody, Col as ColRS, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, Popover, PopoverHeader, PopoverBody, Input as RSInput } from 'reactstrap';
 import FlexView from 'react-flexview';
 import { FaSyncAlt, FaPlusCircle, FaTimesCircle, FaEdit, FaClone, FaSort, FaSortUp, FaSortDown, FaTable, FaList } from 'react-icons/fa';
 import { carrierGetAll, carrierDelete } from '../../actions/CarrierAction';
 import { toastError } from '../../actions/Scheduler/ServiceAction';
 import CarrierView from './CarrierView';
 import { Pagination } from 'antd';
+import {cloneDeep, remove, orderBy, includes } from "lodash";
+import PaginationControl from './../../components/widgets/PaginationControl';
+
 import { Form, Input, Select, Button } from 'antd';
 import { ICON_SIZE, ICON_SMALL, ICON_COLOR } from '../../constants/Attributes';
 import uuid from 'uuid-v4';
@@ -60,10 +62,11 @@ export interface ICarrierListViewState {
     carrierList: ShipViaModel[],
     carrierListCount: number,
     loading: boolean,
-    sorted: SortDescriptor[],
-    filtered: FilterDescriptor[],
-    actionMenuState:string
-    collapse:boolean
+    sorted: SortDescriptor[],  // Sort state of the grid
+    filtered: FilterDescriptor[],  // filtered state of the grid
+    actionMenuState:string // To show/hide action menu poover
+    filterPopover:boolean, // To show/hide filter popover
+    filterDirtyState:FilterDescriptor[]  /// This is to store dirty changes to the filter
 }
 
 class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierListViewState> {
@@ -84,7 +87,8 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
             sorted: [new SortDescriptor({ desc: false, id: XShipVia.kShipVia_Ship_Via_Name })],
             filtered: [],
             actionMenuState:'',
-            collapse:false
+            filterPopover:false,
+            filterDirtyState:[]
         };
 
         this.updateFilter = this.updateFilter.bind(this);
@@ -106,12 +110,15 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         this.handleTypeFilterChange = this.handleTypeFilterChange.bind(this);
         this.handleTestFilterChange = this.handleTestFilterChange.bind(this);
         this.toggleActionMenu = this.toggleActionMenu.bind(this);
+        this.handleFilterDirtyChange = this.handleFilterDirtyChange.bind(this);
+        this.getFilterValues = this.getFilterValues.bind(this);
+        this.handleFilterApply = this.handleFilterApply.bind(this);
+        this.handleFilterCancel = this.handleFilterCancel.bind(this);
+        this.renderEditAddCloneView = this.renderEditAddCloneView.bind(this);
     }
-
     public componentWillMount() {
         this.query(1, 10);
     }
-
     public componentWillReceiveProps(newProps) {
         this.setState({
             loading: false,
@@ -119,145 +126,75 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
             carrierListCount: newProps.carrier.carrierListCount
         });
     }
-    
+    public renderEditAddCloneView(){
+        return (
+            <CarrierView itemId={this.state.carrierEdit.Id} item={this.state.carrierEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
+        );
+    }
     public render() {
         const { loading, pageSize, sorted, filtered, modal } = this.state;
         let { carrierList } = this.state;
 
-        if(modal)
-        {
-            return (
-                <CarrierView itemId={this.state.carrierEdit.Id} item={this.state.carrierEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
-            );
+        if(modal){
+            return this.renderEditAddCloneView();
         }
 
         // Filter and sort client-side
         if (filtered.length > 0) {   // Filter on each column with a value
             filtered.map((column) => {
-                carrierList = carrierList.filter(item => _.includes(String(item[column.id]).toLowerCase(), String(column.value).toLowerCase()));
+                carrierList = carrierList.filter(item => includes(String(item[column.id]).toLowerCase(), String(column.value).toLowerCase()));
             });
         }
 
         if (sorted.length > 0) {   // Implement the multi-sort with lodash
-            carrierList = _.orderBy(carrierList, sorted.map((column) => column.id), sorted.map((column) => column.desc ? "desc" : "asc"));
+            carrierList = orderBy(carrierList, sorted.map((column) => column.id), sorted.map((column) => column.desc ? "desc" : "asc"));
         }
 
         const tablePageSize = Math.min(carrierList.length, pageSize); // Only show rows with data in the table
 
         return (
-            <Container>
+            <div>
                 <div className="header-icons">
                     <RSButton className="fa fa-plus" onClick={() => this.carrierAdd()}/>
                     <RSButton className="fa fa-refresh" onClick={() => this.requery(this.state.pageSize)} />
+                    <RSButton id="filterBtn" className="fa fa-filter" active={this.state.filtered.length>0} onClick={() => this.setState({filterPopover:!this.state.filterPopover})}/>{this.state.filtered.length>0? <Badge color="secondary">{this.state.filtered.length}</Badge>:""}
+                    <Popover placement="left-end" isOpen={this.state.filterPopover} target="filterBtn" toggle={() => this.setState({filterPopover:!this.state.filterPopover})}>
+                        <PopoverHeader>Filter</PopoverHeader>
+                        <PopoverBody>
+                            ID 
+                            <RSInput placeholder="ID" name={XShipVia.kShipVia_Ship_Via_ID} value={this.getFilterValues(XShipVia.kShipVia_Ship_Via_ID)} onChange={(e)=>{this.handleFilterDirtyChange(e.target.name, e.target.value)}} />
+                            Carrier Name 
+                            <RSInput name={XShipVia.kShipVia_Ship_Via_Name} value={this.getFilterValues(XShipVia.kShipVia_Ship_Via_Name)} placeholder="Carrier Name" onChange={(e)=>{this.handleFilterDirtyChange(e.target.name, e.target.value)}}/>
+                            SCAC 
+                            <RSInput name={XShipVia.kShipVia_SCAC} placeholder="SCAC" value={this.getFilterValues(XShipVia.kShipVia_SCAC)} onChange={(e)=>{this.handleFilterDirtyChange(e.target.name, e.target.value)}}/>
+                            Type 
+                            <RSInput name={XShipVia.kShipVia_Ship_Via_Type} value={this.getFilterValues(XShipVia.kShipVia_Ship_Via_Type)} type="select" onChange={(e)=>{this.handleFilterDirtyChange(e.target.name, e.target.value)}}>
+                                {selectType.map((option)=><option key={option.key} value={option.value}>{option.label}</option>)}
+                            </RSInput>
+                            <RSButton color="primary" onClick={this.handleFilterApply}>Apply</RSButton>                                
+                            <RSButton color="secondary" onClick={this.handleFilterCancel}>Cancel</RSButton>
+                        </PopoverBody>
+                    </Popover>
                 </div>
+                {
+                    this.state.filtered.length> 0?<div>
+                        {this.state.filtered.map(f=><RSButton key={f.id} onClick={()=>{this.handleFilterDirtyChange(f.id); this.handleFilterApply()}}>{f.value}</RSButton>)}
+                    </div>:""
+                }
                 <Media query={{ maxWidth: 768 }}>
                     {matches => // Mobile version first
                         matches ? (
                             <div>
-                                <Card body={true} outline={true} style={{ width: '100%' }}>
-                                    <Form layout="inline" style={{marginTop:-10, marginBottom:10}}>
-                                        <FormItem 
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="ID"
-                                        >
-                                            <Input
-                                                name={XShipVia.kShipVia_Ship_Via_ID}
-                                                prefix={this.getSortButton(XShipVia.kShipVia_Ship_Via_ID)}
-                                                value={filterGetValue(this.state.filtered, XShipVia.kShipVia_Ship_Via_ID)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="Name"
-                                        >
-                                            <Input
-                                                name={XShipVia.kShipVia_Ship_Via_Name}
-                                                prefix={this.getSortButton(XShipVia.kShipVia_Ship_Via_Name)}
-                                                value={filterGetValue(this.state.filtered, XShipVia.kShipVia_Ship_Via_Name)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="SCAC"
-                                        >
-                                            <Input
-                                                name={XShipVia.kShipVia_SCAC}
-                                                prefix={this.getSortButton(XShipVia.kShipVia_SCAC)}
-                                                value={filterGetValue(this.state.filtered, XShipVia.kShipVia_SCAC)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="Type"
-                                        >
-                                            <Select style={{ width: '100%' }}
-                                                value={filterGetValue(this.state.filtered, XShipVia.kShipVia_Ship_Via_Type)}
-                                                onChange={this.handleTypeFilterChange}
-                                            >
-                                            {selectType.map((option)=><Option key={option.key} value={option.value}>{option.label}</Option>)}
-                                            </Select>
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="Boolean"
-                                        >
-                                            <Select style={{ width: '100%' }}
-                                                value={filterGetValue(this.state.filtered, "Test")}
-                                                onChange={this.handleTestFilterChange}
-                                            >
-                                            {selectTest.map((option)=><Option key={option.key} value={option.value}>{option.label}</Option>)}
-                                            </Select>
-                                        </FormItem>
-                                    </Form>
-                                </Card>
                                 <Row>
-                                    {carrierList.map((item) =>
-                                        <ColRS xl={4} lg={4} md={4} sm={6} xs={12} key={item.Id}>
-                                            <Card outline={false}>
-                                                <CardHeader>
-                                                    {item.Ship_Via_Name}
-                                                    <div className="card-header-actions">
-                                                        <Button type="primary" shape="circle" size="small" style={{marginLeft:2}} icon="form"  onClick={() => this.carrierEdit(item)} />
-                                                        <Button type="primary" shape="circle" size="small" style={{marginLeft:2}} icon="delete" onClick={() => this.carrierDelete(item)} />
-                                                        <Button type="primary" shape="circle" size="small" style={{marginLeft:2}} icon="copy" onClick={() => this.carrierClone(item)} />
-                                                    </div> 
-                                                </CardHeader>
-                                                <CardBody>
-                                                <Form layout="inline">
-                                                    <FormItem 
-                                                        {...formItemLayout}
-                                                        label="ID"
-                                                        >
-                                                        {item.Ship_Via_ID}
-                                                    </FormItem>
-                                                    <FormItem 
-                                                        {...formItemLayout}
-                                                        label="SCAC"
-                                                        >
-                                                        {item.SCAC}
-                                                    </FormItem>
-                                                    <FormItem 
-                                                        {...formItemLayout}
-                                                        label="Type"
-                                                        >
-                                                        {item.Ship_Via_Type}
-                                                    </FormItem>
-                                                </Form>
-                                                </CardBody>
-                                            </Card>
-                                        </ColRS>)}
+                                {
+                                    carrierList.map((item) =>
+                                    <ColRS xl={4} lg={4} md={4} sm={6} xs={12} key={item.Id}>
+                                        <CarrierListCardItem key={item.Id} data={item} onItemEdit={()=>this.carrierEdit(item)} onItemClone={() => this.carrierClone(item)} onItemDelete={() => this.carrierDelete(item)} />
+                                    </ColRS>)
+                                }
                                 </Row>
                             </div>
-
-                        ) : ( // Desktop version
+                       ) : ( // Desktop version
                                 <div>
                                     <ReactTable
                                         columns={[
@@ -297,7 +234,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                                                 Header: "Type",
                                                 accessor: XShipVia.kShipVia_Ship_Via_Type,
                                                 sortable: true,
-                                                filterable: true,
+                                                filterable: false,
                                                 Cell: ({ row }) => selectGetValue(selectType, row.Ship_Via_Type),
                                                 Filter: ({ filter, onChange }) =>
                                                     <Select
@@ -312,7 +249,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                                                 Header: "Test",
                                                 accessor: "Test",
                                                 sortable: true,
-                                                filterable: true,
+                                                filterable: false,
                                                 Cell: ({ row }) => selectGetValue(selectTest, row.Test),
                                                 Filter: ({ filter, onChange }) =>
                                                     <Select
@@ -342,53 +279,69 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                             )
                     }
                 </Media>
-            
                 <div className="paging-panel">
-                            <Pagination
-                                showSizeChanger={true}
-                                onChange={this.onChangePage}
-                                current={this.state.page}
-                                pageSize={this.state.pageSize}
-                                pageSizeOptions={['10', '50', '100']}
-                                onShowSizeChange={this.onShowSizeChange}
-                                total={this.state.carrierListCount}
-                            />
+                    <Pagination
+                        showSizeChanger={true}
+                        onChange={this.onChangePage}
+                        current={this.state.page}
+                        pageSize={this.state.pageSize}
+                        pageSizeOptions={['10', '50', '100']}
+                        onShowSizeChange={this.onShowSizeChange}
+                        total={this.state.carrierListCount}
+                    />
                 </div>
-            </Container>
+            </div>
         );
     }
 
-    public toggleModal() {
-        this.setState({
-            modal: !this.state.modal
-        });
+    private toggleModal() {
+        this.setState({modal: !this.state.modal});
+    }
+    // Filter calls
+    private handleFilterApply(){
+        this.setState({filterPopover:false, filtered:cloneDeep(this.state.filterDirtyState)}, ()=>{
+            this.requery(this.state.pageSize)
+        })
+    }
+    private handleFilterCancel(){
+        this.setState({filterPopover:false, filterDirtyState:cloneDeep(this.state.filtered)})
+    }
+    private getFilterValues(id){
+        const item = this.state.filterDirtyState.find(f=> f.id === id);
+        return item? item.value: ""; 
+    }
+    private handleFilterDirtyChange(id, value=''){
+        const filterDirtyState = this.state.filterDirtyState;
+        let item = filterDirtyState.find(f=> f.id === id)
+        if(item!== undefined){
+            item.value = value;
+        }else{
+            item = {id, value}
+            filterDirtyState.push(item);
+        }
+        remove(filterDirtyState, (f)=>f.value === undefined || f.value.length === 0 )
+        this.setState({filterDirtyState});
     }
     private toggleActionMenu(data){
         this.setState({actionMenuState:this.state.actionMenuState=== data.Id? "": data.Id});
-        console.log('hello', data)
     }
     private handleTypeFilterChange(value: string) {
         this.updateFilter(XShipVia.kShipVia_Ship_Via_Type, value);
     }
-
     private handleTestFilterChange(value: string) {
         this.updateFilter("Test", value);
     }
-
     private handleFilterChange(event: any) {
         const target: any = event.target;
         const id: string = target.name;
         const value: string = target.type === 'checkbox' ? String(target.checked) : target.value;
-
         this.updateFilter(id, value);
     }
-    
     private updateFilter(id: string, value: string) {
         let { filtered } = this.state;
         filtered = filterAdd(filtered, id, value);
         this.setState({ filtered });
     }
-
     private toggleViewMode() {
         if (this.state.viewMode === 'cards') {
             this.setState({ viewMode: 'table' });
@@ -446,7 +399,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
             isNew: true
         });
     }
-
+   
     private onChangePage = (page) => {
         this.setState({ page });
         this.query(page, this.state.pageSize);
@@ -460,7 +413,6 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
     private getSortButton(columnId) {
         // Get the relevant column from the sorted array
         const sortedColumn = this.state.sorted.filter((column) => column.id === columnId);
-
         // This is a tri-state toggle
         if (sortedColumn.length > 0) {
             if (sortedColumn[0].desc) {
@@ -477,10 +429,8 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
 
     private toggleSortMode(columnId) {
         let sortUpdated: SortDescriptor[] = [];
-
         // Get the relevant column from the sorted array
         const sortedColumn = this.state.sorted.filter((column) => column.id === columnId);
-
         // This is a tri-state toggle
         if (sortedColumn.length > 0) {
             if (sortedColumn[0].desc) {
@@ -507,10 +457,15 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
     }
 
     private onFilteredChange(filtered: FilterDescriptor[]) {
-        this.setState({ filtered });
+        debugger;
+        this.setState({ filtered }, ()=>{
+            // this.requery(this.state.pageSize)
+        });
     }
 }
 
+
+// Redux Connect componet
 const mapStateToProps = ({ carrier }) => {
     return { carrier }
 };
