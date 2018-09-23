@@ -102,6 +102,8 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         this.carrierDelete = this.carrierDelete.bind(this);
         this.carrierClone = this.carrierClone.bind(this);
         this.revertDisplay = this.revertDisplay.bind(this);
+        this.query = this.query.bind(this);
+        this.requery = this.requery.bind(this);
         this.onChangePage = this.onChangePage.bind(this);
         this.onShowSizeChange = this.onShowSizeChange.bind(this);
         this.toggleViewMode = this.toggleViewMode.bind(this);
@@ -112,6 +114,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         this.handleTypeFilterChange = this.handleTypeFilterChange.bind(this);
         this.handleTestFilterChange = this.handleTestFilterChange.bind(this);
         this.getFilterValues = this.getFilterValues.bind(this);
+        this.handleFilterApply = this.handleFilterApply.bind(this);
     }
     public componentWillMount() {
         this.query(1, 10);
@@ -279,7 +282,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
     }
 
     // Filter calls
-    private handleFilterApply=(newFilter:FilterDescriptor[])=>{
+    private handleFilterApply(newFilter:FilterDescriptor[]){
         this.setState({filtered:cloneDeep(newFilter)}, ()=>{
             this.requery(this.state.pageSize)
         })

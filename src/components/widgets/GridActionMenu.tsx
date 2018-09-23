@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {Button, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Popover, PopoverBody} from 'reactstrap';
 import IconButton from "./IconButton";
+import uuid from 'uuid-v4';
+
 interface IGridActionMenuProps{
     items:string[]
     onItemClick:(item:string)=>void
@@ -15,14 +17,14 @@ export default class GridActionMenu extends React.Component<IGridActionMenuProps
         this.state = {
             actionMenuState:false
         }
-        this.iconButtonRef = React.createRef();
+        this.iconButtonRef = uuid();
     }
     // TODo placeholder to replace button dropdown with popover
-    public renderNew(){
+    public render(){
         const {items, onItemClick}= this.props;
         return <React.Fragment>
-                    <IconButton ref={this.iconButtonRef} id="actionButton" className="fa fa-ellipsis-v btn-toggle" onClick={()=>{this.setState({actionMenuState:!this.state.actionMenuState})}}/>
-                    <Popover placement="right-end" isOpen={this.state.actionMenuState} target={()=>this.iconButtonRef} toggle={()=>{this.setState({actionMenuState:!this.state.actionMenuState})}}>
+                    <IconButton id={"menu-"+this.iconButtonRef} className="fa fa-ellipsis-v btn-toggle" onClick={()=>{this.setState({actionMenuState:!this.state.actionMenuState})}}/>
+                    <Popover className="action-menu" placement="auto" isOpen={this.state.actionMenuState} target={"menu-"+this.iconButtonRef} toggle={()=>{this.setState({actionMenuState:!this.state.actionMenuState})}}>
                         <PopoverBody>
                         {
                             items.map((i)=>{
@@ -33,7 +35,7 @@ export default class GridActionMenu extends React.Component<IGridActionMenuProps
                     </Popover>
                 </React.Fragment>
     }
-    public render(){
+    public renderw(){
         const {items, onItemClick}= this.props;
         return <ButtonDropdown direction="right"  isOpen={this.state.actionMenuState} toggle={()=>{this.setState({actionMenuState:!this.state.actionMenuState})}}>
                     <DropdownToggle caret={false} className="fa fa-ellipsis-v btn-toggle"/>

@@ -22,11 +22,6 @@ export default class GridFilter extends React.Component<IGridFilterProps,IGridFi
             isOpen:false,
             filtersDirtyState:[]
         }
-        this.handleFilterDirtyChange = this.handleFilterDirtyChange.bind(this);
-        this.getValueForFilter = this.getValueForFilter.bind(this);
-        this.handleFilterApply = this.handleFilterApply.bind(this);
-        this.handleFilterCancel = this.handleFilterCancel.bind(this);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
     public componentWillReceiveProps(props){
         this.setState({filtersDirtyState:cloneDeep(props.filters)})
@@ -50,12 +45,12 @@ export default class GridFilter extends React.Component<IGridFilterProps,IGridFi
                             let innerItem;
                             switch(item.type){
                                 case "select":
-                                    innerItem=<Input type="select" name={item.name} value={this.getValueForFilter(item.name)} onChange={(e)=>{ this.handleFilterDirtyChange(e.target.name, e.target.value, e.target.options[e.target.options.selectedIndex].text)}}>
+                                    innerItem=<Input type="select" name={item.name} value={this.getValueForFilter(item.name)} onChange={(e)=>{ this.handleFilterDirtyChange(e.target.name, e.target.value, e.target.options[e.target.options.selectedIndex].text, item.label)}}>
                                                 {item.options}
                                         </Input>   
                                         break;
                                 default:
-                                    innerItem = <Input autoComplete="off" name={item.name} onKeyPress={this.handleKeyPress} defaultValue={this.getValueForFilter(item.name)} onChange={(e)=>{this.handleFilterDirtyChange(e.target.name, e.target.value)}}/>;
+                                    innerItem = <Input autoComplete="off" name={item.name} onKeyPress={this.handleKeyPress} defaultValue={this.getValueForFilter(item.name)} onChange={(e)=>{this.handleFilterDirtyChange(e.target.name, e.target.value, e.target.value, item.label)}}/>;
                             }
                             return <React.Fragment key={index}>
                                 {item.label}
@@ -71,22 +66,22 @@ export default class GridFilter extends React.Component<IGridFilterProps,IGridFi
             </Popover>
         </React.Fragment>
     }
-    private handleKeyPress(e){
+    private handleKeyPress=(e)=>{
         if(e.charCode === 13){
             this.handleFilterApply();
         }
     }
-    private getValueForFilter(id){
+    private getValueForFilter=(id)=>{
         const item = this.state.filtersDirtyState.find(f=> f.id === id);
         return item? item.value: undefined; 
     }
-    private handleFilterDirtyChange(id, value, displayValue?){
+    private handleFilterDirtyChange= (id, value, displayValue?, displayLabel?)=>{
         const filtersDirtyState = this.state.filtersDirtyState;
         let item = filtersDirtyState.find(f=> f.id === id)
         if(item!== undefined){
             item.value = value;
         }else{
-            item = {id, value, displayValue}
+            item = {id, value, displayValue, displayLabel}
             filtersDirtyState.push(item);
         }
         if(displayValue){
@@ -95,7 +90,7 @@ export default class GridFilter extends React.Component<IGridFilterProps,IGridFi
         remove(filtersDirtyState, (f)=>f.value === undefined || f.value.length === 0 )
         this.setState({filtersDirtyState});
     }
-    private handleFilterApply(){
+    private handleFilterApply=()=>{
         const filtersDirtyState:FilterDescriptor[] = this.state.filtersDirtyState;
         filtersDirtyState.forEach(f=>{
             const filterItem = this.props.filterItems.find((fi:any)=>fi.name === f.id);
@@ -116,7 +111,7 @@ export default class GridFilter extends React.Component<IGridFilterProps,IGridFi
             this.props.onApply(filtersDirtyState);
         })
     }
-    private handleFilterCancel(){
+    private handleFilterCancel=()=>{
         this.setState({isOpen:false})
     }
 }
