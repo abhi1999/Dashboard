@@ -1,12 +1,16 @@
-import * as  React from 'react';
+import * as React from 'react';
 import { StringChecker } from '../../utils/Conversion';
-import { MultiIncludes } from '../../utils/Comparison';
 import { connect } from "react-redux";
 import Divider from '@material-ui/core/Divider';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { documentAdd, documentUpdate, documentDelete } from '../../actions/DocumentAction';
-import ShipViaModel from "../../constants/implementations/ShipViaModel";
+import { IXMLDoc } from '../../constants/edidb'
+import * as XXMLDoc from "../../constants/edidb/CXMLDoc";
 import { Form, Input, Select, Button } from 'antd';
+import KeyValueLabel from '../../constants/params/keyValueLabel';
+import { pseudoTradeGetAll } from '../../actions/PseudoTradeAction';
+import { Button as RSButton, ButtonDropdown, Card, CardTitle, CardHeader, CardBody, Col, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row } from 'reactstrap';
+import { Form as RSForm, FormGroup as RSFormGroup, Label as RSLabel, Col as RSCol, Input as RSInput, Row as RSRow } from 'reactstrap';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const formItemLayout = {
@@ -19,49 +23,48 @@ const formItemLayout = {
         sm: { span: 16 },
     },
 };
+const selectStatus: KeyValueLabel[] = [
+    new KeyValueLabel({ key: "", value: "", label: "All" }),
+    new KeyValueLabel({ key: "N", value: "N", label: "Ready" }),
+    new KeyValueLabel({ key: "H", value: "H", label: "Hold" }),
+    new KeyValueLabel({ key: "Y", value: "Y", label: "Complete" }),
+    new KeyValueLabel({ key: "C", value: "C", label: "Carbon Copied" }),
+];
+const selectDirection: KeyValueLabel[] = [
+    new KeyValueLabel({ key: "", value: "", label: "All" }),
+    new KeyValueLabel({ key: "I", value: "I", label: "Inbound" }),
+    new KeyValueLabel({ key: "O", value: "O", label: "Outbound" }),
+];
 
-export interface IDocumentViewProps {
+export interface IdocumentViewProps {
     // Local
     itemId: string,
-    item: ShipViaModel,
+    item: IXMLDoc,
     isNew: boolean,
-    toggleModal: any,
+    revertDisplay: any,
     // Redux
     document: any,
+    pseudoTradeSet: any,
+    pseudoTradeGetAll: any;
     documentAdd: any,
     documentUpdate: any,
     documentDelete: any
 }
 
-export interface IDocumentViewState {
-    Field_Ship_Via_ID: string,
-    Field_Ship_Via_ID_Status: any,
-    Field_Ship_Via_ID_Help: string,
-    Field_Ship_Via_Name: string,
-    Field_Ship_Via_Name_Status: any,
-    Field_Ship_Via_Name_Help: string,
-    Field_SCAC: string,
-    Field_Ship_Via_Type: string,
-    Field_User1: string,
-    Field_User2: string,
-    Field_User3: string,
-    Field_User4: string,
-    Field_User5: string,
+export interface IdocumentViewState {
+    tradeSelectList: any[],
+    TP_PartID:string,
     [propName: string]: any, // Lastly, this is so we can set by name dynamically
 }
 
-class DocumentView extends React.Component<IDocumentViewProps, IDocumentViewState> {
-
+class DocumentView extends React.Component<IdocumentViewProps, IdocumentViewState> {
     constructor(props: any) {
         super(props);
-
         this.initState = this.initState.bind(this);
         this.isValid = this.isValid.bind(this);
-        this.packDocument = this.packDocument.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleField_Ship_Via_TypeChange = this.handleField_Ship_Via_TypeChange.bind(this);
+        this.handleExp_FlagChange = this.handleExp_FlagChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
     }
@@ -71,22 +74,12 @@ class DocumentView extends React.Component<IDocumentViewProps, IDocumentViewStat
     };
 
     public render() {
-
         let actionButtons =
             <div>
-                <Button style={{ marginLeft: 8 }}
-                    onClick={() => {
-                        this.initState();
-                        this.props.toggleModal();
-                    }}>
-                    Cancel
-            </Button>
-                <Button style={{ marginLeft: 8 }}
-                    onClick={() => {
-                        this.handleDelete();
-                    }}>
-                    Delete
-            </Button>
+                <Button icon='arrow-left' shape="circle" style={{ marginLeft: 8 }} onClick={() => {
+                    this.initState();
+                    this.props.revertDisplay();
+                }} />
                 <Button style={{ marginLeft: 8 }}
                     type="primary"
                     onClick={() => {
@@ -100,18 +93,16 @@ class DocumentView extends React.Component<IDocumentViewProps, IDocumentViewStat
         if (this.props.isNew) {
             actionButtons =
                 <div>
-                    <Button style={{ marginLeft: 8 }}
-                        onClick={() => {
-                            this.props.toggleModal();
-                        }}>
-                        Cancel
-            </Button>
+                    <Button icon='arrow-left' shape="circle" onClick={() => {
+                        this.initState();
+                        this.props.revertDisplay();
+                    }} />
                     <Button style={{ marginLeft: 8 }}
                         type="primary"
                         onClick={() => {
                             if (this.isValid()) {
                                 this.handleAdd();
-                                this.props.toggleModal();
+                                this.props.revertDisplay();
                             }
                         }}>
                         Add
@@ -122,183 +113,65 @@ class DocumentView extends React.Component<IDocumentViewProps, IDocumentViewStat
             <div style={{ width: '100%', marginBottom: 20 }}>
                 {actionButtons}
                 <Divider style={{ margin: 10 }} />
-                <Form name="DetailForm" id="DetailForm">
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Name"
-                        validateStatus={this.state.Field_Ship_Via_Name_Status}
-                        help={this.state.Field_Ship_Via_Name_Help}
-                    >
-                        <Input
-                            name="Field_Ship_Via_Name"
-                            value={StringChecker(this.state.Field_Ship_Via_Name)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="ID"
-                        validateStatus={this.state.Field_Ship_Via_ID_Status}
-                        help={this.state.Field_Ship_Via_ID_Help}
-                    >
-                        <Input
-                            disabled={!this.props.isNew}
-                            name="Field_Ship_Via_ID"
-                            value={StringChecker(this.state.Field_Ship_Via_ID)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="SCAC"
-                    >
-                        <Input
-                            name="Field_SCAC"
-                            value={StringChecker(this.state.Field_SCAC)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Type"
-                    >
-                        <Select
-                            id="Field_Ship_Via_Type"
-                            value={StringChecker(this.state.Field_Ship_Via_Type)}
-                            onChange={this.handleField_Ship_Via_TypeChange}
-                        >
-                            <Option key="LT" value="LT">LT</Option>
-                            <Option key="M" value="M">M</Option>
-                            <Option key="U" value="U">U</Option>
-                        </Select>
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Field 1"
-                    >
-                        <Input
-                            name="Field_User1"
-                            value={StringChecker(this.state.Field_User1)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Field 2"
-                    >
-                        <Input
-                            name="Field_User2"
-                            value={StringChecker(this.state.Field_User2)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Field 3"
-                    >
-                        <Input
-                            name="Field_User3"
-                            value={StringChecker(this.state.Field_User3)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Field 4"
-                    >
-                        <Input
-                            name="Field_User4"
-                            value={StringChecker(this.state.Field_User4)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                    <FormItem
-                        style={{ height: 24 }}
-                        {...formItemLayout}
-                        label="Field 5"
-                    >
-                        <Input
-                            name="Field_User5"
-                            value={StringChecker(this.state.Field_User5)}
-                            onChange={this.handleInputChange}
-                        />
-                    </FormItem>
-                </Form>
+                <RSForm row={true}>
+                    <RSRow>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XXMLDoc.kXMLDoc_DGID}>DGID</RSLabel>
+                                <RSInput id={XXMLDoc.kXMLDoc_DGID} value={StringChecker(this.state.item.DGID)} onChange={this.handleInputChange} />
+                            </RSFormGroup>
+                        </RSCol>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XXMLDoc.kXMLDoc_XMLRef}>XMLRef</RSLabel>
+                                <RSInput id={XXMLDoc.kXMLDoc_XMLRef} value={StringChecker(this.state.item.XMLRef)} onChange={this.handleInputChange} />
+                            </RSFormGroup>
+                        </RSCol>
+                        <RSCol lg={3} md={6} sm={12}>
+                            <RSFormGroup>
+                                <RSLabel for={XXMLDoc.kXMLDoc_Exp_Flag}>Status</RSLabel>
+                                <RSInput type="select" id={XXMLDoc.kXMLDoc_Exp_Flag} value={StringChecker(this.state.item.Exp_Flag)} onChange={(e) => this.handleExp_FlagChange(e.target.value)}>
+                                    {selectStatus.map((option) => <option key={option.key} value={option.value}>{option.label}</option>)}
+                                </RSInput>
+                            </RSFormGroup>
+                        </RSCol>
+                    </RSRow>
+                </RSForm>
             </div>
         )
     };
 
     private initState() {
         this.setState({
-            Field_Ship_Via_ID: StringChecker(this.props.item.Ship_Via_ID),
-            Field_Ship_Via_ID_Status: undefined,
-            Field_Ship_Via_ID_Help: '',
-            Field_Ship_Via_Name: StringChecker(this.props.item.Ship_Via_Name),
-            Field_Ship_Via_Name_Status: undefined,
-            Field_Ship_Via_Name_Help: '',
-            Field_SCAC: StringChecker(this.props.item.SCAC),
-            Field_Ship_Via_Type: StringChecker(this.props.item.Ship_Via_Type),
-            Field_User1: StringChecker(this.props.item.User1),
-            Field_User2: StringChecker(this.props.item.User2),
-            Field_User3: StringChecker(this.props.item.User3),
-            Field_User4: StringChecker(this.props.item.User4),
-            Field_User5: StringChecker(this.props.item.User5)
+            item: this.props.item,
+            TP_PartID:this.props.item.TP_PartID,
+            tradeSelectList: [],
         });
+
+        this.props.pseudoTradeGetAll();
     }
 
     private handleAdd() {
-        const document = this.packDocument();
+        const document = this.state.item;
         this.props.documentAdd(document);
-        this.props.toggleModal();
+        this.props.revertDisplay();
     }
 
     private handleUpdate() {
-        const document = this.packDocument();
+        const document = this.state.item;
         this.props.documentUpdate(document);
-        this.props.toggleModal();
+        this.props.revertDisplay();
     }
 
-    private handleDelete() {
-        const document = this.packDocument();
-        this.props.documentDelete(document);
-        this.props.toggleModal();
+    private handleTP_PartIDChange(value: string) {
+        this.handleFieldChange(XXMLDoc.kXMLDoc_TP_PartID, value);
     }
 
-    private packDocument() {
-        const { itemId } = this.props;
-
-        let item: ShipViaModel = new ShipViaModel();
-
-        if (!this.props.isNew) {
-            item = this.props.document.documentList.filter((selected) => selected.Id === itemId)[0];
-        }
-
-        item.SCAC = StringChecker(this.state.Field_SCAC);
-        item.Ship_Via_ID = StringChecker(this.state.Field_Ship_Via_ID);
-        item.Ship_Via_Name = StringChecker(this.state.Field_Ship_Via_Name);
-        item.Ship_Via_Type = StringChecker(this.state.Field_Ship_Via_Type);
-        item.User1 = StringChecker(this.state.Field_User1);
-        item.User2 = StringChecker(this.state.Field_User2);
-        item.User3 = StringChecker(this.state.Field_User3);
-        item.User4 = StringChecker(this.state.Field_User4);
-        item.User5 = StringChecker(this.state.Field_User5);
-
-        return JSON.parse(JSON.stringify(item));
+    private handleExp_FlagChange(value: string) {
+        this.handleFieldChange(XXMLDoc.kXMLDoc_Exp_Flag, value);
     }
 
-    private handleField_Ship_Via_TypeChange(value: string) {
-        this.handleFieldChange("Field_Ship_Via_Type", value);
-    }
-
-    private handleInputChange(event:any) {
+    private handleInputChange(event: any) {
 
         const target: any = event.target;
         const value: string = target.type === 'checkbox' ? target.checked : target.value;
@@ -310,42 +183,27 @@ class DocumentView extends React.Component<IDocumentViewProps, IDocumentViewStat
     private handleFieldChange(name: string, value: string) {
 
         if (this !== undefined) {
-            this.setState({
-                [name]: value
-            });
-        }
 
-        // Field Validation
-        if (name === 'Field_Ship_Via_Name') {
-            if (value.length < 1) {
-                this.setState({
-                    Field_Name_Status: 'error',
-                    Field_Name_Help: 'Document Name - cannot be blank.'
-                });
-            }
-            else {
-                this.setState({
-                    Field_Name_Status: undefined,
-                    Field_Name_Help: ''
-                });
-            }
+            this.setState(prevState => ({
+                item: {
+                    ...prevState.item,
+                    [name]: value
+                }
+            }))
         }
     }
 
     private isValid() {
-        if (this.state.Field_Ship_Via_Name_Error === true) {
-            return false;
-        }
-
         return true;
     }
 }
 
-const mapStateToProps = ({ document }) => {
-    return { document }
+const mapStateToProps = ({ document, pseudoTradeSet }) => {
+    return { document, pseudoTradeSet }
 };
 
 const mapActionsToProps = {
+    pseudoTradeGetAll,
     documentAdd,
     documentUpdate,
     documentDelete

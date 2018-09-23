@@ -85,11 +85,14 @@ class Header extends React.Component<any, IHeaderState>{
             <Nav className="d-md-down-none" navbar={true}>
                 <NavItem className="">
                     <NavLink href="#"><i className="icon-exclamation icons" onClick={ () => { this.toggleErrorInfo(); }}/></NavLink>
-                    
                 </NavItem>
-
                 <NavItem className="">
                     <NavLink href="#"><i className="icon-info exclamation icons" onClick={ () => { this.toggleVersionInfo(); }}/></NavLink>
+                </NavItem>
+                <NavItem className="">
+                    <NavLink href="#" onClick={ () => { console.log('clicked on the name'); return false; }}>
+                        <span className="login-name">DM</span>
+                    </NavLink>
                 </NavItem>
             </Nav>
             

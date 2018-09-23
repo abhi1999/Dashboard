@@ -1,11 +1,9 @@
 import * as React from "react";
 import { StringChecker } from '../../utils/Conversion';
-import { Form, Input, Divider, Row, Col, Checkbox } from 'antd'
-import { Select, Button, Icon, message } from 'antd'
+import { Divider } from 'antd'
+import { FormGroup, Label, Col, Input, Row } from 'reactstrap';
+import * as xCompany from "../../constants/EDICompany/CCompany"
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-const FormItem = Form.Item;
-const Option = Select.Option;
 
 const importMethod = [
     { id: 0, value: "Standard" },
@@ -22,136 +20,122 @@ function CompanySetupPanelView(props) {
         <div>
             <Divider orientation="left">Locations</Divider>
             <Row>
-                <Col span={12}>
-                    <FormItem>
-
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_vpEDIdirect}>Data Folder</Label>
                         <Input
-                            addonBefore="Data Folder"
-                            name="vpEDIdirect"
+                            id={xCompany.kCompany_vpEDIdirect}
                             value={StringChecker(props.company.vpEDIdirect)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_EDIdirect}>FTP Folder</Label>
                         <Input
-                            addonBefore="FTP Folder"
-                            name="EDIdirect"
+                            id={xCompany.kCompany_EDIdirect}
                             value={StringChecker(props.company.EDIdirect)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_ACCTdirect}>ERP Folder</Label>
                         <Input
-                            addonBefore="ERP Folder"
-                            name="ACCTdirect"
+                            id={xCompany.kCompany_ACCTdirect}
                             value={StringChecker(props.company.ACCTdirect)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_vpSharedirect}>Shared Folder</Label>
                         <Input
-                            addonBefore="Shared Folder"
-                            name="vpSharedirect"
+                            id={xCompany.kCompany_vpSharedirect}
                             value={StringChecker(props.company.vpSharedirect)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
             </Row>
             <Divider orientation="left">Settings</Divider>
             <Row>
-                <Col span={8}>
-                    <FormItem
-                        label="Link Delivery Date"
-                    >
-                        <Checkbox
-                            name="LinkDelDate"
-                            checked={props.company.LinkDelDate}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup check={true}>
+                        <Label for={xCompany.kCompany_LinkDelDate}>
+                            <Input type="checkbox"
+                                id={xCompany.kCompany_LinkDelDate}
+                                checked={props.company.LinkDelDate}
+                                onChange={props.handleInputChange} />
+                            Line Delivery Date
+                            </Label>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={8}>
-                    <FormItem
-                        label="Enable Security"
-                    >
-                        <Checkbox
-                            name="SecurityEnabled"
-                            checked={props.company.SecurityEnabled}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup check={true}>
+                        <Label for={xCompany.kCompany_SecurityEnabled}>
+                            <Input type="checkbox"
+                                id={xCompany.kCompany_SecurityEnabled}
+                                checked={props.company.SecurityEnabled}
+                                onChange={props.handleInputChange} />
+                            Enable Security
+                            </Label>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={8}>
-                    <FormItem
-                        label="Auto Hold On Error"
-                    >
-                        <Checkbox
-                            name="AutoHoldDoc"
-                            checked={props.company.AutoHoldDoc}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup check={true}>
+                        <Label for={xCompany.kCompany_AutoHoldDoc}>
+                            <Input type="checkbox"
+                                id={xCompany.kCompany_AutoHoldDoc}
+                                checked={props.company.AutoHoldDoc}
+                                onChange={props.handleInputChange} />
+                            Auto Hold On Error
+                            </Label>
+                    </FormGroup>
                 </Col>
             </Row>
             <Divider orientation="left">Warehouse</Divider>
             <Row>
-                <Col span={8}>
-                    <FormItem label="Import Method">
-                        <Select style={{ width: '100%' }}
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_WMSImportType}>Import Method</Label>
+                        <Input type="select"
+                            id={xCompany.kCompany_WMSImportType}
                             value={props.company.WMSImportType}
-                            onChange={props.handleImportMethodChange}
+                            onChange={(e) => props.handleDropDownChange(e.target.id, e.target.value)}
                         >
-                            {importMethod.map((item) => {
-                                return (
-                                    <Option key={item.id} value={item.id}>{item.value}</Option>
-                                )
-                            })
-                            }
-                        </Select>
-                    </FormItem>
+                            {importMethod.map((option) => <option key={option.id} value={option.id}>{option.value}</option>)}
+                        </Input>
+                    </FormGroup>
                 </Col>
             </Row>
             <Divider orientation="left">Scheduler / Workflow</Divider>
             <Row>
-                <Col span={8}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_wfUser}>Username</Label>
                         <Input
-                            addonBefore="Username"
-                            name="wfUser"
+                            id={xCompany.kCompany_wfUser}
                             value={StringChecker(props.company.wfUser)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
             </Row>
             <Divider orientation="left">Purge Password</Divider>
             <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_PurgePass}>Password</Label>
                         <Input
-                            addonBefore="Password"
-                            name="PurgePass"
+                            id={xCompany.kCompany_PurgePass}
                             value={StringChecker(props.company.PurgePass)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
             </Row>
         </div>

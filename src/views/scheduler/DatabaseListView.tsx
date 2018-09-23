@@ -13,6 +13,8 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Database from '../../constants/scheduler/database';
 import { Modal } from 'antd';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
 
 export interface IDatabaseListViewProps
 {
@@ -54,10 +56,10 @@ class DatabaseListView extends React.Component <IDatabaseListViewProps,IDatabase
     public render() {
       const { database } = this.props;
 
-      let activeOnlyIcon = <FaCircleNotch size={36} color='Green' onClick={ () => { this.toggleActiveOnly(); }} />;
+      let activeOnlyIcon = <IconButton onClick={ () => { this.toggleActiveOnly(); }} color="primary" component="span" ><Icon className="fa fa-circle" /></IconButton>;
       if (this.state.activeOnly)
       {
-        activeOnlyIcon = <FaCheckCircle size={36} color='Green' onClick={ () => { this.toggleActiveOnly(); }} />;
+        activeOnlyIcon = <IconButton onClick={ () => { this.toggleActiveOnly(); }} color="primary" component="span" ><Icon className="fa fa-check-circle" /></IconButton>;
       }
 
       let itemList = database.databaseList;
@@ -78,6 +80,7 @@ class DatabaseListView extends React.Component <IDatabaseListViewProps,IDatabase
           <Card>
             <FlexView width='100%' style={{padding: 9}}>
                 <FlexView hAlignContent="left" vAlignContent="center">
+
                   { activeOnlyIcon }
                   <FaPlusCircle size={36} color="Green" onClick={this.toggleModal} style={{marginLeft: 12}}/>
                 </FlexView>

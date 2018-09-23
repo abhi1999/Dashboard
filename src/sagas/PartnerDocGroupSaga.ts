@@ -1,5 +1,5 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import axios from "../configs/axios";
+import axios, { FixURIComponent } from "../configs/axios";
 import { 
     PARTNER_DOC_GROUP_GET_ALL,
     PARTNER_DOC_GROUP_ADD,
@@ -29,7 +29,7 @@ export const partnerDocGroupGetAllApi = (action:any) => {
     console.log("partnerDocGroupGetAllApi: ");
 
     const tpPartID:string = action.payload;
-    const endpoint:string = "/odata/PartnerDocGroupSet?$orderby=Doc_Group,PartnerID&$filter=TP_PartID eq '" + tpPartID + "'";
+    const endpoint:string = "/odata/PartnerDocGroupSet?$orderby=Doc_Group,PartnerID&$filter=TP_PartID eq '" + FixURIComponent(tpPartID) + "'";
     const url:string = endpoint ; 
 
     console.log("partnerDocGroupGetAllApi: " + url);

@@ -16,7 +16,7 @@ const formItemLayout = {
 
 const Option = Select.Option;
 
-function ShipToTradeCardView(props) {
+function ShipToCardView(props) {
     // const textStyle = { color: "red", };
     return (
         <div>
@@ -26,24 +26,19 @@ function ShipToTradeCardView(props) {
                     <ColRS xl={4} lg={4} md={4} sm={6} xs={12} key={item.Id}>
                     <Card outline={false}>
                             <CardHeader>
-                                {item.TP_Name}
+                                {item.ShipTo_ID}
                                 <div className="card-header-actions">
-                                    <i className="fa fa-pencil" onClick={() => props.tradeToEdit(item)}/>&nbsp;&nbsp; 
+                                    <i className="fa fa-pencil" onClick={() => props.shipToEdit(item)}/>&nbsp;&nbsp; 
+                                    <i className="fa fa-trash" onClick={() => props.shipToDelete(item)}/> 
                                 </div>
                             </CardHeader>
                             <CardBody>
                                 <Form layout="vertical">
-                                    <FormItem {...formItemLayout} label="Qualifier:">
-                                        {item.TP_PartQ}
+                                    <FormItem {...formItemLayout} label="ERP Cust ID:">
+                                        {item.ShipTo_CustID}
                                     </FormItem>
-                                    <FormItem {...formItemLayout} label="ISA ID:">
-                                        {item.TP_PartID}
-                                    </FormItem>
-                                    <FormItem {...formItemLayout} label="GS ID:">
-                                        {item.TP_GroupID}
-                                    </FormItem>
-                                    <FormItem {...formItemLayout} label="ERP ID:">
-                                        {item.TP_ID}
+                                    <FormItem {...formItemLayout} label="Store Name:">
+                                        {item.ShipTo_StoreName}
                                     </FormItem>
                                 </Form>
                             </CardBody>
@@ -55,4 +50,4 @@ function ShipToTradeCardView(props) {
     )
 }
 
-export default ShipToTradeCardView
+export default ShipToCardView

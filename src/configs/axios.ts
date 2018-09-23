@@ -2,8 +2,7 @@ import axios from 'axios';
 import buildQuery from "odata-query";
 import ApplyAuthenticationBehavior from "./axiosBehavior/authentication";
 import { IWindow } from '../constants/IWindow';
-
-import mockBehavior from "./axiosBehavior/mock"
+import mockBehavior from './axiosBehavior/mock';
 // OData query parameters are only sometimes used, and should not be appended to every call
 // This causes problems for other axios calls (post, put, delete) because it interferes with the second parameter being applied to the body
 /*
@@ -12,6 +11,13 @@ axios.defaults.paramsSerializer = (params):string=>{
     return query;
 }
 */
+
+//
+// encodeURIComponenet doesn't escape astericks...
+//
+export function FixURIComponent(param : string) : string {
+    return encodeURIComponent(param).replace('*','%2a').replace("'","'')");
+}
 
 // Adding the params serializer back for odata queries
 axios.interceptors.request.use( async (config)=> {
@@ -27,7 +33,7 @@ axios.interceptors.request.use( async (config)=> {
 });
 
 // if(process.env.NODE_ENV !== 'production') {
-     mockBehavior(axios)
+       mockBehavior(axios)
 // }
 
 // This Axios instance does not flow through the axios interceptors so only to be used by the axiosBehavior code

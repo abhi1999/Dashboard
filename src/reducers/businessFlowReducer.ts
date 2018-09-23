@@ -25,16 +25,6 @@ const initialState = {
                 name: 'Carriers',
                 url: '/carriers',
             },
-            {  
-                icon: 'fa fa-list',
-                name: 'Carriers (ag-grid)',
-                url: '/carriersaggrid',
-            },
-            {  
-                icon: 'fa fa-list',
-                name: 'Carriers Alt',
-                url: '/carriersalt',
-            },
             {
                 icon: 'fa fa-list',
                 name: 'Error Codes',

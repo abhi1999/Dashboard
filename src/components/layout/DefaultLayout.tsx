@@ -16,7 +16,16 @@ import Dashboard from "./../../views/dashboard";
 import Favorites from "./../../views/favorites";
 import Footer from "./Footer"
 import Header from "./Header";
+import Loadable from 'react-loadable';
 
+/*
+const LoadableBar = Loadable({
+  loader: () => import('./components/Bar'),
+  loading() {
+    return <div>Loading...</div>
+  }
+});
+*/
 import TaskStatusListView from "../../views/scheduler/TaskStatusListView";
 import WorkflowListView from "../../views/scheduler/WorkflowListView";
 import TaskListView from "../../views/scheduler/TaskListView";
@@ -30,7 +39,7 @@ import DocumentListView from "../../views/document/DocumentListView";
 import ErrorCodeView from "./../../views/ErrorCode/ErrorCodeView";
 import FreightCodeView from "./../../views/FreightCode/FreightCodeView";
 import TradeView from "./../../views/Trade/TradeView";
-// import ShipToTradeView from "./../../views/ShipTo/ShipToTradeView";
+import ShipToTradeView from "./../../views/ShipTo/ShipToTradeView";
 import VPNetworkListView from "./../../views/vpNetwork/NetworkListView";
 import LocalErrorLogView from "./../../views/LocalErrorLog/LocalErrorLogView";
 
@@ -41,6 +50,7 @@ import ItemListView from '../../views/Item/ItemListView';
 import CompanySettingsView from "../../views/companySettings/CompanySettingsView";
 
 import JsonTreeComponent from "./../jsonEditView"
+import JsonEdit from '../../views/document/JsonEdit';
 
 
 interface IDefaultLayoutProps{
@@ -73,12 +83,13 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
       { path: '/errorCodes', name: 'ErrorCodes', component: ErrorCodeView },
       { path: '/freightCodes', name: 'Freight Codes', component: FreightCodeView },
       { path: '/trades', name: 'Trading Partners', component: TradeView },
-//      { path: '/shiptos', name: 'Ship To Locations', component: ShipToTradeView },
+      { path: '/shiptos', name: 'Ship To Locations', component: ShipToTradeView },
       { path: '/documents', name: 'Document Explorer', component: DocumentListView },
       { path: '/vpNetworks', name: 'VPNetworks', component: VPNetworkListView },
       { path: '/companysettings', name: 'Company settings', component: CompanySettingsView},
       { path: '/items', name: 'Items', component: ItemListView},
       { path: '/notifications', name: 'Notifications history', component: LocalErrorLogView },
+      { path: '/jsonEdit/:vpid', name: '', component: JsonEdit },
     ];
     return (
       <div className="app">
@@ -114,9 +125,6 @@ class DefaultLayout extends React.Component<IDefaultLayoutProps> {
             Some desktop only components
           </AppAside>
         </div>
-        <AppFooter>
-          <Footer/>
-        </AppFooter>  
       </div>
     );
   }

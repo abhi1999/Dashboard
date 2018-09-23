@@ -1,6 +1,5 @@
-import * as  React from 'react';
+import * as React from 'react';
 import { StringChecker } from '../../utils/Conversion';
-import { MultiIncludes } from '../../utils/Comparison';
 import { connect } from "react-redux";
 import Divider from '@material-ui/core/Divider';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,6 +12,7 @@ import KeyValueLabel from '../../constants/params/keyValueLabel';
 import { Button as RSButton, ButtonDropdown, Card, CardTitle, CardHeader, CardBody, Col, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Row } from 'reactstrap';
 
 import {Form as RSForm, FormGroup as RSFormGroup, Label as RSLabel, Col as RSCol, Input as RSInput, Row as RSRow} from 'reactstrap';
+import PageBtnContainer from "./../../components/widgets/PageBtnContainer";
 
 
 const FormItem = Form.Item;
@@ -39,7 +39,7 @@ export interface ICarrierViewProps {
     itemId: string,
     item: ShipViaModel,
     isNew: boolean,
-    toggleModal: any,
+    revertDisplay: any,
     // Redux
     carrier: any,
     carrierAdd: any,
@@ -68,52 +68,53 @@ class CarrierView extends React.Component<ICarrierViewProps, ICarrierViewState> 
     };
     public render() {
         let actionButtons =
-            <div>
-                <Button icon='arrow-left' shape="circle" style={{marginLeft:8}} onClick={() =>
-                    {
-                        this.initState();
-                        this.props.toggleModal();
-                    }} />
-                <Button style={{ marginLeft: 8 }}
-                    onClick={() => {
-                        this.handleDelete();
-                    }}>
-                    Delete
-            </Button>
-                <Button style={{ marginLeft: 8 }}
-                    type="primary"
+            <PageBtnContainer>
+                <RSButton 
+                    color="primary"
                     onClick={() => {
                         if (this.isValid()) {
                             this.handleUpdate();
                         }
                     }}>
-                    Update
-            </Button>
-            </div>;
-        if (this.props.isNew) {
-            actionButtons =
-                <div>
-                <Button icon='arrow-left' shape="circle" onClick={() =>
+                    Save
+                </RSButton>
+                <RSButton onClick={() =>
                     {
                         this.initState();
-                        this.props.toggleModal();
-                    }} />
-                    <Button style={{ marginLeft: 8 }}
-                        type="primary"
+                        this.props.revertDisplay();
+                    }} >
+                    Cancel
+                </RSButton>
+                <RSButton 
+                    onClick={() => {
+                        this.handleDelete();
+                    }}>
+                    Delete
+                </RSButton>
+                </PageBtnContainer>;
+        if (this.props.isNew) {
+            actionButtons =
+                <PageBtnContainer>
+                    <RSButton
+                        color="primary"
                         onClick={() => {
                             if (this.isValid()) {
                                 this.handleAdd();
-                                this.props.toggleModal();
+                                this.props.revertDisplay();
                             }
                         }}>
-                        Add
-            </Button>
-                </div>
+                        Save
+                    </RSButton>
+                    <RSButton onClick={() =>
+                        {
+                            this.initState();
+                            this.props.revertDisplay();
+                        }} >
+                    Cancel
+                    </RSButton>
+                </PageBtnContainer>
         }
         return (
-            <div style={{ width: '100%', marginBottom: 20 }}>
-                {actionButtons}
-                <Divider style={{ margin: 10 }} />
                 <RSForm row={true}>
                     <RSRow>
                         <RSCol lg={3} md={6} sm={12}>
@@ -173,8 +174,8 @@ class CarrierView extends React.Component<ICarrierViewProps, ICarrierViewState> 
                             </RSFormGroup>
                         </RSCol>
                         </RSRow>
+                    {actionButtons}
                 </RSForm>
-            </div>
         )
     };
 
@@ -189,19 +190,19 @@ class CarrierView extends React.Component<ICarrierViewProps, ICarrierViewState> 
     private handleAdd() {
         const carrier = this.state.item;
         this.props.carrierAdd(carrier);
-        this.props.toggleModal();
+        this.props.revertDisplay();
     }
 
     private handleUpdate() {
         const carrier = this.state.item;
         this.props.carrierUpdate(carrier);
-        this.props.toggleModal();
+        this.props.revertDisplay();
     }
 
     private handleDelete() {
         const carrier = this.state.item;
         this.props.carrierDelete(carrier);
-        this.props.toggleModal();
+        this.props.revertDisplay();
     }
 
     private handleField_Ship_Via_TypeChange(value: string) {

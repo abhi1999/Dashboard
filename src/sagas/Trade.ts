@@ -7,6 +7,7 @@ import {
     TRADE_DELETE,
     TRADE_UPDATE_MAPS
 } from './../constants/ActionTypes';
+import { FixURIComponent } from "../configs/axios"
 import { kitTypeGetAllApi} from '../sagas/KitType'
 import { kitTypeGetAllSuccess } from './../actions/KitTypeAction';
 import { ediDocGroupGetAllApi } from '../sagas/EdiDocGroupSaga';
@@ -55,14 +56,39 @@ export const tradeGetAllApi = (action:any) => {
         });
     }
 
+    // const filter:string[] = [];
+    // if (action.payload.filtered) {
+    //     action.payload.filtered.map((f:any) => {
+    //         const column:string = "contains(" + f.id + ", '" + f.value + "')";
+    //         filter.push(column);
+    //     });
+    // }
     const filter:string[] = [];
     if (action.payload.filtered) {
+       
         action.payload.filtered.map((f:any) => {
-            const column:string = "contains(" + f.id + ", '" + f.value + "')";
-            filter.push(column);
+            console.log("FILTER", f.value, typeof(f.value))
+            if (typeof(f.value) === 'number')
+            {
+                const numCol:string = f.id + ' eq ' + f.value;
+                filter.push(numCol);
+            }
+            else if (typeof(f.value) === 'boolean') {
+                let boolCol:string;
+                if (f.value) {
+                    boolCol = f.id + ' eq true';
+                }
+                else {
+                    boolCol = f.id + ' eq false';
+                }
+                filter.push(boolCol);
+            }
+            else {
+                const column:string = "contains(" + f.id + ", '" + FixURIComponent(f.value) + "')";
+                filter.push(column);
+            }
         });
     }
-
     const oDataParams:string = buildQuery({
         count,
         top,

@@ -1,177 +1,157 @@
 import * as React from "react";
 import { StringChecker, formatDate } from '../../utils/Conversion';
-import { Form, Input, Divider, Row, Col, Checkbox, DatePicker } from 'antd'
+import { Divider, DatePicker } from 'antd'
 import * as moment from 'moment';
-import { Select, Button, Icon, message } from 'antd'
+import { FormGroup, Label, Col, Input, Row } from 'reactstrap';
+import * as xCompany from "../../constants/EDICompany/CCompany"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MomentUtils from "material-ui-pickers/utils/moment-utils";
 
-const FormItem = Form.Item;
-const Option = Select.Option;
-
 function CompanySystemPanelView(props) {
-    
+
     return (
 
         <div>
             <Divider orientation="left">Identification</Divider>
             <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_Qual}>EDI Qualifier</Label>
                         <Input
                             disabled={true}
-                            addonBefore="EDI Qualifier"
-                            name="YourCompany_Qual"
+                            id={xCompany.kCompany_YourCompany_Qual}
                             value={StringChecker(props.company.YourCompany_Qual)}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_ID}>EDI Identifier</Label>
                         <Input
                             disabled={true}
-                            addonBefore="EDI Identifier"
-                            name="YourCompany_ID"
+                            id={xCompany.kCompany_YourCompany_ID}
                             value={StringChecker(props.company.YourCompany_ID)}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_Duns}>DUNS Number</Label>
                         <Input
                             disabled={true}
-                            addonBefore="DUNS Number"
-                            name="YourCompany_Duns"
+                            id={xCompany.kCompany_YourCompany_Duns}
                             value={StringChecker(props.company.YourCompany_Duns)}
+                            onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourMan_ID}>Manufacturers Identification</Label>
                         <Input
-                            addonBefore="Manufacturers Identification"
-                            name="YourMan_ID"
+                            id={xCompany.kCompany_YourMan_ID}
                             value={StringChecker(props.company.YourMan_ID)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_FedTax_ID}>Federal Tax Identification</Label>
                         <Input
-                            addonBefore="Federal Tax Identification"
-                            name="FedTax_ID"
+                            id={xCompany.kCompany_FedTax_ID}
                             value={StringChecker(props.company.FedTax_ID)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_CanGstTax_ID}>Canadian GST Identification</Label>
                         <Input
-                            addonBefore="Canadian GST Identification"
-                            name="CanGstTax_ID"
+                            id={xCompany.kCompany_CanGstTax_ID}
                             value={StringChecker(props.company.CanGstTax_ID)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_EurTax_ID}>Euro (VAT) Tax Identification</Label>
                         <Input
-                            addonBefore="Euro (VAT) Tax Identification"
-                            name="EurTax_ID"
+                            id={xCompany.kCompany_EurTax_ID}
                             value={StringChecker(props.company.EurTax_ID)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
             </Row>
             <Divider orientation="left">Settings</Divider>
             <Row>
-                <Col span={8}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_dbVer}>Database Version</Label>
                         <Input
-                            addonBefore="Database Version"
-                            name="dbVer"
-                            value={props.company.dbVer}
+                            id={xCompany.kCompany_dbVer}
+                            value={StringChecker(props.company.dbVer)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={8}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_SupExp}>Key Expiration Date</Label>
                         <DatePicker
                             format="MM-DD-YYYY"
                             value={moment(formatDate(props.company.SupExp), 'MM-DD-YYYY')}
                             onChange={props.handleSupExpChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
             </Row>
             <Divider orientation="left">Map Processor</Divider>
             <Row>
-                <Col span={8}>
-                    <FormItem
-                        label="Use Test Server"
-                    >
-                        <Checkbox
-                            name="TestServer"
-                            checked={props.company.TestServer}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup check={true}>
+                        <Label for={xCompany.kCompany_TestServer}>
+                            <Input type="checkbox"
+                                id={xCompany.kCompany_TestServer}
+                                checked={props.company.TestServer}
+                                onChange={props.handleInputChange} />
+                            Use Test Server
+                            </Label>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={8}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_Primary_MapServer}>Primary Server</Label>
                         <Input
-                            addonBefore="Primary Server"
-                            name="Primary_MapServer"
+                            id={xCompany.kCompany_Primary_MapServer}
                             value={StringChecker(props.company.Primary_MapServer)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_Backup_MapServer}>Backup Server</Label>
                         <Input
-                            addonBefore="Backup Server"
-                            name="Backup_MapServer"
+                            id={xCompany.kCompany_Backup_MapServer}
                             value={StringChecker(props.company.Backup_MapServer)}
                             onChange={props.handleInputChange}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={8}>
-                    <FormItem
-                        label="Enable Document Versioning"
-                    >
-                        <Checkbox
-                            name="AutoHoldDoc"
-                            checked={props.company.AutoHoldDoc}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                <Col lg={3} md={6} sm={12}>
+                    <FormGroup check={true}>
+                        <Label for={xCompany.kCompany_AutoHoldDoc}>
+                            <Input type="checkbox"
+                                id={xCompany.kCompany_AutoHoldDoc}
+                                checked={props.company.AutoHoldDoc}
+                                onChange={props.handleInputChange} />
+                            Enable Document Versioning
+                            </Label>
+                    </FormGroup>
                 </Col>
             </Row>
         </div>

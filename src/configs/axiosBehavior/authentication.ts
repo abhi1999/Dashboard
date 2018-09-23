@@ -98,7 +98,7 @@ export const ApplyAuthenticationBehavior =(axiosMain)=>{
 const retryRequest = async (error) => {
     return new Promise(r => {
             console.info("get: " + error.url);
-            axiosRoot.get(SERVICES.endpoints.connectToApi + '/' + sessionStorage.getItem(axUsername) + '/5') // + sessionStorage.getItem(axCompanyID))
+            axiosRoot.get(SERVICES.endpoints.connectToApi + '/' + sessionStorage.getItem(axUsername) + '/' + sessionStorage.getItem(axCompanyID))
             .then((resp) => {
                 sessionStorage.setItem(axClientKey, resp.data);
 
@@ -118,7 +118,7 @@ const retryRequest = async (error) => {
 
 // Pause the Axios request processing until we have a username and company ID
 let isLoginInProgress = false;
-let isAuthenticated =false;
+let isAuthenticated = true;
 const promiseResolveArray:any[]=[];
 
 const launchLogin = async (config)=>{
@@ -140,14 +140,13 @@ const login=async(config)=>{
     if (sessionStorage.getItem(axUsername) === null) {
         // Simulate Login and Company screen responses
         sessionStorage.setItem(axUsername, 'Demo.User');
-        // sessionStorage.setItem(axCompanyID, ((window as any).env as IWindow).DEFAULT_TEST_COMPANY.toString());
-        sessionStorage.setItem(axCompanyID, "4");
+        sessionStorage.setItem(axCompanyID, ((window as any).env as IWindow).DEFAULT_TEST_COMPANY.toString());
         sessionStorage.removeItem(axClientKey);
     }
 
     return new Promise(r=>{
             
-            const url = SERVICES.endpoints.connectToApi + '/' + sessionStorage.getItem(axUsername) + '/4';// + sessionStorage.getItem(axCompanyID);
+            const url = SERVICES.endpoints.connectToApi + '/' + sessionStorage.getItem(axUsername) + '/' + sessionStorage.getItem(axCompanyID);
             console.log("get: " + url);
             axiosRoot.get(url)
             .then((resp) => {

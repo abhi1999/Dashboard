@@ -4,15 +4,16 @@ import { FaTimesCircle, FaEdit, FaClone } from 'react-icons/fa';
 import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
 import { Select } from 'antd';
 import { ToString } from '../../utils/Conversion';
+import GridActionMenu from './../../components/widgets/GridActionMenu';
 
-import {ButtonDropdown, Container, DropdownItem, DropdownMenu, DropdownToggle} from 'reactstrap';
+import { ButtonDropdown, Container, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 
 const Option = Select.Option;
 
 function TradeTableView(props) {
 
-//                                <FaEdit onClick={() => props.tradeEdit(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-  //                              <FaTimesCircle onClick={() => props.tradeDelete(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
+    //                                <FaEdit onClick={() => props.tradeEdit(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
+    //                              <FaTimesCircle onClick={() => props.tradeDelete(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
     //                            <FaClone onClick={() => props.tradeClone(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
 
 
@@ -24,19 +25,23 @@ function TradeTableView(props) {
                         sortable: false,
                         filterable: false,
                         width: 50,
-                        resizable:false,
-                        className:'action-menu',
+                        resizable: false,
+                        className: 'action-menu',
                         Cell: row => (
-                            <div>
-                                <ButtonDropdown direction="right"  isOpen={props.actionMenuOpenFor_TP_PartID === row.original.TP_PartID } toggle={()=>{props.toggleActionMenu(row.original)}}>
-                                    <DropdownToggle caret={false} className="fa fa-ellipsis-v btn-toggle"/>
-                                    <DropdownMenu>
-                                        <DropdownItem onClick={() => props.tradeEdit(row.original)}>Edit</DropdownItem>
-                                        <DropdownItem onClick={() => props.tradeClone(row.original)}>Clone</DropdownItem>
-                                        <DropdownItem onClick={() => props.tradeDelete(row.original)}>Delete</DropdownItem>
-                                    </DropdownMenu>
-                                </ButtonDropdown>
-                            </div>
+                            <GridActionMenu items={["Edit", "Clone", "Delete"]}
+                                onItemClick={(item) => {
+                                    switch (item) {
+                                        case "Edit":
+                                            props.tradeEdit(row.original)
+                                            break;
+                                        case "Clone":
+                                            props.tradeClone(row.original)
+                                            break;
+                                        case "Delete":
+                                            props.tradeDelete(row.original)
+                                            break;
+                                    }
+                                }} />
                         )
                     },
                     {
@@ -63,7 +68,7 @@ function TradeTableView(props) {
                         Header: "Partner Type",
                         accessor: "KitTypeID",
                         sortable: true,
-                        filterable: true,
+                        filterable: false,
                         Cell: ({ row }) => {
                             return (
                                 <div>{(props.partnerList.find(partner => partner.KitTypeID === row.KitTypeID) === undefined ? " "
@@ -80,7 +85,8 @@ function TradeTableView(props) {
                                 {props.partnerList.map((item) => {
                                     return (
                                         <Option key={item.KitTypeID} value={ToString(item.KitTypeID)}>{item.KitTypeDesc}</Option>
-                                    )})
+                                    )
+                                })
                                 }
                             </Select>
                     },
@@ -116,7 +122,7 @@ function TradeTableView(props) {
                 sortable={true}
                 sorted={props.sorted}
                 onSortedChange={props.onSortChange}
-                filterable={true}
+                filterable={false}
                 filtered={props.filtered}
                 onFilteredChange={props.onFilteredChange}
                 defaultFilterMethod={(filter, row) => ToString(row[filter.id]).toLowerCase().includes(ToString(filter.value).toLowerCase())}

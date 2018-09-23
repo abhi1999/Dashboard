@@ -1,11 +1,9 @@
 import * as React from "react";
 import { StringChecker } from '../../utils/Conversion';
-import { Form, Input, Divider, Row, Col } from 'antd'
-import { Select, Button, Icon, message } from 'antd'
+import { Divider } from 'antd'
+import { FormGroup, Label, Col, Input, Row } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-const FormItem = Form.Item;
-
+import * as xCompany from "../../constants/EDICompany/CCompany"
 
 function CompanyPanelView(props) {
 
@@ -14,258 +12,203 @@ function CompanyPanelView(props) {
         <div>
             <Divider orientation="left">Company Address</Divider>
             <Row>
-                <Col span={12}>
-                    <FormItem>
-
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_Name}>Company Name</Label>
                         <Input
                             disabled={true}
-                            addonBefore="Company Name"
-                            name="YourCompany_Name"
+                            id={xCompany.kCompany_YourCompany_Name}
                             value={StringChecker(props.company.YourCompany_Name)}
                         />
-                    </FormItem>
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_DispName}>Display Name</Label>
                         <Input
-                            addonBefore="Display Name"
-                            name="YourCompany_DispName"
+                            id={xCompany.kCompany_YourCompany_DispName}
                             value={StringChecker(props.company.YourCompany_DispName)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_Add1}>Address</Label>
                         <Input
-                            addonBefore="Address"
-                            name="YourCompany_Add1"
+                            id={xCompany.kCompany_YourCompany_Add1}
                             value={StringChecker(props.company.YourCompany_Add1)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_Add2}>Address</Label>
                         <Input
-                            name="YourCompany_Add2"
+                            id={xCompany.kCompany_YourCompany_Add2}
                             value={StringChecker(props.company.YourCompany_Add2)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_City}>City</Label>
                         <Input
-                            addonBefore="City"
-                            name="YourCompany_City"
+                            id={xCompany.kCompany_YourCompany_City}
                             value={StringChecker(props.company.YourCompany_City)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_State}>State/Region</Label>
                         <Input
-                            addonBefore="State/Region"
-                            name="YourCompany_State"
+                            id={xCompany.kCompany_YourCompany_State}
                             value={StringChecker(props.company.YourCompany_State)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_Zip}>Postal Code</Label>
                         <Input
-                            addonBefore="Postal Code"
-                            name="YourCompany_Zip"
+                            id={xCompany.kCompany_YourCompany_Zip}
                             value={StringChecker(props.company.YourCompany_Zip)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_Country}>Country</Label>
                         <Input
-                            addonBefore="Country"
-                            name="YourCompany_Country"
+                            id={xCompany.kCompany_YourCompany_Country}
                             value={StringChecker(props.company.YourCompany_Country)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
             </Row>
             <Divider orientation="left">Remit To</Divider>
             <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_BillName}>Company Name</Label>
                         <Input
-                            addonBefore="Company Name"
-                            name="YourCompany_BillName"
+                            id={xCompany.kCompany_YourCompany_BillName}
                             value={StringChecker(props.company.YourCompany_BillName)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_BillAdd1}>Address</Label>
                         <Input
-                            addonBefore="Address"
-                            name="YourCompany_BillAdd1"
+                            id={xCompany.kCompany_YourCompany_BillAdd1}
                             value={StringChecker(props.company.YourCompany_BillAdd1)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_BillAdd2}>Address</Label>
                         <Input
-                            name="YourCompany_BillAdd2"
+                            id={xCompany.kCompany_YourCompany_BillAdd2}
                             value={StringChecker(props.company.YourCompany_BillAdd2)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_BillCity}>City</Label>
                         <Input
-                            addonBefore="City"
-                            name="YourCompany_BillCity"
+                            id={xCompany.kCompany_YourCompany_BillCity}
                             value={StringChecker(props.company.YourCompany_BillCity)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_BillState}>State/Region</Label>
                         <Input
-                            addonBefore="State/Region"
-                            name="YourCompany_BillState"
+                            id={xCompany.kCompany_YourCompany_BillState}
                             value={StringChecker(props.company.YourCompany_BillState)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
+
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_BillZip}>Postal Code</Label>
                         <Input
-                            addonBefore="Postal Code"
-                            name="YourCompany_BillZip"
+                            id={xCompany.kCompany_YourCompany_BillZip}
                             value={StringChecker(props.company.YourCompany_BillZip)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_BillCountry}>Country</Label>
                         <Input
-                            addonBefore="Country"
-                            name="YourCompany_BillCountry"
+                            id={xCompany.kCompany_YourCompany_BillCountry}
                             value={StringChecker(props.company.YourCompany_BillCountry)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_Contact}>AR Contact</Label>
                         <Input
-                            addonBefore="AR Contact"
-                            name="YourCompany_Contact"
+                            id={xCompany.kCompany_YourCompany_Contact}
                             value={StringChecker(props.company.YourCompany_Contact)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_Phone}>Phone</Label>
                         <Input
-                            addonBefore="Phone"
-                            name="YourCompany_Phone"
+                            id={xCompany.kCompany_YourCompany_Phone}
                             value={StringChecker(props.company.YourCompany_Phone)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_Email}>Email</Label>
                         <Input
-                            type="email"
-                            addonBefore="Email"
-                            name="YourCompany_Email"
+                            id={xCompany.kCompany_YourCompany_Email}
                             value={StringChecker(props.company.YourCompany_Email)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
             </Row>
             <Divider orientation="left">EDI Contact</Divider>
             <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_EDIContact}>Name</Label>
                         <Input
-                            addonBefore="Name"
-                            name="YourCompany_EDIContact"
+                            id={xCompany.kCompany_YourCompany_EDIContact}
                             value={StringChecker(props.company.YourCompany_EDIContact)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_EDIPhone}>Phone</Label>
                         <Input
-                            addonBefore="Phone"
-                            name="YourCompany_EDIPhone"
+                            id={xCompany.kCompany_YourCompany_EDIPhone}
                             value={StringChecker(props.company.YourCompany_EDIPhone)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
-                    <FormItem>
+            <Col lg={3} md={6} sm={12}>
+                    <FormGroup>
+                        <Label for={xCompany.kCompany_YourCompany_EDIEmail}>Email</Label>
                         <Input
-                            addonBefore="Email"
-                            name="YourCompany_EDIEmail"
+                            id={xCompany.kCompany_YourCompany_EDIEmail}
                             value={StringChecker(props.company.YourCompany_EDIEmail)}
-                            onChange={props.handleInputChange}
-                        />
-                    </FormItem>
+                            onChange={props.handleInputChange} />
+                    </FormGroup>
                 </Col>
             </Row>
         </div>

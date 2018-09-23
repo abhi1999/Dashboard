@@ -9288,7 +9288,7 @@ html[dir="rtl"] .aside-menu-show .aside-menu {
     .app-header .navbar-brand {
       position: absolute;
       left: 50%;
-      margin-left: -77.5px; }
+      margin-left: -77.5px !important; }
   .app-body {
     margin-top: 55px; }
   .sidebar {

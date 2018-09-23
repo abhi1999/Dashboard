@@ -1,5 +1,6 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import axios from "../configs/axios";
+import { FixURIComponent } from "../configs/axios"
 import { 
     PACKAGE_LABEL_GET_ALL
 } from './../constants/ActionTypes';
@@ -20,7 +21,7 @@ function* packageLabelGetAllRequest(action:any) {
 export const packageLabelGetAllApi = (action:any) => {
 
     const tpPartID:string = action.payload;
-    const endpoint:string = "/api/PackageLabel/Get?TP_PartID='" + tpPartID + "'";
+    const endpoint:string = "/api/PackageLabel/Get?TP_PartID='" + FixURIComponent(tpPartID) + "'";
     const url:string = endpoint ; 
 
     console.log("PackageLabelGetAllApi: " + url);

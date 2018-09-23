@@ -35,5 +35,9 @@
   "typeRoots": [
       "./typings",
       "node_modules/@types"
-  ]
+  ],
+  "baseUrl": "./",
+  "paths": {
+    "src/*": ["src/*"]  
+  }
 }

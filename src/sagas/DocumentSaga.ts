@@ -7,10 +7,15 @@ import {
 import axios from "axios";
 import {
     DOCUMENT_GET_ALL,
+    DOCUMENT_GET_ONE,
     DOCUMENT_ADD,
     DOCUMENT_UPDATE,
     DOCUMENT_DELETE
 } from '../constants/ActionTypes';
+import {
+    documentGetOneSuccess,
+    documentGetOneFailure
+} from '../actions/DocumentAction';
 import {
     documentGetAllSuccess,
     documentGetAllFailure
@@ -32,7 +37,7 @@ import {
     ERROR_OPTIONS
 } from '../constants/ServiceParameters';
 import buildQuery from "odata-query";
-import ShipViaModel from "../constants/implementations/ShipViaModel";
+import { IXMLDoc } from '../constants/edidb'
 
 function* documentGetAllRequest(action:any) {
     try {
@@ -82,6 +87,35 @@ export const documentGetAllApi = (action:any) => {
     return axios.get(url);
 };
 
+function* documentGetOneRequest(action:any) {
+    try {
+        const result:any= yield call(documentGetOneApi, action);
+        yield put(documentGetOneSuccess(result.data.value));
+    } catch (error) {
+        yield put(Notifications.error({ ...ERROR_OPTIONS,
+            message: error.message
+        }));
+        yield put(documentGetOneFailure(error));
+    }
+}
+
+export const documentGetOneApi = (action:any) => {
+
+    const endpoint:string = "/odata/XMLDocSet";
+    let oDataParams:string = "";
+
+    const filter:string[] = [];
+    if (action.payload) {
+        oDataParams = "?$filter=VPID eq " + action.payload
+
+        const url:string = endpoint + oDataParams; 
+    
+        return axios.get(url);
+    }
+
+    return null;
+};
+
 function* documentAddRequest(action:any) {
     try {
         yield call(documentAddApi, action);
@@ -97,7 +131,7 @@ function* documentAddRequest(action:any) {
 
 export const documentAddApi = (action:any) => {
 
-    const document:ShipViaModel = action.payload;
+    const document:IXMLDoc = action.payload;
     const url:string = "api/XMLDoc/AddXMLDoc";
 
     return axios.post(url, document);
@@ -118,7 +152,7 @@ function* documentUpdateRequest(action:any) {
 
 export const documentUpdateApi = (action:any) => {
 
-    const document:ShipViaModel = action.payload;
+    const document:IXMLDoc = action.payload;
     const url:string = "api/XMLDoc/UpdateXMLDoc";
 
     return axios.put(url, document);
@@ -140,15 +174,16 @@ function* documentDeleteRequest(action:any) {
 
 export const documentDeleteApi = (action:any) => {
 
-    const document:ShipViaModel = action.payload;
-    const url:string = "/api/ShipVia/DeleteXMLDoc" 
+    const document:IXMLDoc = action.payload;
+    const url:string = "/api/XMLDoc/DeleteXMLDoc" 
     
-    return axios.delete(url);
+    return axios.delete(url, { data: document });
 };
 
 export default function* rootSaga() {
     yield all([
         takeLatest(DOCUMENT_GET_ALL, documentGetAllRequest),
+        takeLatest(DOCUMENT_GET_ONE, documentGetOneRequest),
         takeLatest(DOCUMENT_ADD, documentAddRequest),
         takeLatest(DOCUMENT_UPDATE, documentUpdateRequest),
         takeLatest(DOCUMENT_DELETE, documentDeleteRequest)

@@ -1,5 +1,6 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import axios from "../configs/axios";
+import { FixURIComponent } from "../configs/axios"
 import { SERVICES } from '../configs';
 import * as VPCrypt from '../utils/VPEncryption';
 import { VPNETWORK_GET_ALL, VPNETWORK_ADD, VPNETWORK_UPDATE, VPNETWORK_DELETE } from '../constants/ActionTypes';
@@ -70,7 +71,7 @@ export const vpnetworkGetAllApi = (action:any) => {
                 filter.push(boolCol);
             }
             else {
-                const column:string = "contains(" + f.id + ", '" + f.value + "')";
+                const column:string = "contains(" + f.id + ", '" + FixURIComponent(f.value) + "')";
                 filter.push(column);
             }
         });

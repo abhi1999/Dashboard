@@ -8,7 +8,7 @@ import { FaSyncAlt, FaPlusCircle, FaTimesCircle, FaEdit, FaClone, FaSort, FaSort
 import { documentGetAll, documentDelete } from '../../actions/DocumentAction';
 import { toastError } from '../../actions/Scheduler/ServiceAction';
 import DocumentView from './DocumentView';
-import JsonEditView from './JsonEditView';
+import JsonEditTree from './JsonEditTree';
 import { Pagination } from 'antd';
 import { Form, Input, Select, Button, Icon } from 'antd';
 import { ICON_SIZE, ICON_SMALL, ICON_COLOR } from '../../constants/Attributes';
@@ -22,6 +22,13 @@ import * as XXMLDoc from "../../constants/edidb/CXMLDoc";
 import Media from "react-media";
 import { formatDate } from '../../utils/Conversion';
 import { filterAdd, filterIncludes, filterGetValue, selectGetValue } from '../../utils/Comparison';
+import XmlEditForm from './XmlEditForm';
+import {cloneDeep, remove, orderBy, includes } from "lodash";
+import PaginationControl from './../../components/widgets/PaginationControl';
+import GridActionMenu from './../../components/widgets/GridActionMenu';
+import GridFilter from './../../components/widgets/GridFilter';
+import GridFilterPills from './../../components/widgets/GridFilterPills';
+import IconButton from "./../../components/widgets/IconButton";
 const InputGroup = Input.Group;
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -42,6 +49,14 @@ const selectDirection: KeyValueLabel[] = [
     new KeyValueLabel({ key: "O", value: "O", label: "Outbound" }),
 ];
 
+const ViewReplacement = ["summary","detail","editXml"];
+
+const Display = {
+    Summary: {}, 
+    Detail: {}, 
+    EditXml : {}
+  };
+
 export interface IDocumentListViewProps {
     // redux
     document: any,
@@ -53,7 +68,7 @@ export interface IDocumentListViewProps {
 export interface IDocumentListViewState {
     pageSize: number,
     page: number,
-    modal: boolean,
+    display: object,
     documentEdit: IXMLDoc,
     isNew: boolean,
     collapseAddNew: boolean,
@@ -71,7 +86,7 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
         this.state = {
             pageSize: 10,
             page: 1,
-            modal: false,
+            display: Display.Summary,
             documentEdit: new XXMLDoc.CXMLDoc(),
             isNew: false,
             collapseAddNew: false,
@@ -79,7 +94,7 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
             documentListCount: 0,
             loading: true,
             sorted: [new SortDescriptor({ desc: false, id: "Direction" })],
-            filtered: [new FilterDescriptor({ value: 'N', id: "Exp_Flag" })],
+            filtered: [new FilterDescriptor({ displayValue:'Ready', value: 'N', id: "Exp_Flag" })],
         };
 
         this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -87,7 +102,7 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
         this.documentEdit = this.documentEdit.bind(this);
         this.documentDelete = this.documentDelete.bind(this);
         this.documentClone = this.documentClone.bind(this);
-        this.toggleModal = this.toggleModal.bind(this);
+        this.revertDisplay = this.revertDisplay.bind(this);
         this.query = this.query.bind(this);
         this.requery = this.requery.bind(this);
         this.onChangePage = this.onChangePage.bind(this);
@@ -101,6 +116,7 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.updateFilter = this.updateFilter.bind(this);
         this.documentEditXML = this.documentEditXML.bind(this);
+        this.handleFilterApply = this.handleFilterApply.bind(this);
     }
 
     public componentWillMount() {
@@ -116,15 +132,23 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
     }
 
     public render() {
-        const { loading, pageSize, sorted, filtered, modal } = this.state;
+        const { loading, page, pageSize, sorted, filtered, display } = this.state;
         let { documentList } = this.state;
 
-        if (modal) {
-            return (
-                <JsonEditView itemId={this.state.documentEdit.VPID} item={this.state.documentEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
-
-                // <DocumentView itemId={this.state.documentEdit.VPID} item={this.state.documentEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
-            );
+        switch (display) {
+            case Display.Detail:
+                return (
+                    <DocumentView itemId={this.state.documentEdit.VPID} item={this.state.documentEdit} isNew={this.state.isNew} revertDisplay={this.revertDisplay} />
+                );
+                break;
+            case Display.EditXml:
+                return (
+                    // <XmlEditForm itemId={this.state.documentEdit.VPID} item={this.state.documentEdit} isNew={this.state.isNew} revertDisplay={this.revertDisplay} />
+                    <JsonEditTree itemId={this.state.documentEdit.VPID} item={this.state.documentEdit} isNew={this.state.isNew} revertDisplay={this.revertDisplay} />
+                );
+                break;
+            default:
+                break;
         }
 
         // Filter and sort client-side
@@ -142,237 +166,110 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
 
         return (
             <div>
-                <Card body={true} outline={true} style={{ width: '100%' }}>
-                    <FlexView width='100%' wrap={true} style={{ marginTop: -10, marginBottom: 10 }}>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="40" wrap={true}>
-                            <Button type="primary" shape="circle" icon="retweet" size="default" onClick={() => this.requery(this.state.pageSize)} />
-                        </FlexView>
-                        <FlexView hAlignContent="center" vAlignContent="center" grow={true} wrap={true}>
-                            <Pagination
-                                showSizeChanger={true}
-                                onChange={this.onChangePage}
-                                current={this.state.page}
-                                pageSize={this.state.pageSize}
-                                pageSizeOptions={['10', '50', '100']}
-                                onShowSizeChange={this.onShowSizeChange}
-                                total={this.state.documentListCount}
-                            />
-                        </FlexView>
-                        <FlexView hAlignContent="right" vAlignContent="center" basis="40" wrap={true}>
-                            <Button type="primary" shape="circle" icon="plus" size="default" onClick={() => this.documentAdd()} />
-                        </FlexView>
-                    </FlexView>
-                </Card>
+                <div className="header-icons">
+                    <GridFilterPills filters={this.state.filtered} onFilterClear={this.handleFilterApply}/>
+                    <div className="header-btn">
+                    <IconButton className="fa fa-plus" onClick={() => this.documentAdd()} iconText="Add"/>
+                    <GridFilter filters={this.state.filtered} filterItems={[
+                            {type:'select', label:'Status', name:XXMLDoc.kXMLDoc_Exp_Flag, placeholder:'',
+                                options: selectStatus.map((option)=><option key={option.key} value={option.value}>{option.label}</option>)
+                            },
+                            {type:'text', label:'ID', name:XXMLDoc.kXMLDoc_VPID, placeholder:''},
+                            {type:'text', label:'Trading Partner', name:XXMLDoc.kXMLDoc_TP_PartID, placeholder:''},
+                            {type:'text', label:'Doc Group', name:XXMLDoc.kXMLDoc_DGID, placeholder:''},
+                            {type:'select', label:'Direction', name:XXMLDoc.kXMLDoc_Direction, placeholder:'',
+                                options: selectDirection.map((option)=><option key={option.key} value={option.value}>{option.label}</option>)
+                            }]} 
+                        onApply={this.handleFilterApply} 
+                    />
+                    </div>
+                </div>
+                
                 <Media query={{ maxWidth: 768 }}>
                     {matches => // Mobile version first
                         matches ? (
                             <div>
-                                <Card body={true} outline={true} style={{ width: '100%' }}>
-                                    <Form layout="inline" style={{ marginTop: -10, marginBottom: 10 }}>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="Status"
-                                        >
-                                            <Select style={{ width: '100%' }}
-                                                value={filterGetValue(this.state.filtered, XXMLDoc.kXMLDoc_Exp_Flag)}
-                                                onChange={this.handleStatusFilterChange}
-                                            >
-                                                {selectStatus.map((option) => <Option key={option.key} value={option.value}>{option.label}</Option>)}
-                                            </Select>
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="ID"
-                                        >
-                                            <Input
-                                                name={XXMLDoc.kXMLDoc_VPID}   
-                                                prefix={this.getSortButton(XXMLDoc.kXMLDoc_VPID)}
-                                                value={filterGetValue(filtered, XXMLDoc.kXMLDoc_VPID)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="Trading Partner"
-                                        >
-                                            <Input
-                                                name={XXMLDoc.kXMLDoc_TP_PartID}    
-                                                prefix={this.getSortButton(XXMLDoc.kXMLDoc_TP_PartID)}
-                                                value={filterGetValue(filtered, XXMLDoc.kXMLDoc_TP_PartID)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="DGID"
-                                        >
-                                            <Input
-                                                name={XXMLDoc.kXMLDoc_DGID}                                                prefix={this.getSortButton("DGID")}
-                                                value={filterGetValue(filtered, XXMLDoc.kXMLDoc_DGID)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="Reference"
-                                        >
-                                            <Input
-                                                name={XXMLDoc.kXMLDoc_XMLRef}
-                                                prefix={this.getSortButton(XXMLDoc.kXMLDoc_XMLRef)}
-                                                value={filterGetValue(filtered, XXMLDoc.kXMLDoc_XMLRef)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="Direction"
-                                        >
-                                            <Select style={{ width: '100%' }}
-                                                value={filterGetValue(this.state.filtered, XXMLDoc.kXMLDoc_Direction)}
-                                                onChange={this.handleDirectionFilterChange}
-                                            >
-                                                {selectDirection.map((option) => <Option key={option.key} value={option.value}>{option.label}</Option>)}
-                                            </Select>
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="Import Date"
-                                        >
-                                            <Input
-                                                name={XXMLDoc.kXMLDoc_CreatedDate}
-                                                prefix={this.getSortButton(XXMLDoc.kXMLDoc_CreatedDate)}
-                                                value={filterGetValue(filtered, XXMLDoc.kXMLDoc_CreatedDate)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="Export Date"
-                                        >
-                                            <Input
-                                                name={XXMLDoc.kXMLDoc_ExportDate}
-                                                prefix={this.getSortButton(XXMLDoc.kXMLDoc_ExportDate)}
-                                                value={filterGetValue(filtered, XXMLDoc.kXMLDoc_ExportDate)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="GCN"
-                                        >
-                                            <Input
-                                                name={XXMLDoc.kXMLDoc_GCN}
-                                                prefix={this.getSortButton(XXMLDoc.kXMLDoc_GCN)}
-                                                value={filterGetValue(filtered, XXMLDoc.kXMLDoc_GCN)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            colon={false}
-                                            label="TCN"
-                                        >
-                                            <Input
-                                                name={XXMLDoc.kXMLDoc_TCN}
-                                                prefix={this.getSortButton(XXMLDoc.kXMLDoc_TCN)}
-                                                value={filterGetValue(filtered, XXMLDoc.kXMLDoc_TCN)}
-                                                onChange={this.handleFilterChange}
-                                            />
-                                        </FormItem>
-                                    </Form>
-                                </Card>
                                 <Row>
-                                    {documentList.map((item) =>
-                                        <ColRS xl={4} lg={4} md={4} sm={6} xs={12} key={item.VPID}>
-                                            <Card outline={false}>
-                                                <CardHeader>
-                                                    {item.Exp_Flag}
-                                                    <div className="card-header-actions">
-                                                        <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="edit" onClick={() => this.documentEditXML(item)} />
-                                                         {/*
-                                                        <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="form" onClick={() => this.documentEdit(item)} />
-                                                        <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="delete" onClick={() => this.documentDelete(item)} />
-                                                        <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="copy" onClick={() => this.documentClone(item)} />
-                                                         */}
-                                                    </div>
-                                                </CardHeader>
-                                                <CardBody>
-                                                    <Form layout="inline">
-                                                        <FormItem
-                                                            {...formItemLayout}
-                                                            label="Status"
-                                                        >
-                                                            {item.Exp_Flag}
-                                                        </FormItem>
-                                                        <FormItem
-                                                            {...formItemLayout}
-                                                            label="ID"
-                                                        >
-                                                            {item.VPID}
-                                                        </FormItem>
-                                                        <FormItem
-                                                            {...formItemLayout}
-                                                            label="Doc Group"
-                                                        >
-                                                            {item.DGID}
-                                                        </FormItem>
-                                                        <FormItem
-                                                            {...formItemLayout}
-                                                            label="Reference"
-                                                        >
-                                                            {item.XMLRef}
-                                                        </FormItem>
-                                                    </Form>
-                                                </CardBody>
-                                            </Card>
-                                        </ColRS>)}
+                                {documentList.map((item) =>
+                                    <ColRS xl={4} lg={4} md={4} sm={6} xs={12} key={item.VPID}>
+                                        <Card outline={false}>
+                                            <CardHeader>
+                                                {item.Exp_Flag}
+                                                <div className="card-header-actions">
+                                                    <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="edit" onClick={() => this.documentEdit(item)} />
+                                                    <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="edit" onClick={() => this.documentEditXML(item)} />
+                                                    {/*
+                                                    <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="form" onClick={() => this.documentEdit(item)} />
+                                                    <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="delete" onClick={() => this.documentDelete(item)} />
+                                                    <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="copy" onClick={() => this.documentClone(item)} />
+                                                    */}
+                                                </div>
+                                            </CardHeader>
+                                            <CardBody>
+                                                <Form layout="inline">
+                                                    <FormItem
+                                                        {...formItemLayout}
+                                                        label="Status"
+                                                    >
+                                                        {item.Exp_Flag}
+                                                    </FormItem>
+                                                    <FormItem
+                                                        {...formItemLayout}
+                                                        label="ID"
+                                                    >
+                                                        {item.VPID}
+                                                    </FormItem>
+                                                    <FormItem
+                                                        {...formItemLayout}
+                                                        label="Doc Group"
+                                                    >
+                                                        {item.DGID}
+                                                    </FormItem>
+                                                    <FormItem
+                                                        {...formItemLayout}
+                                                        label="Reference"
+                                                    >
+                                                        {item.XMLRef}
+                                                    </FormItem>
+                                                </Form>
+                                            </CardBody>
+                                        </Card>
+                                    </ColRS>)}
+
+                                }
                                 </Row>
                             </div>
-
-                        ) : ( // Desktop version
+                       ) : ( // Desktop version
                                 <div>
                                     <ReactTable
                                         columns={[
                                             {
                                                 sortable: false,
                                                 filterable: false,
-                                                width: 120,
+                                                width: 50,
+                                                resizable:false,
+                                                className:'action-menu',
                                                 Cell: row => (
-                                                    <div>
-                                                        <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="edit" onClick={() => this.documentEditXML(row.original)} />
-                                                        {/*
-                                                        <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="form" onClick={() => this.documentEdit(row.original)} />
-                                                        <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="delete" onClick={() => this.documentDelete(row.original)} />
-                                                        <Button type="primary" shape="circle" size="small" style={{ marginLeft: 2 }} icon="copy" onClick={() => this.documentClone(row.original)} />
-                                                        */}
-                                                    </div>
+                                                        <GridActionMenu items={["Edit", "Edit XML", "Delete"]} 
+                                                                onItemClick={(item)=>{switch(item){
+                                                                    case "Edit":
+                                                                        this.documentEdit(row.original)
+                                                                        break;
+                                                                    case "Edit XML":
+                                                                        this.documentEditXML(row.original)
+                                                                        break;
+                                                                    case "Delete":
+                                                                        this.documentDelete(row.original)
+                                                                        break;
+                                                        }}}/>
                                                 )
                                             },
                                             {
                                                 Header: "Status",
                                                 accessor: XXMLDoc.kXMLDoc_Exp_Flag,
-                                                sortable: true,
-                                                filterable: true,
                                                 Cell: ({ row }) => {
                                                     return selectGetValue(selectStatus, row.Exp_Flag)
                                                 },
-                                                Filter: ({ filter, onChange }) =>
-                                                    <Select
-                                                        style={{ width: "100%" }}
-                                                        value={filterGetValue(this.state.filtered, XXMLDoc.kXMLDoc_Exp_Flag)}
-                                                        onChange={this.handleStatusFilterChange}
-                                                    >
-                                                        {selectStatus.map((option) => <Option key={option.key} value={option.value}>{option.label}</Option>)}
-                                                    </Select>
                                             },
                                             {
                                                 Header: "ID",
@@ -389,19 +286,9 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
                                             {
                                                 Header: "Direction",
                                                 accessor: XXMLDoc.kXMLDoc_Direction,
-                                                sortable: true,
-                                                filterable: true,
                                                 Cell: ({ row }) => {
                                                     return selectGetValue(selectDirection, row.Direction)
                                                 },
-                                                Filter: ({ filter, onChange }) =>
-                                                    <Select
-                                                        style={{ width: "100%" }}
-                                                        value={filterGetValue(this.state.filtered, "Direction")}
-                                                        onChange={this.handleDirectionFilterChange}
-                                                    >
-                                                        {selectDirection.map((option) => <Option key={option.key} value={option.value}>{option.label}</Option>)}
-                                                    </Select>
                                             },
                                             {
                                                 Header: "Import Date",
@@ -432,26 +319,40 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
                                         sortable={true}
                                         sorted={sorted}
                                         onSortedChange={this.onSortedChange}
-                                        filterable={true}
-                                        filtered={filtered}
-                                        onFilteredChange={this.onFilteredChange}
-                                        defaultFilterMethod={(filter, row) => filterIncludes(filter, row)}
+                                        filterable={false}
                                         showPagination={false}
                                         pageSize={tablePageSize}
-                                        className="-striped -highlight"
+                                        className="-highlight table-container"
                                     />
                                 </div>
                             )
                     }
                 </Media>
+                <div className="paging-panel">
+                    <Pagination
+                        showSizeChanger={true}
+                        onChange={this.onChangePage}
+                        current={this.state.page}
+                        pageSize={this.state.pageSize}
+                        pageSizeOptions={['10', '50', '100']}
+                        onShowSizeChange={this.onShowSizeChange}
+                        total={this.state.documentListCount}
+                    />
+                </div>
             </div>
         );
     }
 
-    public toggleModal() {
+    public revertDisplay() {
         this.setState({
-            modal: !this.state.modal
+            display: Display.Summary
         });
+    }
+
+    private handleFilterApply(newFilter:FilterDescriptor[]){
+        this.setState({filtered:cloneDeep(newFilter)}, ()=>{
+            this.requery(this.state.pageSize)
+        })
     }
 
     private handleStatusFilterChange(value: string) {
@@ -473,7 +374,7 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
     private updateFilter(id: string, value: string) {
         let { filtered } = this.state;
         filtered = filterAdd(filtered, id, value);
-        this.setState({ filtered });
+        this.setState({ filtered , page: 1});
     }
 
     private query(page: number, pageSize: number) {   // We pass these arguments rather than reading them from the state, because updates to state are delayed
@@ -492,7 +393,7 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
         this.setState({
             documentEdit: new XXMLDoc.CXMLDoc({
             }),
-            modal: true,
+            display: Display.Detail,
             isNew: true
         });
     }
@@ -500,7 +401,7 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
     private documentEdit(document: IXMLDoc) {
         this.setState({
             documentEdit: document,
-            modal: true,
+            display: Display.Detail,
             isNew: false
         });
     }
@@ -508,7 +409,7 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
     private documentEditXML(document: IXMLDoc) {
         this.setState({
             documentEdit: document,
-            modal: true,
+            display: Display.EditXml,
             isNew: false
         });
     }
@@ -523,7 +424,7 @@ class DocumentListView extends React.Component<IDocumentListViewProps, IDocument
         clone.Ship_Via_ID += "2";
         this.setState({
             documentEdit: clone,
-            modal: true,
+            display: Display.Detail,
             isNew: true
         });
     }

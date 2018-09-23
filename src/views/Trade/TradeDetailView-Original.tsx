@@ -1,8 +1,11 @@
 import * as React from "react";
+import { StringChecker } from '../../utils/Conversion';
 import { connect } from "react-redux";
-import { Modal, Collapse } from 'antd'
+import TextField from '@material-ui/core/TextField';
+import Divider from '@material-ui/core/Divider';
+import { Form, Modal, Input, InputNumber, Row, Col, Collapse } from 'antd'
+import { Select, Button, Icon, message } from 'antd'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, Button } from 'reactstrap';
 
 import { packageGetAll } from '../../actions/PackageAction'
 import { packageLabelGetAll } from '../../actions/PackageLabelAction'
@@ -26,9 +29,10 @@ import TradeDetailSystemPanelView from "./TradeDetailSystemPanelView"
 import TradeDetailDocumentsUsedView from "./TradeDetailDocumentsUsedView"
 import TradeDetailTransObjectView from "./TradeDetailTransObjectView"
 import TradeDetailMapUpdateStatusView from "./TradeDetailMapUpdateStatusView"
-import PageBtnContainer from "./../../components/widgets/PageBtnContainer";
-const Panel = Collapse.Panel;
 
+const Panel = Collapse.Panel;
+const FormItem = Form.Item;
+const Option = Select.Option;
 
 
 
@@ -41,8 +45,8 @@ export interface ITradeDetailViewProps {
     toggleViewMode: any,
     statusList: any,
     partnerList: any,
-    networkList: any,
-    ediDocGroupList: any,
+    networkList:any,
+    ediDocGroupList:any,
 
     // Redux
     packageSet: any,
@@ -51,14 +55,14 @@ export interface ITradeDetailViewProps {
     packageLabelGetAll: any,
     pseudoTradeSet: any,
     pseudoTradeGetAll: any,
-    partnerDocGroupSet: any,
-    partnerDocGroupGetAll: any,
-    partnerDocGroupDelete: any,
-    apiTransObjectSet: any,
+    partnerDocGroupSet:any,
+    partnerDocGroupGetAll:any,
+    partnerDocGroupDelete:any,
+    apiTransObjectSet:any,
     apiTransObjectGetAll,
     trade: any,
     tradeUpdate: any,
-    tradeUpdateMaps: any,
+    tradeUpdateMaps:any,
     tradeDelete: any
 }
 
@@ -66,11 +70,11 @@ export interface ITradeDetailViewState {
     TradingPartner: Trade,
     FieldStatus: any,
     packageLabelList: any,
-    expanded: {},
-    viewModalMapStatus: boolean,
-    modalForm: string,
+    expanded:{},
+    viewModalMapStatus:boolean, 
+    modalForm:string,
     // partnerDocGroup:IPartnerDocGroup,
-    partnerDocGroup: PartnerDocGroupModel,
+    partnerDocGroup:PartnerDocGroupModel,
     [propName: string]: any, // Lastly, this is so we can set by name dynamically
 }
 
@@ -85,17 +89,19 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
-        // this.handleUseDeptChange = this.handleUseDeptChange.bind(this);
-        // this.handleUseN1StChange = this.handleUseN1StChange.bind(this);
+        this.handleStatusChange = this.handleStatusChange.bind(this);
+        this.handleKitTypeChange = this.handleKitTypeChange.bind(this);
+        this.handleUseDeptChange = this.handleUseDeptChange.bind(this);
+        this.handleUseN1StChange = this.handleUseN1StChange.bind(this);
         this.handleDropDownChange = this.handleDropDownChange.bind(this);
-        // this.handlePackageChange = this.handlePackageChange.bind(this);
-        // this.handlePriceMethodChange = this.handlePriceMethodChange.bind(this);
-        // this.handlePSPOMethodChange = this.handlePSPOMethodChange.bind(this);
-        // this.handlePseudoTPPartIDtChange = this.handlePseudoTPPartIDtChange.bind(this);
-        // this.handlePseudoIDChange = this.handlePseudoIDChange.bind(this);
-        // this.handlePseudoSegmentNameChange = this.handlePseudoSegmentNameChange.bind(this);
+        this.handlePackageChange = this.handlePackageChange.bind(this);
+        this.handlePriceMethodChange = this.handlePriceMethodChange.bind(this);
+        this.handlePSPOMethodChange = this.handlePSPOMethodChange.bind(this);
+        this.handlePseudoTPPartIDtChange = this.handlePseudoTPPartIDtChange.bind(this);
+        this.handlePseudoIDChange = this.handlePseudoIDChange.bind(this);
+        this.handlePseudoSegmentNameChange = this.handlePseudoSegmentNameChange.bind(this);
         this.handleGetApiTransObjectList = this.handleGetApiTransObjectList.bind(this);
-        // this.handleNetworkChange = this.handleNetworkChange.bind(this);
+        this.handleNetworkChange = this.handleNetworkChange.bind(this);
         this.handleExpandedChange = this.handleExpandedChange.bind(this);
         this.handleDocumentsUsedEdit = this.handleDocumentsUsedEdit.bind(this);
         this.handleTransObjectEdit = this.handleTransObjectEdit.bind(this);
@@ -103,7 +109,7 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
         this.handleDocumentsUsedDelete = this.handleDocumentsUsedDelete.bind(this);
         this.handleGetLatestMaps = this.handleGetLatestMaps.bind(this);
         this.toggleMapUpdateStatus = this.toggleMapUpdateStatus.bind(this);
-
+        
     }
 
     public componentWillMount() {
@@ -125,43 +131,51 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
         const partnerDocGroupList = this.props.partnerDocGroupSet.partnerDocGroupList
         const partnerDocGroupRowCount = partnerDocGroupList.length
         const apiTransObjectList = this.props.apiTransObjectSet.apiTransObjectList
-
-
+        
+        
         const apiTransObjectRowCount = apiTransObjectList.length
 
         const actionButtons =
-            <PageBtnContainer>
-                <Button
-                    color="primary"
+            <div>
+                <Button size="default"
+                    onClick={() => {
+                        this.initState();
+                        this.props.toggleViewMode();
+                    }}>
+                    Cancel
+            </Button>
+                <Button size="default" 
+                    onClick={() => {
+                        this.handleDelete();
+                    }}>
+                    Delete
+            </Button>
+                <Button size="default" 
+                    type="primary"
                     onClick={() => {
                         if (this.isValid()) {
                             this.handleUpdate();
                         }
                     }}>
-                    Save
-                </Button>
-                <Button
-                        onClick={() => {
-                            this.initState();
-                            this.props.toggleViewMode();
-                        }} >
-                    Cancel
-
-                </Button>
-            </PageBtnContainer>;
+                    Update
+            </Button>
+            </div>;
 
         return (
-            <div>
-                <Form row={true}>
-                    {/* <Collapse accordion={false} defaultActiveKey={["General"]} > */}
-                    <Collapse accordion={false} >
-                        <Panel header="General" key="General">
+            <div style={{ width: '100%', marginBottom: 20 }}>
+                {actionButtons}
+                <Divider />
+                <Form name="DetailForm" id="DetailForm" style={{ width: '100%' }}>
+                    <Collapse accordion={true} defaultActiveKey={["General"]} >
+                        <Panel header="General / Maps" key="General">
                             <TradeDetailGeneralPanelView
                                 handleInputChange={this.handleInputChange}
                                 tradingPartner={this.state.TradingPartner}
                                 fieldStatus={this.state.FieldStatus}
                                 partnerList={this.props.partnerList}
+                                handleKitTypeChange={this.handleKitTypeChange}
                                 statusList={this.props.statusList}
+                                handleStatusChange={this.handleStatusChange}
                                 toggleViewMode={this.toggleModal}
                                 handleDocumentsUsedEdit={this.handleDocumentsUsedEdit}
                                 handleDocumentsUsedAdd={this.handleDocumentsUsedAdd}
@@ -175,7 +189,6 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
                                 expanded={this.state.expanded}
                                 handleExpandedChange={this.handleExpandedChange}
                                 handleGetLatestMaps={this.handleGetLatestMaps}
-                                handleDropDownChange={this.handleDropDownChange}
                             />
                         </Panel>
                         <Panel header="Settings" key="Settings">
@@ -183,10 +196,9 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
                                 handleInputChange={this.handleInputChange}
                                 tradingPartner={this.state.TradingPartner}
                                 packageList={packageList}
-                                // handleUseDeptChange={this.handleUseDeptChange}
-                                // handleUseN1StChange={this.handleUseN1StChange}
-                                // handlePackageChange={this.handlePackageChange}
-                                handleDropDownChange={this.handleDropDownChange}
+                                handleUseDeptChange={this.handleUseDeptChange}
+                                handleUseN1StChange={this.handleUseN1StChange}
+                                handlePackageChange={this.handlePackageChange}
                             />
                         </Panel>
                         <Panel header="Configuration" key="Configuration">
@@ -195,22 +207,8 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
                                 tradingPartner={this.state.TradingPartner}
                                 packageLabelList={packageLabelList}
                                 packageLabelRowCount={packageLabelRowCount}
-                                // handlePriceMethodChange={this.handlePriceMethodChange}
-                                // handlePSPOMethodChange={this.handlePSPOMethodChange}
-                                handleDropDownChange={this.handleDropDownChange}
-                            />
-                        </Panel>
-                        <Panel header="System / Redirect" key="System">
-                            <TradeDetailSystemPanelView
-                                handleInputChange={this.handleInputChange}
-                                tradingPartner={this.state.TradingPartner}
-                                pseudoTradeList={pseudoTradeList}
-                                // handlePseudoTPPartIDtChange={this.handlePseudoTPPartIDtChange}
-                                // handlePseudoIDChange={this.handlePseudoIDChange}
-                                // handlePseudoSegmentNameChange={this.handlePseudoSegmentNameChange}
-                                networkList={this.props.networkList}
-                                // handleNetworkChange={this.handleNetworkChange}
-                                handleDropDownChange={this.handleDropDownChange}
+                                handlePriceMethodChange={this.handlePriceMethodChange}
+                                handlePSPOMethodChange={this.handlePSPOMethodChange}
                             />
                         </Panel>
                         <Panel header="User Fields" key="UserFields">
@@ -220,39 +218,50 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
                             />
 
                         </Panel>
+                        <Panel header="System / Redirect" key="System">
+                            <TradeDetailSystemPanelView
+                                handleInputChange={this.handleInputChange}
+                                tradingPartner={this.state.TradingPartner}
+                                pseudoTradeList={pseudoTradeList}
+                                handlePseudoTPPartIDtChange={this.handlePseudoTPPartIDtChange}
+                                handlePseudoIDChange={this.handlePseudoIDChange}
+                                handlePseudoSegmentNameChange={this.handlePseudoSegmentNameChange}
+                                networkList={this.props.networkList}
+                                handleNetworkChange={this.handleNetworkChange}
+                            />
+                        </Panel>
                     </Collapse>
-                    {actionButtons}
                 </Form>
-                <Modal visible={(this.state.modalForm === "DocumentsUsed" ? true : false)}
-                    title="Trading Partner Documents Used"
-                    footer={null}
-                    closable={false}
-                    destroyOnClose={true}
-                >
-                    <TradeDetailDocumentsUsedView
-                        toggleModal={this.toggleModal}
-                        isNew={this.state.isNew}
-                        item={this.state.partnerDocGroup}
-                        networkList={this.props.networkList}
-                        ediDocGroupList={this.props.ediDocGroupList}
-                    />
-
+                <Modal visible={(this.state.modalForm === "DocumentsUsed" ? true : false)} 
+                       title="Trading Partner Documents Used"
+                       footer={null}
+                       closable={false}
+                       destroyOnClose={true}
+                       >
+                        <TradeDetailDocumentsUsedView 
+                            toggleModal={this.toggleModal} 
+                            isNew={this.state.isNew}
+                            item={this.state.partnerDocGroup} 
+                            networkList={this.props.networkList}
+                            ediDocGroupList={this.props.ediDocGroupList}                                
+                         />
+                    
                 </Modal>
                 <Modal visible={(this.state.modalForm === "TransObject" ? true : false)} title="Trading Partner Transformation Objects">
-                    <TradeDetailTransObjectView toggleModal={this.toggleModal} />
+                        <TradeDetailTransObjectView toggleModal={this.toggleModal} />
                 </Modal>
-                <Modal visible={(this.props.trade.mapList.length > 0 && this.state.viewModalMapStatus ? true : false)}
-                    title="Map Update Status"
-                    closable={false}
-                    destroyOnClose={true}
-                    footer={[
-                        <Button key="Ok" onClick={this.toggleMapUpdateStatus}> Ok</Button>
-                    ]}
-                >
-                    <TradeDetailMapUpdateStatusView
-                        mapList={this.props.trade.mapList} />
+                <Modal visible={(this.props.trade.mapList.length > 0 && this.state.viewModalMapStatus ? true : false)} 
+                        title="Map Update Status"
+                        closable={false}
+                        destroyOnClose={true}
+                        footer={[
+                            <Button key="Ok" onClick={this.toggleMapUpdateStatus}> Ok</Button>
+                        ]}
+                        >
+                        <TradeDetailMapUpdateStatusView 
+                            mapList ={this.props.trade.mapList} />
                 </Modal>
-
+                
             </div>
         )
     };
@@ -274,20 +283,20 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
         this.setState({
             TradingPartner: this.props.item,
             FieldStatus: [{ field: "TP_Name", value: "success", max: 30 },
-            { field: "TP_ID", value: "success", max: 100 }],
-            modalForm: "Detail",
-            viewModalMapStatus: false,
+                          { field: "TP_ID", value: "success", max: 100 }],
+            modalForm:"Detail",
+            viewModalMapStatus:false,
 
         });
     }
 
-    private toggleModal(modified: boolean) {
-
+    private toggleModal(modified:boolean) {
+        
         // if record was modified then refresh the partner groups to show changes in proper sort order
         if (modified) {
             this.props.partnerDocGroupGetAll(this.state.TradingPartner.TP_PartID)
         }
-
+        
         // Closes either modal form 
         this.setState({
             modalForm: "Detail"
@@ -295,7 +304,7 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
     }
 
     // private handleDocumentsUsedEdit(partnerDocGroup:IPartnerDocGroup) {
-    private handleDocumentsUsedEdit(partnerDocGroup: PartnerDocGroupModel) {
+    private handleDocumentsUsedEdit(partnerDocGroup:PartnerDocGroupModel) {
         // Open the TradeDetailDocumentsUsedView form
         this.setState({
             partnerDocGroup,
@@ -314,7 +323,7 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
         newPartnerDocGroup.PartnerQual = this.state.TradingPartner.TP_PartQ
         newPartnerDocGroup.Van_ID = this.state.TradingPartner.Van
         newPartnerDocGroup.CipherKey = this.state.TradingPartner.CipherKey
-
+        
         this.setState({
             partnerDocGroup: newPartnerDocGroup,
             modalForm: "DocumentsUsed",
@@ -322,11 +331,11 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
         });
     }
 
-    private handleDocumentsUsedDelete(partnerDocGroup: PartnerDocGroupModel) {
+    private handleDocumentsUsedDelete(partnerDocGroup:PartnerDocGroupModel) {
         this.props.partnerDocGroupDelete(partnerDocGroup)
     }
 
-    private handleTransObjectEdit(apiTransObject: IApiTransObject) {
+    private handleTransObjectEdit(apiTransObject:IApiTransObject) {
         // Open the TradeDetailTransObjectView form
         this.setState({
             modalForm: "TransObject",
@@ -335,7 +344,6 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
     }
 
     private handleDropDownChange(field: string, value: any) {
-        console.log("HandleDropoDownChange", field, value)
         this.setState(prevState => ({
             TradingPartner: {
                 ...prevState.TradingPartner,
@@ -344,94 +352,96 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
         }))
     }
 
-    // private handleUseDeptChange(value: string) {
-    //     this.handleDropDownChange("TP_UseDept", value)
-    // }
-
-    // private handleUseN1StChange(value: string) {
-    //     this.handleDropDownChange("TP_UseN1ST", value)
-    // }
-
-    // private handlePackageChange(value: string) {
-    //     this.handleDropDownChange("PKG_ID", value)
-    // }
-
-    // private handlePriceMethodChange(value: number) {
-    //     this.handleDropDownChange("PrcMethod", value)
-    // }
-
-    // private handlePSPOMethodChange(value: number) {
-    //     this.handleDropDownChange("PSPOMethod", value)
-    // }
-
-    // private handlePseudoTPPartIDtChange(value:string) {
-    //     this.handleDropDownChange("Pseudo_TPPartID", value)
-    // }
-
-    // private handlePseudoIDChange(value:string) {
-    //     this.handleDropDownChange("Pseudo_ID", value)
-    // }
-
-    // private handlePseudoSegmentNameChange(value:string) {
-    //     this.handleDropDownChange("Pseudo_Segname", value)
-    // }
-
-    private handleGetApiTransObjectList(dgid: string, tppartid: string) {
-        this.props.apiTransObjectGetAll({ dgid, tppartid })
+    private handleStatusChange(value: string) {
+        this.handleDropDownChange("TP_Status", value)
     }
 
-    private handleGetLatestMaps(apiTransObject: IApiTransObject) {
+    private handleKitTypeChange(value: number) {
+        this.handleDropDownChange("KitTypeID", value)
+    }
+
+    private handleUseDeptChange(value: string) {
+        this.handleDropDownChange("TP_UseDept", value)
+    }
+
+    private handleUseN1StChange(value: string) {
+        this.handleDropDownChange("TP_UseN1ST", value)
+    }
+
+    private handlePackageChange(value: string) {
+        this.handleDropDownChange("PKG_ID", value)
+    }
+
+    private handlePriceMethodChange(value: number) {
+        this.handleDropDownChange("PrcMethod", value)
+    }
+
+    private handlePSPOMethodChange(value: number) {
+        this.handleDropDownChange("PSPOMethod", value)
+    }
+
+    private handlePseudoTPPartIDtChange(value:string) {
+        this.handleDropDownChange("Pseudo_TPPartID", value)
+    }
+
+    private handlePseudoIDChange(value:string) {
+        this.handleDropDownChange("Pseudo_ID", value)
+    }
+
+    private handlePseudoSegmentNameChange(value:string) {
+        this.handleDropDownChange("Pseudo_Segname", value)
+    }
+
+    private handleGetApiTransObjectList(dgid:string, tppartid:string){
+        this.props.apiTransObjectGetAll({ dgid, tppartid})
+    }
+
+    private handleGetLatestMaps(apiTransObject:IApiTransObject) {
         // mapSettings[0] =  
         //     new MapSettings({MapName:apiTransObject.TDocName,
         //                      Type:enumTransformationType.Map})
-
+        
         this.props.trade.mapList = [];
 
         const mapSettingsList: MapSetting[] = [];
-
+        
         // map
-        mapSettingsList.push(new MapSetting({
-            MapName: apiTransObject.TDocName,
-            Type: enumTransformationType.Map,
-            Status: enumTransformationUpdateStatus.Same
-        }))
-
+        mapSettingsList.push(new MapSetting({MapName:apiTransObject.TDocName,
+                                             Type:enumTransformationType.Map,
+                                             Status:enumTransformationUpdateStatus.Same}))
+        
         // loop
-        mapSettingsList.push(new MapSetting({
-            MapName: apiTransObject.TransID,
-            Type: enumTransformationType.Loop,
-            Status: enumTransformationUpdateStatus.Same
-        }))
+        mapSettingsList.push(new MapSetting({MapName:apiTransObject.TransID,
+                                             Type:enumTransformationType.Loop,
+                                             Status:enumTransformationUpdateStatus.Same}))
 
         // token
-        mapSettingsList.push(new MapSetting({
-            MapName: "tokendef",
-            Type: enumTransformationType.Token,
-            Status: enumTransformationUpdateStatus.Same
-        }))
+        mapSettingsList.push(new MapSetting({MapName:"tokendef",
+                                             Type:enumTransformationType.Token,
+                                             Status:enumTransformationUpdateStatus.Same}))
 
         // console.log("MAP SETTINGS", mapSettingsList)    
         this.props.tradeUpdateMaps(JSON.parse(JSON.stringify(mapSettingsList)))
-
+        
         this.setState({
-            viewModalMapStatus: true
+            viewModalMapStatus:true
         })
     }
 
     private toggleMapUpdateStatus() {
-
-        this.props.trade.mapList = [];
+        
+        this.props.trade.mapList=[];
         this.setState({
-            viewModalMapStatus: false
+            viewModalMapStatus:false
         })
     }
 
-    // private handleNetworkChange(value:string) {
-    //     this.handleDropDownChange("Van", value)
-    // }
+    private handleNetworkChange(value:string) {
+        this.handleDropDownChange("Van", value)
+    }
 
     private handleExpandedChange(newExpanded, index, event) {
-        this.setState({
+        this.setState({ 
             expanded: { [index]: newExpanded[index] }
         })
     }
@@ -461,11 +471,9 @@ class TradeDetailView extends React.Component<ITradeDetailViewProps, ITradeDetai
 
     private handleInputChange(event) {
 
-
         const target = event.target;
         let value = target.type === 'checkbox' ? target.checked : target.value;
-        // const name = target.name;
-        const name = target.id
+        const name = target.name;
 
         const current = this.state.FieldStatus.find(item => item.field === name)
 

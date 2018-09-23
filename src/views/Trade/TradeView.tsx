@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from 'react-redux'
-import _ from 'lodash';
+import {cloneDeep, includes, orderBy} from 'lodash';
 import { toastError } from '../../actions/Scheduler/ServiceAction';
 import { Card, Container } from 'reactstrap';
 import FlexView from 'react-flexview';
@@ -8,7 +8,12 @@ import { FaSyncAlt, FaPlusCircle, FaTable, FaList } from 'react-icons/fa';
 import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
 import { Pagination, Modal, Input } from 'antd';
 import PaginationControl from './../../components/widgets/PaginationControl';
-
+import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
+import LoadingComponent from "../../components/widgets/LoadingComponent";
+import GridFilter from './../../components/widgets/GridFilter';
+import GridFilterPills from './../../components/widgets/GridFilterPills';
+import FormActionGroup from './../../components/widgets/FormActionGroup';
+import IconButton from './../../components/widgets/IconButton';
 import { tradeGetAll, tradeDelete } from './../../actions/Trade';
 import Media from "react-media";
 // import { ITrade } from "../../constants/edidb";
@@ -20,6 +25,7 @@ import { ToString } from '../../utils/Conversion';
 import TradeCardView from "./TradeCardView"
 import TradeTableView from "./TradeTableView"
 import TradeDetailView from "./TradeDetailView"
+import TradeDetailViewOrig from "./TradeDetailView-Original"
 import TradeCloneView from "./TradeCloneView"
 
 
@@ -32,8 +38,8 @@ export interface ITradeViewProps {
     // redux
     trade: any,
     kitType: any,
-    ediDocGroupSet:any,
-    tradeNetworkSet:any,
+    ediDocGroupSet: any,
+    tradeNetworkSet: any,
     tradeGetAll: any,
     tradeDelete: any,
     toastError: any,
@@ -62,7 +68,7 @@ export interface ITradeViewState {
     TP_Name: string,
     TP_GroupID: string,
     // KitTypeID: number,
-    KitTypeID: string,
+    // KitTypeID: string,
     TP_Status: string
     // kitTypeIDFilter: string,
     [propName: string]: any, // This is so we can set by name dynamically
@@ -73,7 +79,7 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
         super(props)
         this.state = {
             viewMode: 'cards',
-            actionMenuOpenFor_TP_PartID:'',
+            actionMenuOpenFor_TP_PartID: '',
             pageSize: 10,
             page: 1,
             modal: false,
@@ -94,7 +100,7 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
             TP_Name: "",
             TP_GroupID: "",
             // KitTypeID: 0,
-            KitTypeID: "All",
+            // KitTypeID: "All",
             TP_Status: "All",
             // kitTypeIDFilter: ""
         }
@@ -107,6 +113,7 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
         this.toggleSortMode = this.toggleSortMode.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleStatusFilterChange = this.handleStatusFilterChange.bind(this);
+        this.handleFilterApply = this.handleFilterApply.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.toggleClone = this.toggleClone.bind(this);
         this.toggleViewMode = this.toggleViewMode.bind(this);
@@ -142,9 +149,14 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
     }
 
     public render() {
+
+        if (this.state.loading) {
+            return <LoadingComponent />
+        }
+        
         const { loading, pageSize, sorted, filtered, modal } = this.state;
         const partnerList = this.props.kitType.kitTypeList;
-        
+
         let { tradeList } = this.state;
         // let viewComponent;
 
@@ -154,26 +166,26 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
             const ediDocGroupList = this.props.ediDocGroupSet.ediDocGroupList;
 
             return (
-                <TradeDetailView itemId={this.state.tradeEdit.TP_PartID}
-                    item={this.state.tradeEdit}
-                    isNew={this.state.isNew}
-                    toggleViewMode={this.toggleModal}
-                    statusList={statusList}
-                    partnerList={partnerList}
-                    networkList={networkList}
-                    ediDocGroupList={ediDocGroupList}
-                />
+                    <TradeDetailView itemId={this.state.tradeEdit.TP_PartID}
+                        item={this.state.tradeEdit}
+                        isNew={this.state.isNew}
+                        toggleViewMode={this.toggleModal}
+                        statusList={statusList}
+                        partnerList={partnerList}
+                        networkList={networkList}
+                        ediDocGroupList={ediDocGroupList}
+                    />
             )
         }
 
         if (filtered.length > 0) {   // Filter on each column with a value
             filtered.map((column) => {
-                tradeList = tradeList.filter(item => _.includes(ToString(item[column.id]).toLowerCase(), ToString(column.value).toLowerCase()));
+                tradeList = tradeList.filter(item => includes(ToString(item[column.id]).toLowerCase(), ToString(column.value).toLowerCase()));
             });
         }
 
         if (sorted.length > 0) {   // Implement the multi-sort with lodash
-            tradeList = _.orderBy(tradeList, sorted.map((column) => column.id), sorted.map((column) => column.desc ? "desc" : "asc"));
+            tradeList = orderBy(tradeList, sorted.map((column) => column.id), sorted.map((column) => column.desc ? "desc" : "asc"));
         }
 
         // let toggleButton;
@@ -237,8 +249,23 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
         return (
             <div>
                 <div className="header-icons">
-                    <span onClick={()=>this.requery()} className="fa fa-refresh"/>
-                    <span className="fa fa-gear"/>
+                    <GridFilterPills filters={this.state.filtered} onFilterClear={this.handleFilterApply}/>
+                    <div className="header-btn">
+                        <FormActionGroup items={["Help", "Settings"]} onItemClick={(item)=>console.log('Action clicked was - ', item)}/>
+                        <GridFilter filters={this.state.filtered} filterItems={[
+                                {type:'text', label:'Trading Partner', name:"TP_Name",  placeholder:''},
+                                {type:'text', label:'Qualifier', name:"TP_PartQ", placeholder:''},
+                                {type:'select', label:'Partner Type', name:"KitTypeID", placeholder:'', returnType:'number',
+                                    options: partnerList.map((option)=><option key={option.KitTypeID} value={option.KitTypeID}>{option.KitTypeDesc}</option>)
+                                },
+                                {type:'select', label:'Status', name:"TP_Status", placeholder:'',
+                                    options: statusList.map((option)=><option key={option.id} value={option.id}>{option.status}</option>)
+                                }
+                            ]} 
+                            onApply={this.handleFilterApply} 
+                        />
+                        {/* <IconButton className="fa fa-hel" iconText="Help"/> */}
+                    </div>
                 </div>
                 <Media query={{ maxWidth: 768 }}>
                     {matches =>
@@ -262,9 +289,10 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
                             <TradeTableView list={tradeList}
                                 actionMenuOpen={true}
                                 actionMenuOpenFor_TP_PartID={this.state.actionMenuOpenFor_TP_PartID}
-                                toggleActionMenu={(data)=>{
-                                    this.setState({actionMenuOpenFor_TP_PartID:this.state.actionMenuOpenFor_TP_PartID=== data.TP_PartID? "": data.TP_PartID});
-                                    console.log('hello', data)}
+                                toggleActionMenu={(data) => {
+                                    this.setState({ actionMenuOpenFor_TP_PartID: this.state.actionMenuOpenFor_TP_PartID === data.TP_PartID ? "" : data.TP_PartID });
+                                    console.log('hello', data)
+                                }
                                 }
                                 loading={loading}
                                 sorted={sorted}
@@ -296,18 +324,18 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
                     />
                 </div>
                 {/* {viewComponent} */}
-                <Modal visible={(this.state.clone)} 
-                       title="Clone Trading Partner"
-                       footer={null}
-                       closable={false}
-                       destroyOnClose={true}
-                       >
-                        <TradeCloneView
-                            toggleClone={this.toggleClone} 
-                            isNew={this.state.isNew}
-                            item={this.state.tradeClone} 
-                         />
-                    
+                <Modal visible={(this.state.clone)}
+                    title="Clone Trading Partner"
+                    footer={null}
+                    closable={false}
+                    destroyOnClose={true}
+                >
+                    <TradeCloneView
+                        toggleClone={this.toggleClone}
+                        isNew={this.state.isNew}
+                        item={this.state.tradeClone}
+                    />
+
                 </Modal>
 
             </div>
@@ -338,7 +366,8 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
     private query() {
         const top: number = this.state.pageSize;
         const skip: number = (this.state.page - 1) * this.state.pageSize; // The pagination component is 1-based
-        const params: ODataParams = { top, skip, sorted: this.state.sorted, filtered: this.state.filtered };
+        const filtered = this.state.filtered;
+        const params: ODataParams = { top, skip, sorted: this.state.sorted, filtered };
         this.props.tradeGetAll(params);
     }
 
@@ -386,6 +415,11 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
         this.setState({ sorted });
     }
 
+    private handleFilterApply(newFilter:FilterDescriptor[]){
+        this.setState({filtered:cloneDeep(newFilter)}, ()=>{
+            this.requery()
+        })
+    }
     private onFilteredChange(filtered: FilterDescriptor[]) {
         if (filtered.length > 0) {
             filtered.map((column) => {
@@ -407,6 +441,7 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
             });
         }
 
+        
         let filterUpdated: FilterDescriptor[] = [];
 
         // Get the relevant column from the filtered array
@@ -487,7 +522,7 @@ class TradeView extends React.Component<ITradeViewProps, ITradeViewState> {
 }
 
 const mapStateToProps = ({ trade, kitType, ediDocGroupSet, tradeNetworkSet }) => {
-    return { trade, kitType, ediDocGroupSet,  tradeNetworkSet }
+    return { trade, kitType, ediDocGroupSet, tradeNetworkSet }
 };
 
 const mapActionsToProps = {

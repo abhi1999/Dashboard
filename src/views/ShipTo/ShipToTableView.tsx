@@ -1,57 +1,39 @@
 import * as React from "react";
 import ReactTable from "react-table";
-import { FaTimesCircle, FaEdit, FaClone } from 'react-icons/fa';
-import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
 import { Select } from 'antd';
 import { ToString } from '../../utils/Conversion';
 
-import { Card } from 'reactstrap';
-import FlexView from 'react-flexview';
-import uuid from 'uuid-v4';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { FaSyncAlt, FaPlusCircle, FaTable, FaList } from 'react-icons/fa';
-// import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
-import { Pagination, Input } from 'antd';
+import GridActionMenu from './../../components/widgets/GridActionMenu';
+import GridFilter from './../../components/widgets/GridFilter';
+import GridFilterPills from './../../components/widgets/GridFilterPills';
 
 const Option = Select.Option;
 
 function ShipToTableView(props) {
     return (
         <div>
-            {/*
-            <Card body={true} outline={true} style={{ width: '100%' }}>
-                <FlexView width='100%' wrap={true} style={{ marginBottom: 12 }}>
-                    <FlexView hAlignContent="left" vAlignContent="center" basis="40" wrap={true}>
-                        <FaSyncAlt onClick={() => props.requery()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                    </FlexView>
-                    <FlexView hAlignContent="center" vAlignContent="center" grow={true} wrap={true}>
-                        <Pagination
-                            showSizeChanger={true}
-                            onChange={props.onChangePage}
-                            current={props.page}
-                            pageSize={props.pageSize}
-                            pageSizeOptions={['10', '50', '100']}
-                            onShowSizeChange={props.onShowSizeChange}
-                            total={props.shipToListCount}
-                        />
-                    </FlexView>
-                    <FlexView hAlignContent="right" vAlignContent="center" basis="120" wrap={true}>
-                        <FaPlusCircle onClick={() => props.shipToAdd()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />
-                    </FlexView>
-                </FlexView>
-            </Card>
-            */}
             <ReactTable
                 columns={[
                     {
                         sortable: false,
                         filterable: false,
-                        width: 90,
+                        width: 50,
+                        resizable:false,
+                        className:'action-menu',
                         Cell: row => (
-                            <div>
-                                <FaEdit onClick={() => props.shipToEdit(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                                <FaTimesCircle onClick={() => props.shipToDelete(row.original)} size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft: 12}}/>
-                            </div>
+                            <GridActionMenu items={["Edit", "Delete"]}
+                                onItemClick={(item) => {
+                                    switch (item) {
+                                        case "Edit":
+                                            props.shipToEdit(row.original)
+                                            break;
+
+                                        case "Delete":
+                                            props.shipToDelete(row.original)
+                                            break;
+
+                                    }
+                                }} />
                         )
                     },
                     {
@@ -174,13 +156,13 @@ function ShipToTableView(props) {
                 sortable={true}
                 sorted={props.sorted}
                 onSortedChange={props.onSortChange}
-                filterable={true}
+                filterable={false}
                 filtered={props.filtered}
                 onFilteredChange={props.onFilteredChange}
                 defaultFilterMethod={(filter, row) => ToString(row[filter.id]).toLowerCase().includes(ToString(filter.value).toLowerCase())}
                 showPagination={false}
                 pageSize={props.pageSize}
-                className="-striped -highlight"
+                className="-highlight table-container"
             />
         </div>
     )

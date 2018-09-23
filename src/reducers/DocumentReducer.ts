@@ -4,6 +4,9 @@ import {
   DOCUMENT_GET_ALL,
   DOCUMENT_GET_ALL_SUCCESS,
   DOCUMENT_GET_ALL_FAILURE,
+  DOCUMENT_GET_ONE,
+  DOCUMENT_GET_ONE_SUCCESS,
+  DOCUMENT_GET_ONE_FAILURE,
   DOCUMENT_ADD,
   DOCUMENT_ADD_SUCCESS,
   DOCUMENT_ADD_FAILURE,
@@ -34,6 +37,21 @@ const config = (state = initialSettings, action) => {
         documentListCount: action.payload.data["@odata.count"]
       };
     case DOCUMENT_GET_ALL_FAILURE:
+      return {
+        ...state,
+        errorMessage: action.payload
+      };
+    case DOCUMENT_GET_ONE:
+      return {
+        ...state,
+        document: {}
+      };
+    case DOCUMENT_GET_ONE_SUCCESS:
+      return {
+        ...state,
+        document: action.payload[0]
+      };
+    case DOCUMENT_GET_ONE_FAILURE:
       return {
         ...state,
         errorMessage: action.payload

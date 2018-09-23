@@ -4,14 +4,17 @@ import _ from 'lodash';
 import { Card } from 'reactstrap';
 import FlexView from 'react-flexview';
 import uuid from 'uuid-v4';
-import { ModalHeader, ModalBody } from 'reactstrap';
 import { Modal } from 'antd';
-import { FaSyncAlt, FaPlusCircle, FaTable, FaList } from 'react-icons/fa';
-import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
 import { Pagination, Input } from 'antd';
+import {cloneDeep, remove, orderBy, includes } from "lodash";
+import GridFilter from './../../components/widgets/GridFilter';
+import GridFilterPills from './../../components/widgets/GridFilterPills';
+import IconButton from "./../../components/widgets/IconButton";
+
 import { shipToGetAll, shipToDelete, } from './../../actions/ShipTo';
 import { ToString } from '../../utils/Conversion';
 import Media from "react-media";
+import { filterAdd, filterIncludes, filterGetValue, selectGetValue } from '../../utils/Comparison';
 import { Button } from 'antd';
 
 import Trade from "../../constants/implementations/Trade";
@@ -20,7 +23,7 @@ import ODataParams from '../../constants/params/oDataParams';
 import SortDescriptor from '../../constants/params/sortDescriptor';
 import FilterDescriptor from '../../constants/params/filterDescriptor';
 
-// import ShipToCardView from "./ShipToCardView"
+import ShipToCardView from "./ShipToCardView"
 import ShipToTableView from "./ShipToTableView"
 import ShipToDetailView from "./ShipToDetailView"
 
@@ -87,6 +90,8 @@ class ShipToView extends React.Component<IShipToViewProps, IShipToViewState> {
         this.shipToDelete = this.shipToDelete.bind(this);
         this.shipToClone = this.shipToClone.bind(this);
         this.onOkDelete = this.onOkDelete.bind(this);
+
+        this.handleFilterApply = this.handleFilterApply.bind(this);
     }
 
     public componentDidMount() {
@@ -152,46 +157,36 @@ class ShipToView extends React.Component<IShipToViewProps, IShipToViewState> {
 
         return (
             <div>
-                <Button icon='arrow-left' shape="circle" style={{marginLeft:8}} onClick={() => {
-                        // this.initState();
-                        this.props.setHeaderViewMode(); // return from this screen
-                 }}/>
-                 <Card outline={true}>&nbsp;&nbsp;{TP_Name}</Card>
-                <Card body={true} outline={true} style={{ width: '100%' }}>
-                    <FlexView width='100%' wrap={true} style={{ marginBottom: 12 }}>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="40" wrap={true}>
-                            <FaSyncAlt onClick={() => this.requery()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                        </FlexView>
-                        <FlexView hAlignContent="center" vAlignContent="center" grow={true} wrap={true}>
-                            <Pagination
-                                showSizeChanger={true}
-                                onChange={this.onChangePage}
-                                current={this.state.page}
-                                pageSize={this.state.pageSize}
-                                pageSizeOptions={['10', '50', '100']}
-                                onShowSizeChange={this.onShowSizeChange}
-                                total={this.state.shipToListCount}
-                            />
-                        </FlexView>
-                        <FlexView hAlignContent="right" vAlignContent="center" basis="120" wrap={true}>
-                            <FaPlusCircle onClick={() => this.shipToAdd()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />
-                        </FlexView>
-                    </FlexView>
-                </Card>
-                <Media query={{ maxWidth: 1 /* 768 */ }}>
+                <Button icon='arrow-left' shape="circle" style={{ marginLeft: 8 }} onClick={() => {
+                    // this.initState();
+                    this.props.setHeaderViewMode(); // return from this screen
+                }} />
+                <Card outline={true}>&nbsp;&nbsp;{TP_Name}</Card>
+                <div className="header-icons">
+                    <GridFilterPills filters={this.state.filtered} onFilterClear={this.handleFilterApply} />
+                    <div className="header-btn">
+                        <IconButton className="fa fa-plus" onClick={() => this.shipToAdd()} iconText="Add" />
+                        <GridFilter filters={this.state.filtered} filterItems={[
+                            { type: 'text', label: 'Ship To ID', name: "ShipTo_ID", placeholder: '' },
+                            { type: 'text', label: 'ERP Cust ID', name: "ShipTo_CustID", placeholder: '' },
+                            { type: 'text', label: 'Name', name: "ShipTo_Name", placeholder: '' },]}
+                            onApply={this.handleFilterApply}
+                        />
+                    </div>
+                </div>
+
+                <Media query={{ maxWidth: 768 }}>
                 {matches => // Mobile version first
                      matches ?
-                        {/* 
-                        <ShipToCardView list={errorCodeList}
-                            errorCodeListCount={this.state.errorCodeListCount}
+                        <ShipToCardView list={shipToList}
+                            shipToListCount={this.state.shipToListCount}
                             sorted={sorted}
                             toggleSortMode={this.toggleSortMode}
                             handleFilterChange={this.handleFilterChange}
-                            errorCodeEdit={this.errorCodeEdit}
-                            errorCodeDelete={this.errorCodeDelete}
-                            errorCodeClone={this.errorCodeClone}
+                            shipToEdit={this.shipToEdit}
+                            shipToDelete={this.shipToDelete}
+                            shipToClone={this.shipToClone}
                         />
-                        */}
                         :
                         <ShipToTableView list={shipToList}
                             loading={loading}
@@ -206,6 +201,20 @@ class ShipToView extends React.Component<IShipToViewProps, IShipToViewState> {
                         />
                 }
                 </Media>
+                <div className="paging-panel">
+                    {this.state.shipToListCount > 0? 
+                            <Pagination
+                                showSizeChanger={true}
+                                onChange={this.onChangePage}
+                                current={this.state.page}
+                                pageSize={this.state.pageSize}
+                                pageSizeOptions={['10', '50', '100']}
+                                onShowSizeChange={this.onShowSizeChange}
+                                total={this.state.shipToListCount}
+                            />
+                        :''}
+                   
+                </div>
             </div>
         )
     }
@@ -246,8 +255,8 @@ class ShipToView extends React.Component<IShipToViewProps, IShipToViewState> {
         this.props.shipToGetAll(params);
     }
 
-    private requery() {
-        this.setState({ page: 1, refresh: true });
+    private requery(_pageSize: number) {
+        this.setState({ page: 1, refresh: true, pageSize: _pageSize });
     }
 
     private onChangePage = (page) => {
@@ -313,35 +322,35 @@ class ShipToView extends React.Component<IShipToViewProps, IShipToViewState> {
         this.setState({ filtered });
     }
 
-    private handleFilterChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const columnId = target.name;
+    // 
 
-        if (this !== undefined) {
-            this.setState({
-                [columnId]: value
-            });
-        }
+    // Filter calls
+    private handleFilterApply(newFilter:FilterDescriptor[]){
+        this.setState({filtered:cloneDeep(newFilter)}, ()=>{
+            this.requery(this.state.pageSize)
+        })
+    }
 
-        let filterUpdated: FilterDescriptor[] = [];
+    private getFilterValues(id){
+        const item = this.state.filtered.find(f=> f.id === id);
+        return item? item.value: ""; 
+    }
 
-        // Get the relevant column from the filtered array
-        const filteredColumn = this.state.filtered.filter((column) => column.id === columnId);
+    private handleTestFilterChange(value: string) {
+        this.updateFilter("Test", value);
+    }
 
-        if (filteredColumn.length > 0) {
-            // Update the value that it is filtering on
-            filterUpdated = this.state.filtered.filter((column) => column.id !== columnId).concat({ "id": columnId, "value": value });
-        }
-        else {
-            // Add it to the array as new
-            filterUpdated = this.state.filtered.concat({ "id": columnId, "value": value });
-        }
+    private handleFilterChange(event: any) {
+        const target: any = event.target;
+        const id: string = target.name;
+        const value: string = target.type === 'checkbox' ? String(target.checked) : target.value;
+        this.updateFilter(id, value);
+    }
 
-        this.setState({
-            filtered: filterUpdated
-        });
-
+    private updateFilter(id: string, value: string) {
+        let { filtered } = this.state;
+        filtered = filterAdd(filtered, id, value);
+        this.setState({ filtered });
     }
 
     private shipToAdd() {

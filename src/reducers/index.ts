@@ -32,7 +32,7 @@ import PseudoTradeSet from './PseudoTradeReducer'
 import PartnerDocGroupSet from './PartnerDocGroupReducer'
 import ApiTransObjectSet from './ApiTransObjectReducer'
 import TradeNetworkSet from './TradeNetworkReducer'
-import ItemSet from './ItemReducer';
+import ItemSetReducer from './ItemSetReducer';
 import EdiDocGroupSet from './EdiDocGroupReducer'
 import CompanySetting from './CompanyReducer'
 import AcctPackageSet from './AcctPackageReducer'
@@ -69,7 +69,7 @@ const appReducer = combineReducers({
     partnerDocGroupSet:PartnerDocGroupSet,
     apiTransObjectSet:ApiTransObjectSet,
     tradeNetworkSet:TradeNetworkSet,
-    itemsetReducer : ItemSet,
+    itemsetReducer : ItemSetReducer,
     ediDocGroupSet:EdiDocGroupSet,
     companySetting:CompanySetting,
     acctPackageSet:AcctPackageSet

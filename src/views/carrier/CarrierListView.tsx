@@ -10,6 +10,10 @@ import CarrierView from './CarrierView';
 import { Pagination } from 'antd';
 import {cloneDeep, remove, orderBy, includes } from "lodash";
 import PaginationControl from './../../components/widgets/PaginationControl';
+import GridActionMenu from './../../components/widgets/GridActionMenu';
+import GridFilter from './../../components/widgets/GridFilter';
+import GridFilterPills from './../../components/widgets/GridFilterPills';
+import IconButton from "./../../components/widgets/IconButton";
 
 import { Form, Input, Select, Button } from 'antd';
 import { ICON_SIZE, ICON_SMALL, ICON_COLOR } from '../../constants/Attributes';
@@ -42,6 +46,10 @@ const selectTest:KeyValueLabel[] = [
     new KeyValueLabel({ key: "true", value: "true", label: "True" }),
     new KeyValueLabel({ key: "false", value: "false", label: "False" }),
 ];
+const Display = {
+    Summary: {}, 
+    Detail: {}
+  };
 
 export interface ICarrierListViewProps {
     // redux
@@ -52,6 +60,7 @@ export interface ICarrierListViewProps {
 }
 
 export interface ICarrierListViewState {
+    display: any,
     viewMode: string,
     pageSize: number,
     page: number,
@@ -64,9 +73,6 @@ export interface ICarrierListViewState {
     loading: boolean,
     sorted: SortDescriptor[],  // Sort state of the grid
     filtered: FilterDescriptor[],  // filtered state of the grid
-    actionMenuState:string // To show/hide action menu poover
-    filterPopover:boolean, // To show/hide filter popover
-    filterDirtyState:FilterDescriptor[]  /// This is to store dirty changes to the filter
 }
 
 class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierListViewState> {
@@ -74,6 +80,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
     constructor(props: ICarrierListViewProps) {
         super(props);
         this.state = {
+            display: Display.Summary,
             viewMode: 'cards',
             pageSize: 10,
             page: 1,
@@ -85,10 +92,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
             carrierListCount: 0,
             loading: true,
             sorted: [new SortDescriptor({ desc: false, id: XShipVia.kShipVia_Ship_Via_Name })],
-            filtered: [],
-            actionMenuState:'',
-            filterPopover:false,
-            filterDirtyState:[]
+            filtered: []
         };
 
         this.updateFilter = this.updateFilter.bind(this);
@@ -97,9 +101,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         this.carrierEdit = this.carrierEdit.bind(this);
         this.carrierDelete = this.carrierDelete.bind(this);
         this.carrierClone = this.carrierClone.bind(this);
-        this.toggleModal = this.toggleModal.bind(this);
-        this.query = this.query.bind(this);
-        this.requery = this.requery.bind(this);
+        this.revertDisplay = this.revertDisplay.bind(this);
         this.onChangePage = this.onChangePage.bind(this);
         this.onShowSizeChange = this.onShowSizeChange.bind(this);
         this.toggleViewMode = this.toggleViewMode.bind(this);
@@ -109,12 +111,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         this.getSortButton = this.getSortButton.bind(this);
         this.handleTypeFilterChange = this.handleTypeFilterChange.bind(this);
         this.handleTestFilterChange = this.handleTestFilterChange.bind(this);
-        this.toggleActionMenu = this.toggleActionMenu.bind(this);
-        this.handleFilterDirtyChange = this.handleFilterDirtyChange.bind(this);
         this.getFilterValues = this.getFilterValues.bind(this);
-        this.handleFilterApply = this.handleFilterApply.bind(this);
-        this.handleFilterCancel = this.handleFilterCancel.bind(this);
-        this.renderEditAddCloneView = this.renderEditAddCloneView.bind(this);
     }
     public componentWillMount() {
         this.query(1, 10);
@@ -126,17 +123,21 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
             carrierListCount: newProps.carrier.carrierListCount
         });
     }
-    public renderEditAddCloneView(){
-        return (
-            <CarrierView itemId={this.state.carrierEdit.Id} item={this.state.carrierEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
-        );
-    }
+
     public render() {
-        const { loading, pageSize, sorted, filtered, modal } = this.state;
+        const { loading, pageSize, sorted, filtered, display } = this.state;
         let { carrierList } = this.state;
 
-        if(modal){
-            return this.renderEditAddCloneView();
+        switch (display)
+        {
+            case Display.Detail:
+                return (
+                    <CarrierView itemId={this.state.carrierEdit.Id} item={this.state.carrierEdit} isNew={this.state.isNew} revertDisplay={this.revertDisplay}/>
+                );
+            break;
+
+            case Display.Summary:
+            break;
         }
 
         // Filter and sort client-side
@@ -155,32 +156,21 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         return (
             <div>
                 <div className="header-icons">
-                    <RSButton className="fa fa-plus" onClick={() => this.carrierAdd()}/>
-                    <RSButton className="fa fa-refresh" onClick={() => this.requery(this.state.pageSize)} />
-                    <RSButton id="filterBtn" className="fa fa-filter" active={this.state.filtered.length>0} onClick={() => this.setState({filterPopover:!this.state.filterPopover})}/>{this.state.filtered.length>0? <Badge color="secondary">{this.state.filtered.length}</Badge>:""}
-                    <Popover placement="left-end" isOpen={this.state.filterPopover} target="filterBtn" toggle={() => this.setState({filterPopover:!this.state.filterPopover})}>
-                        <PopoverHeader>Filter</PopoverHeader>
-                        <PopoverBody>
-                            ID 
-                            <RSInput placeholder="ID" name={XShipVia.kShipVia_Ship_Via_ID} value={this.getFilterValues(XShipVia.kShipVia_Ship_Via_ID)} onChange={(e)=>{this.handleFilterDirtyChange(e.target.name, e.target.value)}} />
-                            Carrier Name 
-                            <RSInput name={XShipVia.kShipVia_Ship_Via_Name} value={this.getFilterValues(XShipVia.kShipVia_Ship_Via_Name)} placeholder="Carrier Name" onChange={(e)=>{this.handleFilterDirtyChange(e.target.name, e.target.value)}}/>
-                            SCAC 
-                            <RSInput name={XShipVia.kShipVia_SCAC} placeholder="SCAC" value={this.getFilterValues(XShipVia.kShipVia_SCAC)} onChange={(e)=>{this.handleFilterDirtyChange(e.target.name, e.target.value)}}/>
-                            Type 
-                            <RSInput name={XShipVia.kShipVia_Ship_Via_Type} value={this.getFilterValues(XShipVia.kShipVia_Ship_Via_Type)} type="select" onChange={(e)=>{this.handleFilterDirtyChange(e.target.name, e.target.value)}}>
-                                {selectType.map((option)=><option key={option.key} value={option.value}>{option.label}</option>)}
-                            </RSInput>
-                            <RSButton color="primary" onClick={this.handleFilterApply}>Apply</RSButton>                                
-                            <RSButton color="secondary" onClick={this.handleFilterCancel}>Cancel</RSButton>
-                        </PopoverBody>
-                    </Popover>
+                    <GridFilterPills filters={this.state.filtered} onFilterClear={this.handleFilterApply}/>
+                    <div className="header-btn">
+                    <IconButton className="fa fa-plus" onClick={() => this.carrierAdd()} iconText="Add"/>
+                    <GridFilter filters={this.state.filtered} filterItems={[
+                            {type:'text', label:'ID', name:XShipVia.kShipVia_Ship_Via_ID,  placeholder:'ID'},
+                            {type:'text', label:'Carrier Name', name:XShipVia.kShipVia_Ship_Via_Name, placeholder:'Carrier Name'},
+                            {type:'text', label:'SCAC', name:XShipVia.kShipVia_SCAC, placeholder:'SCAC'},
+                            {type:'select', label:'Type', name:XShipVia.kShipVia_Ship_Via_Type, placeholder:'Type',
+                                options: selectType.map((option)=><option key={option.key} value={option.value}>{option.label}</option>)
+                            }]} 
+                        onApply={this.handleFilterApply} 
+                    />
+                    </div>
                 </div>
-                {
-                    this.state.filtered.length> 0?<div>
-                        {this.state.filtered.map(f=><RSButton key={f.id} onClick={()=>{this.handleFilterDirtyChange(f.id); this.handleFilterApply()}}>{f.value}</RSButton>)}
-                    </div>:""
-                }
+                
                 <Media query={{ maxWidth: 768 }}>
                     {matches => // Mobile version first
                         matches ? (
@@ -205,16 +195,18 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                                                 resizable:false,
                                                 className:'action-menu',
                                                 Cell: row => (
-                                                    <div>
-                                                        <ButtonDropdown direction="right"  isOpen={this.state.actionMenuState === row.original.Id } toggle={()=>{this.toggleActionMenu(row.original)}}>
-                                                            <DropdownToggle caret={false} className="fa fa-ellipsis-v btn-toggle"/>
-                                                            <DropdownMenu>
-                                                                <DropdownItem onClick={() => this.carrierEdit(row.original)}>Edit</DropdownItem>
-                                                                <DropdownItem onClick={() => this.carrierClone(row.original)}>Clone</DropdownItem>
-                                                                <DropdownItem onClick={() => this.carrierDelete(row.original)}>Delete</DropdownItem>
-                                                            </DropdownMenu>
-                                                        </ButtonDropdown>
-                                                    </div>
+                                                        <GridActionMenu items={["Edit", "Clone", "Delete"]} 
+                                                                onItemClick={(item)=>{switch(item){
+                                                                    case "Edit":
+                                                                        this.carrierEdit(row.original)
+                                                                        break;
+                                                                    case "Clone":
+                                                                        this.carrierClone(row.original)
+                                                                        break;
+                                                                    case "Delete":
+                                                                        this.carrierDelete(row.original)
+                                                                        break;
+                                                        }}}/>
                                                 )
                                             },
                                             {
@@ -244,22 +236,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                                                     >
                                                     {selectType.map((option)=><Option key={option.key} value={option.value}>{option.label}</Option>)}
                                                     </Select>
-                                            },
-                                            {
-                                                Header: "Test",
-                                                accessor: "Test",
-                                                sortable: true,
-                                                filterable: false,
-                                                Cell: ({ row }) => selectGetValue(selectTest, row.Test),
-                                                Filter: ({ filter, onChange }) =>
-                                                    <Select
-                                                        style={{ width: "100%" }}
-                                                        value={filterGetValue(this.state.filtered, "Test")}
-                                                        onChange={this.handleTestFilterChange}
-                                                    >
-                                                    {selectTest.map((option)=><Option key={option.key} value={option.value}>{option.label}</Option>)}
-                                                    </Select>
-                                            },
+                                            }
                                         ]}
                                         manual={false}
                                         data={carrierList}
@@ -267,7 +244,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                                         sortable={true}
                                         sorted={sorted}
                                         onSortedChange={this.onSortedChange}
-                                        filterable={true}
+                                        filterable={false}
                                         filtered={filtered}
                                         onFilteredChange={this.onFilteredChange}
                                         defaultFilterMethod={(filter, row) => filterIncludes(filter, row)}
@@ -280,7 +257,8 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                     }
                 </Media>
                 <div className="paging-panel">
-                    <Pagination
+                    {this.state.carrierListCount && this.state.carrierListCount>0 ? 
+                        <Pagination
                         showSizeChanger={true}
                         onChange={this.onChangePage}
                         current={this.state.page}
@@ -288,42 +266,27 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
                         pageSizeOptions={['10', '50', '100']}
                         onShowSizeChange={this.onShowSizeChange}
                         total={this.state.carrierListCount}
-                    />
+                    />:''}
                 </div>
             </div>
         );
     }
 
-    private toggleModal() {
-        this.setState({modal: !this.state.modal});
+    public revertDisplay() {
+        this.setState({
+            display: Display.Summary
+        });
     }
+
     // Filter calls
-    private handleFilterApply(){
-        this.setState({filterPopover:false, filtered:cloneDeep(this.state.filterDirtyState)}, ()=>{
+    private handleFilterApply=(newFilter:FilterDescriptor[])=>{
+        this.setState({filtered:cloneDeep(newFilter)}, ()=>{
             this.requery(this.state.pageSize)
         })
     }
-    private handleFilterCancel(){
-        this.setState({filterPopover:false, filterDirtyState:cloneDeep(this.state.filtered)})
-    }
     private getFilterValues(id){
-        const item = this.state.filterDirtyState.find(f=> f.id === id);
+        const item = this.state.filtered.find(f=> f.id === id);
         return item? item.value: ""; 
-    }
-    private handleFilterDirtyChange(id, value=''){
-        const filterDirtyState = this.state.filterDirtyState;
-        let item = filterDirtyState.find(f=> f.id === id)
-        if(item!== undefined){
-            item.value = value;
-        }else{
-            item = {id, value}
-            filterDirtyState.push(item);
-        }
-        remove(filterDirtyState, (f)=>f.value === undefined || f.value.length === 0 )
-        this.setState({filterDirtyState});
-    }
-    private toggleActionMenu(data){
-        this.setState({actionMenuState:this.state.actionMenuState=== data.Id? "": data.Id});
     }
     private handleTypeFilterChange(value: string) {
         this.updateFilter(XShipVia.kShipVia_Ship_Via_Type, value);
@@ -369,7 +332,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         newCarrier.Ship_Via_Name = "New Carrier";
         this.setState({
             carrierEdit: newCarrier,
-            modal: true,
+            display: Display.Detail,
             isNew: true
         });
     }
@@ -377,7 +340,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
     private carrierEdit(carrier: ShipViaModel) {
         this.setState({
             carrierEdit: carrier,
-            modal: true,
+            display: Display.Detail,
             isNew: false
         });
     }
@@ -395,7 +358,7 @@ class CarrierListView extends React.Component<ICarrierListViewProps, ICarrierLis
         clone.Ship_Via_ID += "2";
         this.setState({
             carrierEdit: clone,
-            modal: true,
+            display: Display.Detail,
             isNew: true
         });
     }

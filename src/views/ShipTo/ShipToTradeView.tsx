@@ -2,12 +2,12 @@ import * as React from "react";
 import { connect } from 'react-redux'
 import _ from 'lodash';
 import { toastError } from '../../actions/Scheduler/ServiceAction';
-import { Card } from 'reactstrap';
 import FlexView from 'react-flexview';
-import { FaSyncAlt, FaPlusCircle, FaTable, FaList } from 'react-icons/fa';
-import { ICON_SIZE, ICON_COLOR } from '../../constants/Attributes';
 import { Pagination, Input } from 'antd';
-import { shipToGetAll, shipToDelete, shipToUpdate } from '../../actions/ShipTo';
+import {cloneDeep, remove, orderBy, includes } from "lodash";
+import GridFilter from './../../components/widgets/GridFilter';
+import GridFilterPills from './../../components/widgets/GridFilterPills';
+
 import { tradeGetAll } from '../../actions/Trade';
 import { IShipTo } from "../../constants/edidb";
 import { CShipTo } from "../../constants/edidb/CShipTo";
@@ -17,10 +17,9 @@ import FilterDescriptor from '../../constants/params/filterDescriptor';
 import { ToString } from '../../utils/Conversion';
 import ShipToTradeCardView from "./ShipToTradeCardView"
 import ShipToTradeTableView from "./ShipToTradeTableView"
-// import ShipToDetailView from "./ShipToDetailView"
-// import ShipToTableView from "./ShipToTableView"
 import ShipToView from "./ShipToView"
 import Media from "react-media";
+import { filterAdd, filterIncludes, filterGetValue, selectGetValue } from '../../utils/Comparison';
 import { CTrade } from "../../constants/edidb/CTrade";
 import { ITrade } from "../../constants/edidb";
 
@@ -100,10 +99,12 @@ class ShipToTradeView extends React.Component<IShipToTradeViewProps, IShipToTrad
         this.onFilteredChange = this.onFilteredChange.bind(this);
         this.toggleSortMode = this.toggleSortMode.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
-        this.handleStatusFilterChange = this.handleStatusFilterChange.bind(this);
+        // this.handleStatusFilterChange = this.handleStatusFilterChange.bind(this);
         this.setHeaderViewMode = this.setHeaderViewMode.bind(this);
         this.tradeToEdit = this.tradeToEdit.bind(this);
         this.handleKitTypeIDFilterChange = this.handleKitTypeIDFilterChange.bind(this);
+
+        this.handleFilterApply = this.handleFilterApply.bind(this);
     }
     public componentDidMount() {
         this.query()
@@ -165,7 +166,7 @@ class ShipToTradeView extends React.Component<IShipToTradeViewProps, IShipToTrad
             handleKitTypeIDFilterChange={this.handleKitTypeIDFilterChange}
             tpStatus={this.state.TP_Status}
             statusList={statusList}
-            handleStatusFilterChange={this.handleStatusFilterChange}
+            // handleStatusFilterChange={this.handleStatusFilterChange}
         />
 
         // toggleButton = <FaList onClick={() => this.toggleViewMode()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginRight: 12 }} />;
@@ -182,7 +183,7 @@ class ShipToTradeView extends React.Component<IShipToTradeViewProps, IShipToTrad
             handleKitTypeIDFilterChange={this.handleKitTypeIDFilterChange}
             tpStatus={this.state.TP_Status}
             statusList={statusList}
-            handleStatusFilterChange={this.handleStatusFilterChange}
+            // handleStatusFilterChange={this.handleStatusFilterChange}
         />
 
         // if mode list show list screen            
@@ -192,12 +193,23 @@ class ShipToTradeView extends React.Component<IShipToTradeViewProps, IShipToTrad
 
         return (
             <div>
-                <Card body={true} outline={true} style={{ width: '100%' }}>
-                    <FlexView width='100%' wrap={true} style={{ marginBottom: 12 }}>
-                        <FlexView hAlignContent="left" vAlignContent="center" basis="40" wrap={true}>
-                            <FaSyncAlt onClick={() => this.requery()} size={ICON_SIZE} color={ICON_COLOR} style={{ marginLeft: 12 }} />
-                        </FlexView>
-                        <FlexView hAlignContent="center" vAlignContent="center" grow={true} wrap={true}>
+                <div className="header-icons">
+                    <GridFilterPills filters={this.state.filtered} onFilterClear={this.handleFilterApply} />
+                    <div className="header-btn">
+                        <GridFilter filters={this.state.filtered} filterItems={[
+                            { type: 'text', label: 'Trading Partner', name: "TP_Name", placeholder: '' },
+                            { type: 'text', label: 'Qualifier', name: "TP_PartQ", placeholder: '' },
+                            { type: 'text', label: 'ISA_ID', name: "TP_PartID", placeholder: '' },]}
+                            onApply={this.handleFilterApply}
+                        />
+                    </div>
+                </div>
+
+                <Media query={{ maxWidth: 768 }}>
+                    { matches => matches ? cardViewComponent : tableViewComponent }
+                </Media>
+                <div className="paging-panel">
+                    {this.state.tradeListCount > 0? 
                             <Pagination
                                 showSizeChanger={true}
                                 onChange={this.onChangePage}
@@ -207,17 +219,9 @@ class ShipToTradeView extends React.Component<IShipToTradeViewProps, IShipToTrad
                                 onShowSizeChange={this.onShowSizeChange}
                                 total={this.state.tradeListCount}
                             />
-                        </FlexView>
-                        {/*
-                        <FlexView hAlignContent="right" vAlignContent="center" basis="120" wrap={true}>
-                            {toggleButton}
-                        </FlexView>
-                        */}
-                    </FlexView>
-                </Card>
-                <Media query={{ maxWidth: 768 }}>
-                    { matches => matches ? cardViewComponent : tableViewComponent }
-                </Media>
+                        :''}
+                   
+                </div>
             </div>
         )
     }
@@ -236,8 +240,8 @@ class ShipToTradeView extends React.Component<IShipToTradeViewProps, IShipToTrad
         this.props.tradeGetAll(params);
     }
 
-    private requery() {
-        this.setState({ page: 1, refresh: true });
+    private requery(_pageSize: number) {
+        this.setState({ page: 1, refresh: true, pageSize: _pageSize });
     }
 
     private onChangePage = (page) => {
@@ -290,49 +294,33 @@ class ShipToTradeView extends React.Component<IShipToTradeViewProps, IShipToTrad
         this.setState({ filtered });
     }
 
-    private handleFilterChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const columnId = target.name;
-
-        if (this !== undefined) {
-            this.setState({
-                [columnId]: value
-            });
-        }
-
-        let filterUpdated: FilterDescriptor[] = [];
-
-        // Get the relevant column from the filtered array
-        const filteredColumn = this.state.filtered.filter((column) => column.id === columnId);
-
-        if (filteredColumn.length > 0) {
-            // Update the value that it is filtering on
-            filterUpdated = this.state.filtered.filter((column) => column.id !== columnId).concat({ "id": columnId, "value": value });
-        }
-        else {
-            // Add it to the array as new
-            filterUpdated = this.state.filtered.concat({ "id": columnId, "value": value });
-        }
-
-        this.setState({
-            filtered: filterUpdated
-        });
-
+    // Filter calls
+    private handleFilterApply(newFilter:FilterDescriptor[]){
+        this.setState({filtered:cloneDeep(newFilter)}, ()=>{
+            this.requery(this.state.pageSize)
+        })
     }
-    private handleStatusFilterChange(value: string) {
 
+    private getFilterValues(id){
+        const item = this.state.filtered.find(f=> f.id === id);
+        return item? item.value: ""; 
+    }
+
+    private handleTestFilterChange(value: string) {
+        this.updateFilter("Test", value);
+    }
+
+    private handleFilterChange(event: any) {
+        const target: any = event.target;
+        const id: string = target.name;
+        const value: string = target.type === 'checkbox' ? String(target.checked) : target.value;
+        this.updateFilter(id, value);
+    }
+
+    private updateFilter(id: string, value: string) {
         let { filtered } = this.state;
-        // Remove the current filter for this column if there is one
-        filtered = filtered.filter((column: FilterDescriptor) => column.id !== "TP_Status")
-
-        // If they selected a value (not "all" or blank), then add the filter back in
-        if (value !== "all" && value.length > 0) {
-            filtered = filtered.concat(new FilterDescriptor({ id: "TP_Status", value }));
-        }
-
-        // Update the state value for the field, as well as the filtered array
-        this.setState({ TP_Status: value, filtered });
+        filtered = filterAdd(filtered, id, value);
+        this.setState({ filtered });
     }
 
     private handleKitTypeIDFilterChange(value: string) {

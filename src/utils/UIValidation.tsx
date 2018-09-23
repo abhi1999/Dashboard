@@ -1,7 +1,8 @@
 import * as  React from 'react';
 import { ILoggedNotification } from '../constants/ILoggedNotification';
 import uuid from 'uuid-v4';
-
+import _ from 'lodash';
+import { IUserLabel } from '../constants/IUserLabel';
 
 //
 // Log a debugging message to the Notify buffer
@@ -42,11 +43,37 @@ export function IsRequired(val : string, hlp : string) : any {
 
 // Limit the maximum length of a string input
 export function LimitLength(key: string, value:string, limit:number, ths:any) {
-    if (key.length > limit) {
-        ths.setState({
-            [key]  : (value as string).substring(0, limit)
-        });
+    if (value.length > limit) {
+        ths.setState({ [key]  : value.substring(0, limit) })
     }
+}
+
+// Only extract numeric and separators
+//
+// TODO: This is US-centric (only supports . as a separator)
+export function NumericOnly(value:string) : string {
+    if (isNaN(Number(value))) {
+        return value.replace(/[^\d.-]/g, '');
+    } else {
+        return value
+    }
+}
+
+//
+// Convert the IUserLabel[] array to a simple array of label captions
+//
+// labelList : IUserLabel array
+// max : Maximum number of labels to return
+//
+export function GetUserLabelCaptions(labelList : IUserLabel[], max : number) : string[] {
+    const retlbl : string[] = [];
+    for (let i=1; i<= max; i++) {
+        const u = 'User' + i.toString();
+        const lbl : IUserLabel = _.find(labelList, ll => ll.labelName === u);
+        const userlabel = lbl !== undefined ? (lbl.Caption.length !== 0 ? lbl.Caption : u) : u;
+        retlbl.push(userlabel)
+    }
+    return retlbl;
 }
 
 export default DebugNotify;

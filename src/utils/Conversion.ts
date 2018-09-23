@@ -88,6 +88,12 @@ export function StripHex(stringVariable) {
     return cleaned;
 }
 
+export function EncodeXml(stringVariable) {
+    let cleaned = StringChecker(stringVariable);
+    cleaned = cleaned.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    return cleaned;
+}
+
 export function Uptime(adminTaskRunCount) {
 
     if (adminTaskRunCount !== undefined) {

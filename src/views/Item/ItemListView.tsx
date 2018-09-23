@@ -1,8 +1,9 @@
 import * as  React from 'react';
 import { connect } from 'react-redux'
 import _ from 'lodash';
+import {cloneDeep} from 'lodash';
 import ReactTable from "react-table";
-import { Container, Card, Col, Row, CardHeader, CardBody } from 'reactstrap';
+import { Button as RSButton,  Container, Card, Col, Row, CardHeader, CardBody } from 'reactstrap';
 import FlexView from 'react-flexview';
 import { FaSyncAlt,FaPlusCircle,FaTimesCircle,FaEdit,FaClone,FaSort,FaSortUp,FaSortDown,FaTable,FaList, FaFile, FaUndo } from 'react-icons/fa';
 import { itemDelete, itemGetAll } from '../../actions/ItemAction';
@@ -20,6 +21,14 @@ import KeyValueLabel from '../../constants/params/keyValueLabel';
 import { filterAdd, filterIncludes, filterClear, filterGetValue, selectGetValue, kAll, kTrue, kFalse } from '../../utils/Comparison';
 import { ClickParam } from 'antd/lib/menu';
 import { ShowHelp } from '../../utils/index';
+import ItemView from './ItemView';
+import { IItemReducer } from '../../reducers/ItemSetReducer';
+import LoadingComponent from "../../components/widgets/LoadingComponent";
+
+import GridActionMenu from './../../components/widgets/GridActionMenu';
+import GridFilter from './../../components/widgets/GridFilter';
+import GridFilterPills from './../../components/widgets/GridFilterPills';
+
 
 const FormItemLayout = {
     labelCol: {
@@ -84,7 +93,7 @@ export interface IItemListViewState
     collapseAddNew:boolean,
     itemList:IItem[],
     itemListCount:number,
-    loading:boolean,
+    loading:number,
     sorted:SortDescriptor[],
     filtered:FilterDescriptor[],
     // Filter fields
@@ -113,8 +122,7 @@ export interface IItemListViewState
 }
 
 class ItemListView extends React.Component<IItemListViewProps, IItemListViewState> {
-    
-    constructor(props:IItemListViewProps) {
+    public constructor(props:IItemListViewProps) {
         super(props);
         this.state = {
             viewMode: 'cards',
@@ -127,7 +135,7 @@ class ItemListView extends React.Component<IItemListViewProps, IItemListViewStat
             collapseAddNew: false,
             itemList: [],
             itemListCount: 0,
-            loading: true,
+            loading: 0,
             sorted: [{desc: false,id: XItem.kItem_Int_Item_No}],
             filtered: [],
             Int_Item_No : '',
@@ -174,7 +182,8 @@ class ItemListView extends React.Component<IItemListViewProps, IItemListViewStat
         this.handleNumberFilterChange = this.handleNumberFilterChange.bind(this);
         this.menuClick = this.menuClick.bind(this);
         this.clearFilters = this.clearFilters.bind(this);
-        }
+        this.handleFilterApply = this.handleFilterApply.bind(this);
+    }
  
 
     public componentWillMount() {
@@ -184,19 +193,25 @@ class ItemListView extends React.Component<IItemListViewProps, IItemListViewStat
 
     public componentWillReceiveProps(newProps) {
         this.setState({
-            itemList: newProps.itemsetReducer.itemList,
-            itemListCount: newProps.itemsetReducer.itemListCount,
-            loading : newProps.itemsetReducer.loading
+            itemList: (newProps.itemsetReducer as IItemReducer).itemList,
+            itemListCount: (newProps.itemsetReducer as IItemReducer).itemListCount,
+            loading : (newProps.itemsetReducer as IItemReducer).loading
           });
     }
 
     public render() {
-        const { loading, pageSize, sorted, filtered } = this.state;
+
+        if (this.state.modal){
+            return <ItemView itemId={this.state.itemEdit.Int_Item_No} item={this.state.itemEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
+        }
+
+        const { pageSize, sorted, filtered } = this.state;
+
         let { itemList } = this.state;
 
-        // if (this.state.modal){
-        //     return <NetworkView itemId={this.state.itemEdit.Van_ID} item={this.state.itemEdit} isNew={this.state.isNew} toggleModal={this.toggleModal} />
-        // }
+        if (this.state.loading > 0) {
+            return <LoadingComponent />
+        }
 
         if (filtered.length > 0) {   // Filter on each column with a value
             filtered.map((column) => {
@@ -237,17 +252,6 @@ class ItemListView extends React.Component<IItemListViewProps, IItemListViewStat
                                 <FaUndo onClick={this.clearFilters} size={ICON_SIZE} color={ICON_COLOR} style={{marginLeft: 12}}/>
                             </Tooltip>
                         </FlexView>
-                        <FlexView hAlignContent="center" vAlignContent="center" grow={true} wrap={true}>
-                            <Pagination
-                                showSizeChanger={true}
-                                onChange={this.onChangePage} 
-                                current={this.state.page}
-                                pageSize={this.state.pageSize}
-                                pageSizeOptions={['10','50','100']}
-                                onShowSizeChange={this.onShowSizeChange}
-                                total={this.state.itemListCount}
-                                />
-                        </FlexView>
                         <FlexView hAlignContent="right" vAlignContent="center" basis="120" wrap={true}>
                             <Tooltip title="Add">
                                 <FaPlusCircle onClick={() => this.itemAdd()} size={ICON_SIZE} color={ICON_COLOR} style={{marginRight: 12}}/>
@@ -255,6 +259,15 @@ class ItemListView extends React.Component<IItemListViewProps, IItemListViewStat
                         </FlexView>
                     </FlexView>
                 </Card>
+                <div className="header-icons">
+                    <RSButton className="fa fa-plus" onClick={() => this.itemAdd()}/>
+                    <GridFilter filters={this.state.filtered} filterItems={[
+                            {type:'text', label:Label_Int_Item_No, name:XItem.kItem_Int_Item_No, placeholder:Label_Int_Item_No},
+                    ]} 
+                        onApply={this.handleFilterApply} 
+                    />
+                </div>
+                <GridFilterPills filters={this.state.filtered} onFilterClear={this.handleFilterApply}/>
                 <Media query={{maxWidth: 1024}}>
                     {matches => // Mobile version first
                         matches ? (
@@ -576,19 +589,19 @@ class ItemListView extends React.Component<IItemListViewProps, IItemListViewStat
                                 {
                                     sortable: false,
                                     filterable: false,
-                                    width: 90,
+                                    width: 50,
+                                    resizable:false,
+                                    className:'action-menu',
                                     Cell: row => (
-                                        <div>
-                                            <Tooltip title='Edit'>
-                                                <Button type="primary" shape="circle" size="small" style={{marginLeft:2}} icon="edit"  onClick={() => this.itemEdit(row.original)} />
-                                            </Tooltip>
-                                            <Tooltip title='Delete'>
-                                                <Button type="primary" shape="circle" size="small" style={{marginLeft:2}} icon="delete" onClick={() => this.itemDelete(row.original)} />
-                                            </Tooltip>
-                                            <Tooltip title='Rename'>
-                                                <Button type="primary" shape="circle" size="small" style={{marginLeft:2}} icon="file" onClick={() => this.itemRename(row.original)} />    
-                                            </Tooltip>
-                                        </div>
+                                        <GridActionMenu items={["Edit", "Delete"]} 
+                                            onItemClick={(item)=>{switch(item){
+                                                case "Edit":
+                                                    this.itemEdit(row.original)
+                                                    break;
+                                                case "Delete":
+                                                    this.itemDelete(row.original)
+                                                    break;
+                                        }}}/>
                                     )
                                 },
                                 {
@@ -731,8 +744,6 @@ class ItemListView extends React.Component<IItemListViewProps, IItemListViewStat
                             ]}
                             manual={false} 
                             data={itemList}
-                            loading={loading}
-                            loadingText= "Please wait, retrieving list of items..."
                             sortable={true}
                             sorted={sorted}
                             onSortedChange={this.onSortedChange}
@@ -742,24 +753,43 @@ class ItemListView extends React.Component<IItemListViewProps, IItemListViewStat
                             onFilteredChange={this.onFilteredChange}
                             showPagination={false}
                             pageSize={tablePageSize}
-                            className="-striped -highlight"
+                            className="-highlight table-container"
+                            minRows={0}
                             getNoDataProps={() => {
                                 return { style: { display: 'none' } };
                               }}
                         />)}
                 </Media>
+                <div className="paging-panel">
+                    <Pagination
+                        showSizeChanger={true}
+                        onChange={this.onChangePage} 
+                        current={this.state.page}
+                        pageSize={this.state.pageSize}
+                        pageSizeOptions={['10','50','100']}
+                        onShowSizeChange={this.onShowSizeChange}
+                        total={this.state.itemListCount}
+                        />
+                </div>
             </div>
             )
     }
-
     protected toggleModal() {
         this.setState({
           modal: !this.state.modal
         });
-      }
-
+    }
     protected toggleRelatedView() {
         this.setState({ relatedView : !this.state.relatedView });
+    }
+    private handleFilterApply(newFilter:FilterDescriptor[]){
+        this.setState({filtered:cloneDeep(newFilter)}, ()=>{
+            this.requery(this.state.pageSize)
+        })
+    }
+    private getFilterValues(id){
+        const item = this.state.filtered.find(f=> f.id === id);
+        return item? item.value: ""; 
     }
 
     private clearFilters() {
@@ -861,7 +891,8 @@ class ItemListView extends React.Component<IItemListViewProps, IItemListViewStat
 
     private itemDelete(item:IItem)
     {
-        this.props.itemDelete(item); 
+        const check = confirm('Are you sure you want to delete this?')
+        if (check) { this.props.itemDelete(item) }; 
     }
 
     private itemRename(item: IItem)

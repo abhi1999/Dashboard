@@ -34,7 +34,7 @@ function getSortButton(props, columnId) {
 function TradeCardView(props) {
     return (
         <div>
-            <Card body={true} outline={true} style={{ width: '100%' }}>
+            {/* <Card body={true} outline={true} style={{ width: '100%' }}>
                 <Form layout="vertical" style={{ marginTop: -10, marginBottom: 10 }}>
 
                     <FormItem {...formItemLayout} colon={false}>
@@ -108,7 +108,7 @@ function TradeCardView(props) {
                         </Select>
                     </FormItem>
                 </Form>
-            </Card>
+            </Card> */}
             <Row>
                 {props.list.map((item) =>
                     <ColRS xl={4} lg={4} md={4} sm={6} xs={12} key={item.Id}>

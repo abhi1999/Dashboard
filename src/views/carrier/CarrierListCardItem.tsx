@@ -2,7 +2,7 @@ import * as  React from 'react';
 import * as ReactDOM from 'react-dom';
 import classnames from "classnames";
 
-import { Badge, Card, CardBody, CardFooter, CardHeader, CardTitle, CardText, Col, Collapse, Fade, Row, Table } from 'reactstrap';
+import { Badge, Card, CardBody, CardFooter, CardHeader, CardTitle, CardText, Col, Collapse, Fade, Row, Table, Label } from 'reactstrap';
 
 import CarrierGridEditControl from "./CarrierGridEditControl";
 
@@ -40,13 +40,15 @@ export class CarrierListCardItem extends React.Component<any, any> {
                </div> 
                 </CardHeader>
                 <CardBody>
-                    SCAS: {data.SCAS}<br/>
-                    ID: {data.Ship_Via_ID}<br/>
-                    Type:{data.Ship_Via_Type}<br/>
-                    User1:{data.User1}<br/>
-                    User2:{data.User2}<br/>
-                    User3:{data.User3}<br/>
-                    User4:{data.User4}<br/>
+                    <div>
+                        <Label>ID:</Label> &nbsp;<Label>{data.Ship_Via_ID}</Label>
+                    </div>
+                    <div>
+                        <Label>SCAS:</Label> &nbsp;<Label>{data.SCAS}</Label>
+                    </div>
+                    <div>
+                        <Label>Type:</Label> &nbsp;<Label>{data.Ship_Via_Type}</Label>
+                    </div>
                 </CardBody>
             </Card>
         );

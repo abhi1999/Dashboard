@@ -1,17 +1,16 @@
 import * as React from "react";
 import { connect } from 'react-redux'
 import _ from 'lodash';
-import { Card } from 'reactstrap';
+import { Button, Form } from 'reactstrap';
 import { axCompanyID } from '../../constants/index';
-import { Form, Modal, Input, InputNumber, Row, Col, Button, Collapse } from 'antd'
+import { Collapse } from 'antd'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaSyncAlt, FaPlusCircle, FaTable, FaList } from 'react-icons/fa';
-import { ICON_SIZE, ICON_COLOR } from './../../constants/Attributes';
-import Divider from '@material-ui/core/Divider';
 import { companysettingsGetAll, companysettingsUpdate } from './../../actions/CompanySettingsAction';
 import Media from "react-media";
+import LoadingComponent from "../../components/widgets/LoadingComponent";
 // import ICompanySettingsViewState from "./ICompanySettingsViewState";
 // import ICompanySettingsViewProps from "./ICompanySettingsViewProps";
+import PageBtnContainer from "./../../components/widgets/PageBtnContainer";
 import CompanySettingsModel from "./../../constants/implementations/CompanySettingsModel"
 import CompanyPanelView from "./CompanyPanelView"
 import CompanySetupPanelView from "./CompanySetupPanelView"
@@ -28,14 +27,14 @@ export interface ICompanySettingsViewProps {
     companySetting: any,
     acctPackageSet: any,
     companysettingsGetAll: any,
-    companysettingsUpdate:any,
+    companysettingsUpdate: any,
     toastError: any,
 }
 
 export interface ICompanySettingsViewState {
     // companyID: string,
     companyEdit: CompanySettingsModel,
-    companyID:any,
+    companyID: any,
     loading: boolean,
     [propName: string]: any, // This is so we can set by name dynamically
 }
@@ -49,7 +48,7 @@ export class CompanySettingsView extends React.Component<ICompanySettingsViewPro
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleDropDownChange = this.handleDropDownChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleImportMethodChange = this.handleImportMethodChange.bind(this);
+        // this.handleImportMethodChange = this.handleImportMethodChange.bind(this);
         this.handleAuthenticationMethodChange = this.handleAuthenticationMethodChange.bind(this);
         this.handlePostItemSequenceChange = this.handlePostItemSequenceChange.bind(this);
         this.handlePOTypeChange = this.handlePOTypeChange.bind(this);
@@ -73,42 +72,43 @@ export class CompanySettingsView extends React.Component<ICompanySettingsViewPro
     }
 
     public render() {
+
+        if (this.state.loading) {
+            return <LoadingComponent />
+        }
+
         const actionButtons =
-            <div>
-                <Button size="default"
-                    onClick={() => {
-                        this.setState({loading:true});
-                        this.query();
-                    }}>
-                    Cancel
-        </Button>
-                <Button size="default"
-                    type="primary"
+            <PageBtnContainer>
+                <Button
+                    color="primary"
                     onClick={() => {
                         if (this.isValid()) {
                             this.handleUpdate();
                         }
                     }}>
-                    Update
-        </Button>
-            </div>;
+                    Save
+               </Button>
+               <Button
+                    onClick={() => {
+                        this.setState({ loading: true });
+                        this.query();
+                    }}>
+                    Cancel
+                </Button>
+            </PageBtnContainer>;
 
         // if (this.state.companyEdit === undefined) {
         //     return (<div> Loading... </div>)
         // }
 
-        if (this.state.loading) {
-            return (<div> Loading... </div>)
-        }
-        
+
+
         const acctPackageList = this.props.acctPackageSet.acctPackageList
 
         return (
             <div>
-                {actionButtons}
-                <Divider />
-                <Form name="Company Settings" id="CompanySettings" style={{ width: '100%' }}>
-                    <Collapse accordion={true} defaultActiveKey={["Company"]} >
+                <Form row={true}>
+                    <Collapse accordion={false} >
                         <Panel header="Company" key="Company">
                             <CompanyPanelView
                                 company={this.state.companyEdit}
@@ -119,28 +119,30 @@ export class CompanySettingsView extends React.Component<ICompanySettingsViewPro
                             <CompanySetupPanelView
                                 company={this.state.companyEdit}
                                 handleInputChange={this.handleInputChange}
-                                handleImportMethodChange={this.handleImportMethodChange}
+                                handleDropDownChange={this.handleDropDownChange}
                             />
                         </Panel>
                         <Panel header="System" key="System">
-                        <CompanySystemPanelView
+                            <CompanySystemPanelView
                                 company={this.state.companyEdit}
                                 handleInputChange={this.handleInputChange}
                                 handleSupExpChange={this.handleSupExpChange}
                             />
                         </Panel>
                         <Panel header="ERP" key="Erp">
-                        <CompanyErpPanelView
+                            <CompanyErpPanelView
                                 company={this.state.companyEdit}
                                 handleInputChange={this.handleInputChange}
-                                handleAuthenticationMethodChange={this.handleAuthenticationMethodChange}
-                                handlePostItemSequenceChange={this.handlePostItemSequenceChange}
-                                handlePOTypeChange={this.handlePOTypeChange}
+                                // handleAuthenticationMethodChange={this.handleAuthenticationMethodChange}
+                                // handlePostItemSequenceChange={this.handlePostItemSequenceChange}
+                                // handlePOTypeChange={this.handlePOTypeChange}
                                 acctPackageList={acctPackageList}
-                                handleErpPackageChange={this.handleErpPackageChange}
+                                // handleErpPackageChange={this.handleErpPackageChange}
+                                handleDropDownChange={this.handleDropDownChange}
                             />
                         </Panel>
                     </Collapse>
+                    {actionButtons}
                 </Form>
             </div>
         );
@@ -173,27 +175,27 @@ export class CompanySettingsView extends React.Component<ICompanySettingsViewPro
         }))
     }
 
-    private handleImportMethodChange(value: string) {
-        this.handleDropDownChange("WMSImportType", value)
-    }
-  
-    private handleAuthenticationMethodChange(value:string) {
+    // private handleImportMethodChange(value: string) {
+    //     this.handleDropDownChange("WMSImportType", value)
+    // }
+
+    private handleAuthenticationMethodChange(value: string) {
         this.handleDropDownChange("AuthType", value)
     }
 
-    private handlePostItemSequenceChange(value:string) {
+    private handlePostItemSequenceChange(value: string) {
         this.handleDropDownChange("PostItemSeq", value)
     }
 
-    private handlePOTypeChange(value:string) {
+    private handlePOTypeChange(value: string) {
         this.handleDropDownChange("AxaptaExpandedPO", value)
     }
 
-    private handleErpPackageChange(value:string) {
+    private handleErpPackageChange(value: string) {
         this.handleDropDownChange("AcctPackageID", value)
     }
 
-    private handleSupExpChange(date:any, dateStr:string) {
+    private handleSupExpChange(date: any, dateStr: string) {
         this.handleDropDownChange("SupExp", date)
     }
 
@@ -201,7 +203,7 @@ export class CompanySettingsView extends React.Component<ICompanySettingsViewPro
 
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
+        const name = target.id;
 
         // const current = this.state.FieldStatus.find(item => item.field === name)
 
